@@ -1,0 +1,66 @@
+---
+description: Core engineering principles for all code changes
+alwaysApply: true
+---
+
+# Engineering Principles
+
+## Repository-first behaviour
+
+- Treat the repository's current requirements, tests, interfaces, documentation, and established patterns as the source of truth.
+- Before editing, inspect the relevant files, surrounding architecture, dependency declarations, types, and tests. Do not guess about code that has not been examined.
+- Keep changes tightly scoped to the requested outcome. Do not modify unrelated files or perform opportunistic refactoring.
+
+## Compatibility and obsolete code
+
+- Do not preserve obsolete code paths by default.
+- Remove dead or superseded paths instead of adding compatibility layers, fallbacks, duplicate implementations, or permanent feature flags.
+- Preserve backward compatibility only when it is an explicit requirement or when changing a public API, persisted data format, external integration, or user workflow would create material risk.
+- When a breaking change is necessary, identify the affected interfaces and implement the smallest safe migration required.
+
+## Simplicity and incremental delivery
+
+- Choose the simplest implementation that fully meets the current requirements.
+- Avoid speculative abstractions, premature generalisation, unnecessary configuration, and indirection.
+- Build in small, end-to-end increments. Start with the smallest working vertical slice, validate it, and add capabilities on top of a working system.
+- Never replace a working path with unfinished complexity.
+
+## Architecture and modularity
+
+- Keep components cohesive, modular, and clearly separated by responsibility.
+- Follow the repository's existing architectural boundaries unless there is a documented reason to change them.
+- Prefer explicit data flow and readable code over cleverness.
+- Make architectural decisions that remain maintainable over the long term. Do not introduce temporary structures that are already expected to be replaced.
+
+## Dependencies
+
+- Prefer established, actively maintained libraries when they reduce complexity or improve reliability.
+- Reuse dependencies already present in the project before adding new packages or writing custom implementations.
+- Before concluding that a dependency lacks a capability, check its installed version, documentation, types, and existing usage in the repository.
+- Add a new dependency only when its value clearly exceeds its maintenance, security, licensing, and operational cost.
+- Do not reimplement common functionality without a clear, documented reason.
+
+## Implementation discipline
+
+- Fix root causes rather than masking symptoms with retries, broad exception handling, silent fallbacks, or disabled validation.
+- Do not suppress failing tests, type errors, lint errors, security warnings, or runtime errors merely to make the change appear complete.
+- Maintain existing naming, formatting, typing, error-handling, logging, and testing conventions.
+- Do not expose secrets, credentials, tokens, personal data, or sensitive configuration in code, logs, tests, fixtures, or documentation.
+
+## Validation
+
+- For multi-file, architectural, destructive, or high-risk changes, first produce a concise implementation plan.
+- Run the smallest relevant validation first, then broaden validation when the change could affect wider behaviour.
+- Add or update tests for changed behaviour, including important failure paths and boundary cases.
+- Do not claim completion unless the implementation and relevant validations have succeeded.
+- If validation cannot be run, state exactly what was not verified and why.
+
+## Completion report
+
+At the end of a task, provide a concise summary of:
+
+1. What changed.
+2. Why the chosen approach is the simplest sufficient solution.
+3. Files materially affected.
+4. Validation performed and its result.
+5. Remaining risks, assumptions, or follow-up work.
