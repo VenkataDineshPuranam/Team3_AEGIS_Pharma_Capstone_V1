@@ -1,0 +1,23 @@
+{
+  "status": "FAIL",
+  "errors": [
+    "manifest total packaged-file count mismatch",
+    "manifest file listing does not exactly match packaged files",
+    "immutable hash coverage mismatch"
+  ],
+  "warnings": [
+    "unresolved prose reference CLAUDE.md: submission_manifest.csv",
+    "unresolved prose reference CLAUDE.md: test_results.json",
+    "unresolved prose reference CLAUDE.md: evaluation_results.json",
+    "unresolved prose reference CLAUDE.md: index.html",
+    "unresolved prose reference CLAUDE.md: app.js"
+  ],
+  "counts": {
+    "files": 321,
+    "injects": 84,
+    "csv": 143,
+    "knowledge": 32,
+    "templates": 30,
+    "public_scenarios": 15
+  }
+}
