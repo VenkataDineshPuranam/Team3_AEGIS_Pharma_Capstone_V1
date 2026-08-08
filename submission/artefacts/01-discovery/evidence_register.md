@@ -134,4 +134,4 @@ Scope of this Discovery pass: the three mandatory workflows and their shared cro
 
 ---
 
-*Continued in: `evidence_acquisition_backlog.md`, `early_waste_signals.md`, `dmaic_lens.md`.*
+*Continued in: `evidence_acquisition_backlog.md`, `dmaic_lens.md` (full DMAIC), `waste_register_downtime.md`, `waste_register_ai_specific.md`. (`early_waste_signals.md` is superseded, kept as historical seed only.)*

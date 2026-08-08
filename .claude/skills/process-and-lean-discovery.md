@@ -1,10 +1,12 @@
 ---
 name: process-and-lean-discovery
 description: >-
-  Applies Lean/DMAIC as an operating spine: thin dmaic_lens.md on every stage,
-  stage-09 lens_rollup + full waste registers, structural_reopen gate before
-  tasks, Measure-first under scarce data, CTQ/RCA/future state. Use when the
-  user asks about DMAIC, Lean, waste, Measure-first, or structural reopen.
+  Applies Lean/DMAIC as an operating spine: full Define-Measure-Analyze-Improve-
+  Control cycle + full waste registers at stages 01/02/04/06/07, thin single-
+  letter dmaic_lens.md at stages 03/05/08/10-13, stage-09 cross-stage
+  reconciliation, structural_reopen gate before tasks, Measure-first under
+  scarce data, CTQ/RCA/future state. Use when the user asks about DMAIC, Lean,
+  waste, Measure-first, or structural reopen.
 ---
 
 # Process & Lean Discovery
@@ -17,21 +19,29 @@ Find and measure waste **before** automating with AI. Many “AI problems” are
 
 **Scarce-data rule:** if Discovery baselines are Missing/Partial or narrative class is `hypothesis`, DMAIC is **Measure-first** — instrumentation, sampling, and evidence acquisition outrank new AI features. Do not schedule agent/retrieval scale-out ahead of Measure capability.
 
-## Thin lens contract (every stage except 09)
+## Lens contract — full-DMAIC stages vs thin stages
 
-Each stage 01–08 and 10–13 writes a short `dmaic_lens.md` in that stage’s `participant-outputs-v2/NN-*/` folder. Do **not** run a full Lean workshop except at stage 09.
+Stages **01 (Discovery), 02 (Frame), 04 (DDD), 06 (C4) and 07 (ADR)** are designated **full-DMAIC stages**: each runs the complete Define → Measure → Analyze → Improve → Control cycle plus the full 8-category DOWNTIME and 8-category AI-specific waste registers, carrying forward and refining the prior full stage's registers rather than restarting. Improve/Control content at 01/02 is necessarily provisional (no architecture exists yet) and must be labeled as such; it hardens progressively through 04/06/07 as the domain model, containers and decisions lock in.
 
-| Stages | Lens focus |
-|---|---|
-| 01 | Measure + light Define |
-| 02–03 | Define (+ Measure targets) |
-| 04–05 | Analyze |
-| 06–08 | Improve-by-design + Control triggers |
-| 10–11 | Improve (prioritize / execute) |
-| 12 | Control (plus `control_lens_rollup`) |
-| 13 | Control (executive) |
+Stages **03 (PRD), 05 (Feature Specs) and 08 (Technical Design)**, and **10–13**, keep a short single-letter-focus `dmaic_lens.md` as before — these are tactical stages sandwiched between or after the full-DMAIC stages, and repeating the full cycle there is redundant.
 
-## Stage 09 — full consolidation
+| Stages | Lens depth | Focus |
+|---|---|---|
+| 01 Discovery | **Full DMAIC + full waste registers** | Define+Measure primary; Analyze/Improve/Control provisional |
+| 02 Frame | **Full DMAIC + full waste registers** | Define/Measure refined; Answer = Improve candidate |
+| 03 PRD | Thin | Define (+ Measure targets) |
+| 04 DDD | **Full DMAIC + full waste registers** | Analyze primary; domain model = Improve artifact |
+| 05 Feature Specs | Thin | Analyze |
+| 06 C4 | **Full DMAIC + full waste registers** | Improve-by-architecture primary; Control = health/SLO checks |
+| 07 ADR | **Full DMAIC + full waste registers** | Analyze trade-offs; Control = revisit triggers (closes out the registers) |
+| 08 Technical Design | Thin | Improve-by-contract + Control NFRs |
+| 10–11 | Thin | Improve (prioritize / execute) |
+| 12 | Thin | Control (plus `control_lens_rollup`) |
+| 13 | Thin | Control (executive) |
+
+## Stage 09 — cross-stage reconciliation (not the first full pass)
+
+Stage 09 is no longer the *first* full DMAIC pass — 01/02/04/06/07 already ran it. Stage 09's job is to reconcile the five full-stage registers against each other (they may disagree once architecture/ADRs are locked), fold in the three thin-stage lenses (03/05/08), and produce the single governing plan and registers Prompts 10–13 build from.
 
 **Prerequisites:** lenses 01–08 available (or gaps noted); architecture review `pass`/`conditional`; feature ACs + contracts; early waste from Discovery.
 
@@ -169,15 +179,15 @@ Control owners and revisit triggers feed Assurance in `delivery-ops-llmops`.
 
 ## Workflow
 
-1. Ensure thin `dmaic_lens.md` exists for stages 01–08 (or note gaps).  
-2. Build `lens_rollup.md` first — do not ignore prior lenses.  
-3. Map process; classify DOWNTIME + AI waste with observed vs hypothesized.  
-4. Write DMAIC charter + baselines (or open measurements); Measure-first under scarcity.  
-5. Root-cause; design future state; emit build constraints.  
-6. Produce `structural_reopen.md` with gate **`cleared`** before tasks.  
+1. At each full-DMAIC stage (01/02/04/06/07), run the complete Define/Measure/Analyze/Improve/Control cycle and update the full waste registers — carry forward, don't restart. At thin stages (03/05/08/10–13), write the short single-letter-focus `dmaic_lens.md`.
+2. At stage 09, build `lens_rollup.md` first — reconcile the five full-stage registers against each other and fold in the three thin lenses; do not ignore any of them.
+3. Map process; classify DOWNTIME + AI waste with observed vs hypothesized (started at 01, refined through 02/04/06/07).
+4. Write DMAIC charter + baselines (or open measurements); Measure-first under scarcity.
+5. Root-cause; design future state; emit build constraints.
+6. Produce `structural_reopen.md` with gate **`cleared`** before tasks.
 7. Hand Control close to Assurance (`control_lens_rollup` at stage 12).
 
 ## Do / Don’t
 
-- **Do:** quantify wait vs touch; Pareto wastes; constrain AI touchpoints; Measure-first under scarcity; consolidate lenses before the full workshop; clear structural reopen before tasks  
-- **Don’t:** AI-wash a broken process; skip measurement; invent baselines; scale agents before Measure capability; re-run full stage 09 after every earlier step; ignore prior `dmaic_lens.md`; hand off to tasks while reopen is `blocked`  
+- **Do:** quantify wait vs touch; Pareto wastes; constrain AI touchpoints; Measure-first under scarcity; run full DMAIC at each designated full-DMAIC stage (01/02/04/06/07), carrying registers forward rather than restarting; reconcile (not just re-collect) at stage 09; clear structural reopen before tasks
+- **Don’t:** AI-wash a broken process; skip measurement; invent baselines (label Improve/Control as provisional instead, at early full-DMAIC stages); scale agents before Measure capability; restart the waste registers from blank at each full-DMAIC stage instead of carrying them forward; ignore prior `dmaic_lens.md`; hand off to tasks while reopen is `blocked`  

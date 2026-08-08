@@ -1,34 +1,59 @@
-# DMAIC Lens — Prompt 01 (thin Measure/Define only)
+# DMAIC Lens — Discovery (FULL cycle, per updated `prompts/01_discovery.md`)
 
-Per `prompts/01_discovery.md`: this is a short lens, not the full Prompt 09 Lean workshop. Do not run Analyse/Improve/Control here.
+Discovery is a designated full-DMAIC stage (with Frame/02, DDD/04, C4/06, ADR/07) — this replaces the earlier thin Measure/Define-only version of this file. Improve and Control content below is **provisional**: no architecture exists yet, so these are candidate directions to carry into Frame/PRD/DDD, not locked decisions. Full waste detail lives in `waste_register_downtime.md` and `waste_register_ai_specific.md` (this file summarizes and links to them).
 
-## 1. What can already be measured
+**Label key:** FACT = package-cited · INTERPRETATION = reasoned from facts · ASSUMPTION = unproven · DECISION = team choice · PROVISIONAL = candidate, not yet architecture-validated.
 
-- **Board target metric** — release lead time, with an explicit numeric target (−14%) and due date (2026-11-30). Baseline lead-time value itself is **not yet in evidence** — `board_requests.csv` states the target, not the current-state number.
-- **No-AI comparison baselines exist as estimates**, not measurements: `no_ai_baselines.csv` gives estimated value % and duration in weeks for three options (master_data_repair 38%/10wk, rules_workflow 27%/6wk, genai_assist 51%/14wk) — these are themselves synthetic planning estimates, to be treated as INTERPRETATION inputs, not measured facts.
-- **Cost signals exist and are partially measured, partially missing**: `cost_model.csv` gives a real inference-cost figure ($184,000/mo) and a real observability figure ($31,000/mo), but human quality-review and medical-review costs are booked at $0 — a known gap (INJ-077), not a true zero.
-- **Continuity/outage tolerance is measured as a policy value**, not an observed incident rate: `continuity_requirements.csv` states max AI outage (14 days for batch/supply, 0 hours for PV) as a requirement, not a historical MTTR.
+## 1. Define
 
-## 2. Baselines that are Unknown
+**FACT**: the improvement problem is release-lead-time reduction (−14%, `board_requests.csv` BR-01) achieved without changing registered specifications or Quality authority (`data/ai_use_boundaries.csv`), across a fragmented, multi-system estate (`case/SOURCE_SYSTEM_FACT_PACK.md`).
 
-- Current-state release lead time (the number the −14% target applies against).
-- Current-state PV case cycle time and duplicate rate.
-- Current-state supply/cold-chain option turnaround time.
-- True fully-loaded review cost (human_quality_review and medical_review lines are $0-booked, not measured).
-- Error/defect rate for unit-mismatch or terminology-mismatch incidents (INJ-024, INJ-039 are known occurrences, not a measured rate).
+**Scope boundary (FACT, `case/INTEGRATED_CASE.md` §4)**: three workflows only — GxP batch evidence reconciliation, PV case intake/signal support, supply/cold-chain option planning. Improvement is bounded to evidence assembly/reconciliation, never to the regulated decision itself.
 
-## 3. Top 3 early waste signals (see `early_waste_signals.md` for full list)
+## 2. Measure
 
-1. Manual, multi-system evidence assembly before the accountable human can act — **observed**.
-2. Rework from unit/terminology mismatches already present in the data — **observed**.
-3. Retrieval/token waste risk if trust-by-default retrieval is built — **hypothesized**.
+**FACT** — what is already measurable: target metric (−14% lead time, due 2026-11-30); four function-level KPI targets (`kpi_conflicts.csv`); three non-AI improvement-option estimates, not measurements (`no_ai_baselines.csv`); partial cost model with a known $0-booked gap on human review (`cost_model.csv`, INJ-077).
 
-## 4. What Prompt 09 (full DMAIC) must Measure before scaling automation
+**FACT** — what is Unknown: current-state release lead time (the number −14% applies to), PV case cycle time, supply-option turnaround time, true fully-loaded review cost, defect/rework rate from identity/unit/terminology/temporal mismatches. None of these are fabricated here; they are explicit gaps in `evidence_acquisition_backlog.md`.
 
-- Real current-state lead time per workflow (to validate the −14% target is even attributable to evidence-reconciliation effort vs. other bottlenecks).
-- Real fully-loaded cost including human quality/medical review (to correct the INJ-077 gap before any ROI claim in artefact 01/23).
-- Defect/rework rate attributable specifically to identity, unit, terminology and temporal mismatches (to size the evidence-resolver's expected value).
-- Duplicate-case rate in PV intake before and after any dedup-support feature.
-- Actual AI outage/incident history (none yet — system is pre-build) once the workflows are live, to validate the 14-day/0-hour continuity targets are achievable, not just declared.
+**Full detail**: `evidence_register.md` §§1–10 and `evidence_acquisition_backlog.md`.
 
-**Status: thin lens only. Full DMAIC workshop is out of scope for this Discovery pass and belongs to Prompt 09 / artefact 02 §§3–5 (Analyse/Improve/Control).**
+## 3. Analyze
+
+**INTERPRETATION**, grounded in the two waste registers (not yet a confirmed root cause — Measure baselines are mostly Unknown):
+
+- The dominant candidate root cause of the lead-time problem is **Waiting** and **Motion**: time spent on cross-system evidence reconciliation *before* the accountable human's judgement begins, not the judgement itself (`waste_register_downtime.md` Pareto section).
+- A secondary candidate root cause is **Defects** propagating from unresolved identity/unit/terminology conflicts (INJ-024, INJ-039, INJ-021, INJ-045) that force rework once discovered downstream, rather than being caught at intake.
+- **Fishbone (5 of the 8 standard branches populated from evidence; 3 not yet evidenced):**
+  - *Process* — manual, sequential evidence assembly across 5+ systems before judgement (Waiting/Motion).
+  - *Source documents/inputs* — untrusted/superseded/draft knowledge documents mixed with approved ones (`knowledge/` status variance); unapproved spreadsheet in the batch chain (INJ-032).
+  - *Reference/master data* — identity collisions (compound INJ-008, product INJ-045) and validation-state disagreement (INJ-031).
+  - *Control design* — audit trail disabled 47 minutes undetected (INJ-029); tool-manifest poisoning already present (INJ-066).
+  - *Model behaviour* — not yet evidenced (no model exists); flagged **not applicable at this stage**, revisit once a model is built.
+  - *People, retrieval, integration* — not yet evidenced at Discovery depth; carried to DDD (04)/C4 (06) as open branches.
+- **5 Whys (top candidate — Waiting):** Why is release lead time high? → Evidence must be manually assembled from 5+ systems. → Why manually? → No shared, trusted, cross-system evidence view exists. → Why none? → Each system was built/acquired independently with no shared identity/authority model (`SOURCE_SYSTEM_FACT_PACK.md`, INJ-005 acquisition integration). → Why was this tolerated? → No single system was ever mandated as authoritative across business objects (deliberate, per case design — "no system is universally authoritative"). → **Root cause candidate:** the absence of an object-scoped, authority-aware evidence-resolution layer, not a deficiency in any single system.
+
+**Root-cause register**: identity/authority fragmentation (process+data cause; candidate treatment: shared evidence-resolver) is the leading candidate; unresolved until Measure baselines exist to confirm magnitude.
+
+## 4. Improve (PROVISIONAL)
+
+Candidate treatment classes to carry into Frame (02) / PRD (03) / DDD (04) — none are locked:
+
+1. **Deterministic validation / evidence-resolver** (non-AI-first) — computes integrity hashes, checks knowledge-document authority/status, validates identity/relationship links, and surfaces contradictions rather than resolving them silently. This directly targets the Waiting/Motion/Defects root causes above.
+2. **Risk-tiered human review** — routes clean, fully-corroborated evidence faster while routing conflicted/incomplete evidence for deeper review, rather than uniform review depth for everything (addresses Non-utilised-talent waste).
+3. **Constrained/grounded AI, only after the deterministic layer** — per `no_ai_baselines.csv`, AI is not the only or obviously-best lever; any AI component must be justified against `rules_workflow` (27%/6wk) and `master_data_repair` (38%/10wk) at Prompt 02/03, not assumed.
+
+**Explicitly not recommended yet**: any agentic/autonomous component — insufficient evidence exists that model accuracy (vs. control/integration failures) is the dominant problem (`waste_register_ai_specific.md`, closing section).
+
+## 5. Control (PROVISIONAL)
+
+Candidate Control questions to firm up once Prompt 09 consolidates and Prompt 12 closes Control:
+
+- Which metric proves the Waiting/Motion root cause was actually addressed (candidate: evidence-assembly time per object, once instrumented)?
+- Who owns the evidence-resolver's authority ruling once built (candidate: shared ownership across P3/build and P4/GxP per the governing plan's RACI)?
+- What re-triggers a revisit of this Analyze conclusion (candidate: if Measure baselines, once acquired, show Waiting/Motion is not in fact dominant)?
+
+## Cross-reference
+
+- Full waste detail: `waste_register_downtime.md`, `waste_register_ai_specific.md`.
+- This full lens is a direct input to Prompt 02 (Frame/SCQA) — see `submission/artefacts/02-frame/`.

@@ -65,16 +65,22 @@ Also produce:
 - boundary risks and unresolved questions for Prompt 05/06;
 - link back to Prompt 01 evidence acquisition backlog items that would de-provisionalize this model.
 
-### Lean / DMAIC lens (spine — thin)
+### Lean / DMAIC lens (spine — FULL at this stage)
 
-**DMAIC focus this stage:** **Analyze** (where defects/rework come from in the domain) + design to avoid waste.
+**DMAIC focus this stage:** run the **full** Define → Measure → Analyze → Improve → Control cycle, building on Prompts 01/02's registers — do not restart from a blank page. DDD is a designated full-DMAIC stage (with Discovery/01, Frame/02, C4/06, ADR/07).
 
-In `dmaic_lens.md` (short), record:
+In `dmaic_lens.md`, record the full cycle:
 
-1. Which invariants/rules remove **Defects** (hallucinations, bad decisions) vs leaving them to the model?  
-2. Where does **HITL** prevent human-review waste (review everything) while still catching high-risk cases?  
-3. RAG/agent boundaries: risks of retrieval/token/context waste if unbounded?  
-4. Domain ambiguities that would cause Extra processing / Motion if left unresolved?
+1. **Define** — restate the improvement problem at domain-model granularity: which bounded-context boundaries exist specifically to contain a named waste or defect risk?
+2. **Measure** — which domain invariants are (or should be) instrumented so a violation is measurable, not just theoretically prevented?
+3. **Analyze** — root cause, at the domain level: which invariants/rules remove **Defects** (hallucinations, bad decisions) vs leaving them to the model? Where does **HITL** prevent human-review waste (review everything) while still catching high-risk cases? RAG/agent boundaries: risks of retrieval/token/context waste if unbounded? Domain ambiguities that would cause Extra processing / Motion if left unresolved?
+4. **Improve** — the domain model itself is the Improve artifact: which specific modeling choices (aggregate boundaries, invariants, anti-corruption layers) are the treatment for a root cause identified above?
+5. **Control** — which domain invariants need a runtime check/monitor so a violation is caught, not just documented?
+
+Update, do not restart:
+
+- **DOWNTIME waste register** (`waste_register_downtime.md`) — carried from Prompts 01/02, refined with domain-level findings.
+- **AI-specific waste register** (`waste_register_ai_specific.md`) — same.
 
 ---
 
@@ -87,7 +93,7 @@ In `dmaic_lens.md` (short), record:
 - [ ] RAG/agent responsibilities (if applicable) map to domain artefacts, not tech fashion.
 - [ ] Domain is **not** organized around technical layers or dataset names.
 - [ ] Domain language is ready for Feature Specifications (Prompt 05).
-- [ ] `dmaic_lens.md` is complete (feeds Prompt 09).
+- [ ] Full `dmaic_lens.md` (Define/Measure/Analyze/Improve/Control) and updated waste registers are complete (feeds Prompt 09 consolidation).
 
 ---
 
@@ -98,7 +104,7 @@ In `dmaic_lens.md` (short), record:
 - Do not treat dataset or API names as the domain model.
 - Do not treat a provisional model as production-ready domain truth.
 - Do not expand beyond PRD in-scope / out-of-scope without updating Prompt 03.
-- Do not run full Prompt 09 here.
+- Full DMAIC and full waste registers ARE required at this stage; what remains deferred to Prompt 09 is cross-stage *consolidation*, not the first full pass.
 
 ---
 
@@ -109,4 +115,6 @@ Write under `participant-outputs-v2/04-ddd/`:
 - `domain_model.md` (include artifact status)
 - `context_map.md`
 - `gen_ai_boundaries.md` (rules vs AI, RAG, agents, HITL, audit, eval intent)
-- `dmaic_lens.md`
+- `dmaic_lens.md` (full Define/Measure/Analyze/Improve/Control)
+- `waste_register_downtime.md` (updated)
+- `waste_register_ai_specific.md` (updated)

@@ -2,7 +2,7 @@
 
 Flat Markdown skills (one `.md` file per skill) merging theme teaching depth with Spec-Driven engagement process.
 
-**Synced to current `prompts_v2/`** (Lean/DMAIC thin-lens spine, `structural_reopen` gate, `ac_test_plan`, `control_lens_rollup`, DDD stages 15–16, Tests merged into Deliver).
+**Synced to current `prompts_v2/`** (Lean/DMAIC spine — full DMAIC + waste registers at stages 01/02/04/06/07, thin lens elsewhere — `structural_reopen` gate, `ac_test_plan`, `control_lens_rollup`, DDD stages 15–16, Tests merged into Deliver).
 
 Each file is self-contained and carries no runtime dependency on `deck/`, `prompts_v2/`, or `fde-skill-pack/`. When produce lists diverge, prefer opening the matching `prompts_v2/` file for the full checklist.
 
@@ -35,7 +35,7 @@ skills_final/
 | `agentic-systems.md` | Workflows before agents, ACI, multi-agent, chaos, verifiers |
 | `data-and-knowledge.md` | Discovery ladder, semantic layers, KGs, question router, provenance, quality gates |
 | `delivery-ops-llmops.md` | Eval/CI/FinOps + Assurance + **`control_lens_rollup`** + **`production_readiness`** |
-| `process-and-lean-discovery.md` | Thin-lens contract, **`lens_rollup`**, full DMAIC, **`structural_reopen`**, Measure-first |
+| `process-and-lean-discovery.md` | Full-DMAIC-stage contract (01/02/04/06/07), thin-lens contract (03/05/08/10-13), **`lens_rollup`** reconciliation, **`structural_reopen`**, Measure-first |
 | `trust-risk-security.md` | RAI, ISO 42001, EU AI Act, DPDP, guardrails, HITL |
 | `spec-driven-delivery.md` | Layers (Arch before TD), mirrors, **`traceability_gap_audit`**, **`ac_test_plan`**, Tests-in-Deliver, **`pilot_learnings`** |
 | `exec-communication.md` | Frame (+ handoff pack/lens), pods/lenses/30-60-90, Proposal with Lean spine close |
@@ -44,7 +44,7 @@ skills_final/
 
 - `fde-operating-model` triages stage + which skill applies.
 - `domain-and-architecture` owns Discovery→ADR/review; `spec-driven-delivery` owns PRD/features/tech/tasks/deliver.
-- `process-and-lean-discovery` owns thin-lens contract + stage 09 consolidation; `delivery-ops-llmops` closes Control at 12.
+- `process-and-lean-discovery` owns the full-DMAIC-stage contract (01/02/04/06/07) + thin-lens contract (03/05/08/10-13) + stage 09 reconciliation; `delivery-ops-llmops` closes Control at 12.
 - `exec-communication` owns Frame (02) and Proposal (13).
 
 ## Engagement sequence (quick)
@@ -79,4 +79,4 @@ Flat Cursor-style skills (one `.md` per skill, YAML `name` + `description`).
 - Mark gaps as **Assumption**  
 - No compliance certification claims  
 - Architecture before Technical Design; structural reopen must be `cleared` before tasks  
-- Thin `dmaic_lens.md` on non-09 stages; full Lean workshop only at 09  
+- Full DMAIC + full waste registers at stages 01/02/04/06/07 (carried forward, not restarted); thin `dmaic_lens.md` at 03/05/08/10-13; stage 09 reconciles rather than re-deriving  

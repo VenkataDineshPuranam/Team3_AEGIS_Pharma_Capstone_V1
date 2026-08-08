@@ -71,16 +71,22 @@ Present the Answer as a pyramid:
 - Open questions that block design (must be resolved or explicitly assumed).
 - Whether later artifacts (PRD through ADR) must be marked **provisional**.
 
-### Lean / DMAIC lens (spine — thin)
+### Lean / DMAIC lens (spine — FULL at this stage)
 
-**DMAIC focus this stage:** **Define** (improvement problem and success measures).
+**DMAIC focus this stage:** run the **full** Define → Measure → Analyze → Improve → Control cycle, building directly on Prompt 01's full DMAIC output and waste registers — do not restart from a blank page. Frame is a designated full-DMAIC stage (with Discovery/01, DDD/04, C4/06, ADR/07).
 
-In `dmaic_lens.md` (short), record:
+In `dmaic_lens.md`, record the full cycle:
 
-1. What waste or rework does the Complication describe (map to DOWNTIME / AI waste names if clear)?  
-2. Which success metrics are Measure targets for Prompt 09/12 (known vs Unknown baseline)?  
-3. What must *not* be automated yet because Measure is missing (`hypothesis` → Measure-first)?  
-4. One sentence: how the Answer reduces waste without adding model/process waste.
+1. **Define** — the improvement problem restated at Frame level: what waste or rework does the Complication describe (map to DOWNTIME / AI waste names using Prompt 01's registers)?
+2. **Measure** — which success metrics from the Answer are Measure targets (known vs Unknown baseline, carried from Prompt 01, refined here)?
+3. **Analyze** — do Prompt 01's root-cause findings still hold at Frame level, or does the SCQA narrative surface a root cause Prompt 01 missed? Note any correction.
+4. **Improve** — how the Answer (governing recommendation or governing experiment) is itself the Improve candidate — state explicitly how it reduces waste without adding model/process waste, and what alternative Improve options were rejected and why.
+5. **Control** — what would have to be monitored post-decision for this Answer to be judged as working (provisional; firmed up in Prompt 09/12).
+
+Carry forward and refine, rather than re-deriving from scratch:
+
+- **DOWNTIME waste register** (`waste_register_downtime.md`) — update Prompt 01's register with any Frame-stage findings.
+- **AI-specific waste register** (`waste_register_ai_specific.md`) — same.
 
 ---
 
@@ -93,7 +99,7 @@ In `dmaic_lens.md` (short), record:
 - [ ] In `hypothesis` mode: Answer is an experiment with falsifiers and acquisition needs.
 - [ ] Answer stays at capability level (no C4/tool lock-in).
 - [ ] One bounded question is ready to drive PRD and domain modeling.
-- [ ] `dmaic_lens.md` Define focus is complete (feeds Prompt 09).
+- [ ] Full `dmaic_lens.md` (Define/Measure/Analyze/Improve/Control) and updated waste registers are complete (feeds Prompt 09 consolidation).
 
 ---
 
@@ -102,7 +108,7 @@ In `dmaic_lens.md` (short), record:
 - Do not write the full PRD, feature flows, bounded contexts, containers, or ADRs here.
 - Do not expand scope beyond the evidence boundary without labeling new items as assumptions.
 - Do not present a `hypothesis` narrative as if it were `decision-ready`.
-- Do not run full Prompt 09 waste registers here.
+- Full DMAIC and full waste registers ARE required at this stage; what remains deferred to Prompt 09 is cross-stage *consolidation* across all designated full-DMAIC stages, not the first full pass.
 - Think top-down; communicate so the audience sees answer → reasons → evidence/assumptions.
 
 ---
@@ -112,4 +118,6 @@ In `dmaic_lens.md` (short), record:
 Write under `participant-outputs-v2/02-scqa/`:
 
 - `scqa_minto_decision_narrative.md`
-- `dmaic_lens.md`
+- `dmaic_lens.md` (full Define/Measure/Analyze/Improve/Control)
+- `waste_register_downtime.md` (updated from Prompt 01)
+- `waste_register_ai_specific.md` (updated from Prompt 01)

@@ -78,16 +78,22 @@ Produce `architecture_review.md` with:
 
 Under `hypothesis` / `provisional`, prefer `conditional` unless evidence supports `pass`.
 
-### Lean / DMAIC lens (spine — thin)
+### Lean / DMAIC lens (spine — FULL at this stage)
 
-**DMAIC focus this stage:** **Analyze** trade-offs that create or remove waste; set **Control** revisit triggers.
+**DMAIC focus this stage:** run the **full** Define → Measure → Analyze → Improve → Control cycle, building on Prompts 01/02/04/06's registers — do not restart from a blank page. ADR is the last designated full-DMAIC stage in this set (with Discovery/01, Frame/02, DDD/04, C4/06); it is also the natural point to make Control concrete via revisit triggers.
 
-In `dmaic_lens.md` (short), record:
+In `dmaic_lens.md`, record the full cycle:
 
-1. Which ADRs explicitly prevent a named waste (e.g. rules-before-LLM → Defects/Model waste)?  
-2. Which decisions risk new Waiting / Human-review / Token waste?  
-3. Validation + revisit triggers that serve DMAIC Control later?  
-4. Architecture review open issues that are really waste risks?
+1. **Define** — restate the improvement problem at decision granularity: which ADR exists specifically to resolve a named waste or risk trade-off?
+2. **Measure** — for each ADR with a measurable consequence, state the metric and threshold that would prove the decision right or wrong.
+3. **Analyze** — which ADRs explicitly prevent a named waste (e.g. rules-before-LLM → Defects/Model waste)? Which decisions risk new Waiting / Human-review / Token waste? Architecture review open issues that are really waste risks?
+4. **Improve** — the ADR set itself is the Improve artifact: confirm each accepted ADR maps to a specific waste/root-cause from Prompts 01/02/04/06; reject or flag any ADR that does not.
+5. **Control** — validation and revisit triggers per ADR (required — this is where Control becomes concrete and enforceable, feeding Prompt 09's structural-reopen gate and Prompt 12's control rollup).
+
+Update, do not restart:
+
+- **DOWNTIME waste register** (`waste_register_downtime.md`) — carried from Prompts 01/02/04/06, closed out with ADR-level treatment decisions.
+- **AI-specific waste register** (`waste_register_ai_specific.md`) — same.
 
 ---
 
@@ -99,7 +105,7 @@ In `dmaic_lens.md` (short), record:
 - [ ] Status values are explicit; under `provisional`/`hypothesis`, material ADRs are `proposed` unless evidence supports `accepted`.
 - [ ] Architecture review status is `pass` or `conditional` (not `fail`).
 - [ ] “Proposed” items needing sponsor input or data access are flagged for Prompt 13.
-- [ ] `dmaic_lens.md` is complete (feeds Prompt 09).
+- [ ] Full `dmaic_lens.md` (Define/Measure/Analyze/Improve/Control) and closed-out waste registers are complete (feeds Prompt 09 consolidation).
 
 ---
 
@@ -110,7 +116,7 @@ In `dmaic_lens.md` (short), record:
 - Do not start implementation detail that belongs in Prompt 11 unless needed to make the decision testable.
 - Do not mark assumption-based decisions `accepted` without interim assumption + revisit trigger called out.
 - Do not skip architecture review / defense.
-- Do not run full Prompt 09 here.
+- Full DMAIC and full waste registers ARE required at this stage; what remains deferred to Prompt 09 is cross-stage *consolidation* across all designated full-DMAIC stages (01/02/04/06/07), not the first full pass.
 - Prefer fewer sharp ADRs over many vague ones.
 
 ---
@@ -122,4 +128,6 @@ Write under `participant-outputs-v2/07-adrs/` **and mirror** to `specs/architect
 - `ADR-001-....md` … (one file per ADR)
 - `decision_index.md`
 - `architecture_review.md`
-- `dmaic_lens.md`
+- `dmaic_lens.md` (full Define/Measure/Analyze/Improve/Control)
+- `waste_register_downtime.md` (closed out)
+- `waste_register_ai_specific.md` (closed out)

@@ -1,6 +1,6 @@
-# Early Waste Signals — Prompt 01 Discovery (Lean preview, not full DMAIC)
+# Early Waste Signals — Prompt 01 Discovery (superseded — kept as historical seed)
 
-Per `prompts/01_discovery.md` §12: observed vs. hypothesized only. Full DMAIC workshop happens at Prompt 09, not here. DOWNTIME letters used where they fit; AI-specific waste named separately.
+**Superseded.** Discovery was upgraded to a full-DMAIC stage; this preview list has been expanded into the full 8-category registers at `waste_register_downtime.md` and `waste_register_ai_specific.md`. Kept in place, unmodified, as the historical seed those registers were built from — do not cite this file as current.
 
 | # | Waste | DOWNTIME / AI-specific | Observed or hypothesized | Evidence |
 |---|---|---|---|---|

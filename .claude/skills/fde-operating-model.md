@@ -61,27 +61,31 @@ Mirrors: `specs/product|features|architecture|api|data|testing/`, `tasks/`
 6. **Structural reopen after Lean** — if 09 needs C4/ADR/contract changes, `structural_reopen.md` must be **`cleared`** before Prompt 10  
 7. Tasks before coding — agents load only listed specs  
 8. Write the value, not the adjective — numeric or `Unknown`  
-9. **Waste before scale (Lean/DMAIC spine)** — every stage 01–08 and 10–13 writes thin `dmaic_lens.md`; **09 consolidates** full registers (do **not** re-run full 09 after every step); **12 closes** with `control_lens_rollup.md`  
+9. **Waste before scale (Lean/DMAIC spine)** — stages **01/02/04/06/07 run the full Define-Measure-Analyze-Improve-Control cycle + full waste registers**, carried forward stage to stage; stages 03/05/08/10–13 write thin single-letter `dmaic_lens.md`; **09 reconciles** the five full-stage registers against the thin ones into one governing plan; **12 closes** with `control_lens_rollup.md`  
 10. **Tests are intentional merge** — SDD “Tests” merged into Deliver (11) + AC review in Assurance (12); every AC needs a row in `ac_test_plan.md`  
 11. **PoC ≠ production** — 11–13 label demo vs production-grade; DDD stage 15 → `pilot_learnings.md` (11); stage 16 → `production_readiness.md` (12–13)  
 12. Specs in the repository — `participant-outputs-v2/` **and** mirror `specs/` / `tasks/`  
 
 ### Lean / DMAIC spine (through all stages)
 
-Lean/DMAIC is the **operating improvement spine**, not only stage 09.
+Lean/DMAIC is the **operating improvement spine**, not only stage 09. Five stages run the full cycle; the rest stay thin.
 
-| Stages | Thin lens focus | Full workshop |
+| Stages | Lens depth | Focus |
 |---|---|---|
-| 01 | Measure + light Define | — |
-| 02–03 | Define (+ Measure targets) | — |
-| 04–05 | Analyze | — |
-| 06–08 | Improve-by-design + Control triggers | — |
-| **09** | — | **Full** registers + DMAIC plan (`lens_rollup` first) + `structural_reopen` gate |
-| 10–11 | Improve (prioritize / execute) | — |
+| **01** | **Full DMAIC + full waste registers** | Define+Measure primary; Analyze/Improve/Control provisional |
+| **02** | **Full DMAIC + full waste registers** | Define/Measure refined; Answer = Improve candidate |
+| 03 | Thin | Define (+ Measure targets) |
+| **04** | **Full DMAIC + full waste registers** | Analyze primary; domain model = Improve artifact |
+| 05 | Thin | Analyze |
+| **06** | **Full DMAIC + full waste registers** | Improve-by-architecture; Control = health/SLO checks |
+| **07** | **Full DMAIC + full waste registers** | Analyze trade-offs; Control = revisit triggers (closes registers) |
+| 08 | Thin | Improve-by-design + Control triggers |
+| **09** | Reconciliation | Merge 01/02/04/06/07 full registers + fold in 03/05/08 thin lenses (`lens_rollup` first) + `structural_reopen` gate |
+| 10–11 | Thin | Improve (prioritize / execute) |
 | **12** | Control | **`control_lens_rollup`** closes lenses 10–12 |
-| 13 | Control (executive) | — |
+| 13 | Thin | Control (executive) |
 
-Each non-09 stage: short `dmaic_lens.md` only. Stage 09: synthesize 01–08 lenses, then deepen. Stage 12: roll up post-build lenses.
+Full-DMAIC stages (01/02/04/06/07) carry the waste registers forward and refine them — never restart from blank. Thin stages (03/05/08/10–13): short `dmaic_lens.md` only. Stage 09: reconcile, don't re-derive. Stage 12: roll up post-build lenses.
 
 ### Which skill owns which stage
 

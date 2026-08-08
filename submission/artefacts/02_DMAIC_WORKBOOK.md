@@ -2,7 +2,7 @@
 
 **Label key:** FACT = package-cited · INTERPRETATION = reasoned from facts · ASSUMPTION = unproven · DECISION = team choice · ABSTAIN = unresolved until evidence/as-of/auth present.
 
-**Stage note:** per `prompts/01_discovery.md` and `prompts/09_lean_dmaic.md` (governing plan §11.8/methodology), only a **thin Define/Measure lens** is run during Discovery (P1/G1). Analyse, Improve and Control are explicitly deferred to the full Prompt 09 Lean workshop (Phase P6/G6 per the governing plan). Filling them in now would violate the methodology's own constraint against running the full workshop early — those sections are marked **PENDING (Prompt 09)** rather than fabricated.
+**Stage note:** per the updated `prompts/01_discovery.md`, Discovery is now a designated **full-DMAIC stage** (with Frame/02, DDD/04, C4/06, ADR/07) — all five phases are run now, not deferred to Prompt 09. Improve and Control below are labeled **PROVISIONAL**: they are candidate directions, not architecture-validated decisions, since no design exists yet. Prompt 09 (Phase P6/G6) still runs — its job is cross-stage *reconciliation* across all five full-DMAIC stages plus the thin lenses from 03/05/08, not the first full pass.
 
 ## Document control
 
@@ -43,20 +43,31 @@ Establish the Define and Measure baseline for the AEGIS-PHARMA intervention befo
 |---|---|---|---|
 | What can already be measured from supplied evidence? | **FACT**: target metric (release lead time, −14%), current KPI targets (E-002), estimated (not measured) value/duration for three improvement options (E-003), partial cost model (E-004) — full detail in `submission/artefacts/01-discovery/dmaic_lens.md` §1 | FDE2 | E-005 |
 | What baselines are Unknown? | **FACT**: current-state release lead time, PV case cycle time, supply-option turnaround time, true fully-loaded review cost, and mismatch/defect rate are all **Unknown** — none are in the supplied evidence | FDE2, added to evidence-acquisition backlog | `submission/artefacts/01-discovery/dmaic_lens.md` §2; `submission/artefacts/01-discovery/evidence_acquisition_backlog.md` item 1 |
-| What early waste signals were observed (not yet measured)? | **FACT**: 6 waste signals identified, 5 observed / 1 hypothesized — manual multi-system evidence assembly, unit/terminology rework, cross-system-reconciliation waiting, retrieval/token waste risk, mis-costed value (human review $0), duplicate PV case handling | FDE2 | `submission/artefacts/01-discovery/early_waste_signals.md` |
+| What waste was observed (not yet measured)? | **FACT**: full 8-category DOWNTIME register + full 8-category AI-specific register completed — 6 of 8 DOWNTIME categories observed with named evidence, 2 hypothesized (Non-utilised talent, Motion); all 8 AI-specific categories hypothesized (no system built yet) but each grounded in an already-present condition | FDE2 | `submission/artefacts/01-discovery/waste_register_downtime.md`, `waste_register_ai_specific.md` |
 | What must the full Prompt 09 workshop measure before scaling automation? | **FACT** (carried forward, not answered here): real current-state lead time per workflow; real fully-loaded cost; defect rate attributable to identity/unit/terminology/temporal mismatches; PV duplicate rate; actual AI-outage incident history once live | FDE2, executed at Prompt 09 | `submission/artefacts/01-discovery/dmaic_lens.md` §4 |
 
 ## 3. Analyse
 
-**PENDING (Prompt 09 full Lean workshop, Phase P6/G6).** Running root-cause analysis before Measure has established real baselines (§2, all Unknown) would produce unsupported conclusions. Do not treat the "top ten investigation hypotheses" in `submission/artefacts/01-discovery/evidence_register.md` §9 as Analyse-stage findings — they are Discovery-stage hypotheses to be tested, not root causes yet confirmed.
+| Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
+|---|---|---|---|
+| What is the leading root-cause candidate? | **INTERPRETATION** (not yet confirmed — Measure baselines are mostly Unknown, §2): fishbone analysis points to a **process/data cause** — the absence of an object-scoped, authority-aware evidence-resolution layer, since no system was ever mandated authoritative across business objects (`SOURCE_SYSTEM_FACT_PACK.md`; INJ-005). 5-Whys trace: high lead time → manual multi-system evidence assembly → no shared trusted evidence view → systems built/acquired independently → no shared identity/authority model → root cause | FDE2, confirmed at Prompt 09 | `submission/artefacts/01-discovery/dmaic_lens.md` §3 |
+| Which DOWNTIME/AI wastes are implicated? | **FACT**: full 8-category DOWNTIME register and full 8-category AI-specific register completed this stage — Waiting and Motion (multi-system reconciliation before human judgement) are the Pareto-leading candidates; every AI-specific waste is currently hypothesized since no system is built, but each is grounded in an already-present condition (e.g. INJ-065 poisoned document, INJ-066 poisoned tool manifest) | FDE2/FDE5 | `submission/artefacts/01-discovery/waste_register_downtime.md`, `waste_register_ai_specific.md` |
+| Is model accuracy the dominant bottleneck? | **INTERPRETATION**: evidence so far points *against* it — every named AI-specific risk is a control/integration/process failure mode (poisoned input, stale authorization, unsigned tool, missing eval harness), not a case of a well-controlled model reasoning incorrectly. Provisional; retest once a system exists | FDE5, retested at Prompt 09/12 | `waste_register_ai_specific.md` closing section |
 
 ## 4. Improve
 
-**PENDING (Prompt 09 full Lean workshop, Phase P6/G6).** No improvement design is committed until Analyse confirms root causes against measured (not estimated) baselines.
+| Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
+|---|---|---|---|
+| What treatment classes follow from Analyse? | **PROVISIONAL** (candidate, not architecture-validated): (1) a deterministic evidence-resolver — integrity hashing, knowledge-document authority/status check, identity/relationship validation, surfacing contradictions rather than resolving them silently; (2) risk-tiered human review — route clean, corroborated evidence faster, route conflicted evidence for deeper review; (3) constrained/grounded AI only after the deterministic layer, and only if justified against `rules_workflow`/`master_data_repair` non-AI baselines at Prompt 02/03 | FDE1/FDE3, locked at Prompt 04 (DDD) at the earliest | `dmaic_lens.md` §4 |
+| What is explicitly NOT recommended yet? | **DECISION**: no agentic/autonomous component — insufficient evidence that model accuracy is the dominant problem vs. control/integration failures | FDE5 veto until evidence changes | `waste_register_ai_specific.md` |
 
 ## 5. Control
 
-**PENDING (Prompt 09 full Lean workshop, Phase P6/G6).** Control-phase artefacts (SPC-equivalent monitoring, control plan, ownership handoff) depend on an implemented, measured system that does not yet exist (`submission/src` currently has 0 substantive files).
+| Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
+|---|---|---|---|
+| What would prove the root cause was actually addressed? | **PROVISIONAL**: candidate metric is evidence-assembly time per object (batch/case/shortage event), once instrumented — currently Unknown, so this is a Measure commitment, not a result | FDE2 | `evidence_acquisition_backlog.md` item 1 |
+| Who owns Control once built? | **PROVISIONAL**: shared ownership across FDE3 (build) and FDE4 (GxP), per governing-plan RACI §6.4 | Team, ratified at Prompt 09/12 | `submission/artefacts/ProjectPlan/AEGIS_PROJECT_PLAN_FINAL.md` §6.4 |
+| What re-triggers a revisit of this Analyse conclusion? | **DECISION**: if Measure baselines, once acquired, show Waiting/Motion is not in fact the dominant waste, this Analyse section must be reopened before Improve proceeds further | FDE2, gate at Prompt 09 | — |
 
 ## 6. Failure modes and verification
 
@@ -69,15 +80,15 @@ Establish the Define and Measure baseline for the AEGIS-PHARMA intervention befo
 
 | ID | Type | Description | Impact | Owner | Due / trigger | Status |
 |---|---|---|---|---|---|---|
-| R-001 | Gap | No current-state baseline for any of the three workflows' cycle time | Analyse/Improve cannot start with real numbers | FDE2 | Before Prompt 09 | Open |
-| R-002 | Risk | Team may be tempted to skip straight to Improve without a measured baseline, given time pressure (40h Track A budget) | Undermines DMAIC discipline; plan explicitly forbids this ("Do not run full DMAIC or redesign here") | FDE1 | Every gate review | Open |
+| R-001 | Gap | No current-state baseline for any of the three workflows' cycle time | Analyse root-cause ranking and Improve treatment classes are provisional until Measure baselines exist | FDE2 | Before Prompt 09 reconciliation | Open |
+| R-002 | Risk | Improve/Control content (§§4–5) was written before any architecture exists, since Discovery is now a full-DMAIC stage | Provisional labeling mitigates but does not eliminate the risk of anchoring too early on one treatment class | FDE1 | Revisit at Prompt 04 (DDD) and every gate review | Open |
 
 ## Traceability and acceptance
 
 | Claim / requirement | Architecture or control | Test / evaluation | Evidence path | Result |
 |---|---|---|---|---|
-| Define/Measure only run at Discovery; Analyse/Improve/Control deferred | `prompts/01_discovery.md` constraints; `prompts/09_lean_dmaic.md` | Reviewed at G1; enforced at Prompt 09 | This document §§3–5 | Pending Prompt 09 |
-| Waste signals traced to real evidence, not invented | `submission/artefacts/01-discovery/early_waste_signals.md` | Cross-check against `case/INTEGRATED_CASE.md` inject IDs | This document §2 | Done — all citations verified against source injects |
+| Full DMAIC (Define/Measure/Analyse/Improve/Control) run at Discovery per updated methodology | `prompts/01_discovery.md` (full-DMAIC stage); `prompts/09_lean_dmaic.md` (reconciliation, not first pass) | Reviewed at G1; reconciled at Prompt 09 | This document §§1–5 | Done — Improve/Control explicitly labeled provisional |
+| Waste registers traced to real evidence, not invented | `submission/artefacts/01-discovery/waste_register_downtime.md`, `waste_register_ai_specific.md` | Cross-check against `case/INTEGRATED_CASE.md` inject IDs | This document §3 | Done — all citations verified against source injects |
 
 ## Review record
 

@@ -10,7 +10,7 @@
 
 ## Intent
 
-**Consolidate** the Lean / DMAIC operating spine before tasks and coding. Prior prompts (01–08) already produced thin `dmaic_lens.md` files — **do not ignore them**. Start from those lenses + Prompt 01 early waste signals, then produce the **full** DOWNTIME + AI-waste registers and a complete DMAIC plan.
+**Consolidate** the Lean / DMAIC operating spine before tasks and coding. Prompts 01 (Discovery), 02 (Frame), 04 (DDD), 06 (C4) and 07 (ADR) are designated **full-DMAIC stages** and already produced full `dmaic_lens.md` + waste registers; Prompts 03 (PRD), 05 (Feature Specs) and 08 (Technical Design) produced thin, single-letter lenses. **Do not ignore any of them.** This stage's job is cross-stage *reconciliation* — merge the full-stage findings (checking they still agree once architecture/ADRs are locked), fold in the thin-stage findings, resolve any contradictions between stages, and produce the single governing DOWNTIME + AI-waste registers and DMAIC plan that Prompts 10–13 build from.
 
 Reference guidance: use waste lenses before automating, orchestrating, or scaling AI workflows.
 
