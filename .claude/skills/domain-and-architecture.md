@@ -218,12 +218,16 @@ Outputs: `participant-outputs-v2/06-c4/` (`c4_context.md`, `c4_containers.md`, `
 
 ### Diagram conventions that keep a view reviewable
 
-- Each view is its own self-contained fenced `plantuml` block: `@startuml` … `@enduml`.  
-- Plain PlantUML shapes only — `rectangle`, `package`, `boundary`, `cloud`, `database` — each carrying a stereotype:
-  `<<Person>>`, `<<System>>`, `<<Container>>`, `<<External>>`. **No `!include` and no C4-PlantUML macros** (`Person()`,
-  `System()`, `Rel()`, …) — nothing outside the diagram text should need fetching to render it.  
-- Relationships are plain labelled arrows (`-->`). A relationship the system is **forbidden** to have is drawn
-  `-[#red,dashed]->` with the label starting `PROHIBITED:`.  
+- Each view is its own self-contained fenced `mermaid` block (`flowchart TD`). Mermaid was chosen over PlantUML
+  because it renders natively with zero extensions in VS Code's built-in Markdown preview and on GitHub — this
+  package is offline by design (no PlantUML/Graphviz renderer or network fetch available), so a notation that
+  requires an external renderer fails the same "reviewable without extra tooling" goal it's meant to serve.
+- Plain node shapes only — rectangle `[ ]`, subgraph/boundary `subgraph`, database/store `[( )]` — each node's label
+  carries a stereotype suffix: `«Person»`, `«System»`, `«Container»`, `«External»`. `classDef`/`:::class` may be used
+  for colour only, never to hide structure behind an include or macro — nothing outside the diagram text should need
+  fetching to render it.
+- Relationships are plain labelled arrows (`-->|label|`). A relationship the system is **forbidden** to have is drawn
+  dashed (`-.->|label|`) with the label starting `PROHIBITED:`, and styled red via `linkStyle <index> stroke:#d32f2f`.
 - **Every person, system and container named in the prose must appear as a labelled shape in at least one diagram** —
   no architecture element may exist only in text.
 

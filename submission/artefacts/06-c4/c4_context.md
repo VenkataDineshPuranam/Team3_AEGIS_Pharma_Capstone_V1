@@ -6,44 +6,47 @@
 
 ## Diagram
 
-```plantuml
-@startuml
-skinparam rectangle {
-  BackgroundColor<<Person>> #E8F0FE
-  BackgroundColor<<System>> #FFF3E0
-  BackgroundColor<<External>> #F5F5F5
-}
+*(Mermaid — renders natively in VS Code's built-in Markdown preview and on GitHub with no extension; see `.claude/skills/domain-and-architecture.md` "Diagram conventions" for the notation rules this follows.)*
 
-rectangle "EU Qualified Person" <<Person>> as QP
-rectangle "Safety Physician" <<Person>> as SafetyPhys
-rectangle "Supply Governance Board" <<Person>> as SupplyBoard
-rectangle "Data Steward" <<Person>> as Steward
-rectangle "CISO / Security Reviewer" <<Person>> as CISO
+```mermaid
+flowchart TD
+  classDef person fill:#E8F0FE,stroke:#333,color:#111;
+  classDef system fill:#FFF3E0,stroke:#333,color:#111;
+  classDef external fill:#F5F5F5,stroke:#333,color:#111;
 
-rectangle "AEGIS-PHARMA Evidence Advisory System" <<System>> as AEGIS
+  QP["EU Qualified Person<br/>«Person»"]:::person
+  SafetyPhys["Safety Physician<br/>«Person»"]:::person
+  SupplyBoard["Supply Governance Board<br/>«Person»"]:::person
+  Steward["Data Steward<br/>«Person»"]:::person
+  CISO["CISO / Security Reviewer<br/>«Person»"]:::person
 
-rectangle "LIMS / MES / eQMS\n(source of record, read-only)" <<External>> as SourceSystems
-rectangle "Global Safety Database\n(source of record, read-only)" <<External>> as SafetyDB
-rectangle "ERP / Warehouse / CMO Portals\n(source of record, read-only)" <<External>> as SupplySystems
-rectangle "knowledge/*.md Policy Corpus" <<External>> as KnowledgeCorpus
-rectangle "AI Model Endpoint\n(optional, scoped)" <<External>> as ModelEndpoint
+  AEGIS["AEGIS-PHARMA Evidence Advisory System<br/>«System»"]:::system
 
-QP --> AEGIS : requests batch evidence view
-SafetyPhys --> AEGIS : requests PV case support
-SupplyBoard --> AEGIS : requests supply options
-Steward --> AEGIS : maintains knowledge catalog status
-CISO --> AEGIS : reviews security/audit evidence
+  SourceSystems["LIMS / MES / eQMS<br/>(source of record, read-only)<br/>«External»"]:::external
+  SafetyDB["Global Safety Database<br/>(source of record, read-only)<br/>«External»"]:::external
+  SupplySystems["ERP / Warehouse / CMO Portals<br/>(source of record, read-only)<br/>«External»"]:::external
+  KnowledgeCorpus["knowledge/*.md Policy Corpus<br/>«External»"]:::external
+  ModelEndpoint["AI Model Endpoint<br/>(optional, scoped)<br/>«External»"]:::external
 
-AEGIS --> SourceSystems : read-only evidence retrieval
-AEGIS --> SafetyDB : read-only evidence retrieval
-AEGIS --> SupplySystems : read-only evidence retrieval
-AEGIS --> KnowledgeCorpus : status-gated citation retrieval
-AEGIS --> ModelEndpoint : scoped drafting/scoring calls (optional)
+  QP -->|requests batch evidence view| AEGIS
+  SafetyPhys -->|requests PV case support| AEGIS
+  SupplyBoard -->|requests supply options| AEGIS
+  Steward -->|maintains knowledge catalog status| AEGIS
+  CISO -->|reviews security/audit evidence| AEGIS
 
-AEGIS -[#red,dashed]-> SourceSystems : "PROHIBITED: disposition write-back"
-AEGIS -[#red,dashed]-> SafetyDB : "PROHIBITED: case decision write-back"
-AEGIS -[#red,dashed]-> SupplySystems : "PROHIBITED: reservation/allocation write-back"
-@enduml
+  AEGIS -->|read-only evidence retrieval| SourceSystems
+  AEGIS -->|read-only evidence retrieval| SafetyDB
+  AEGIS -->|read-only evidence retrieval| SupplySystems
+  AEGIS -->|status-gated citation retrieval| KnowledgeCorpus
+  AEGIS -->|scoped drafting/scoring calls, optional| ModelEndpoint
+
+  AEGIS -.->|"PROHIBITED: disposition write-back"| SourceSystems
+  AEGIS -.->|"PROHIBITED: case decision write-back"| SafetyDB
+  AEGIS -.->|"PROHIBITED: reservation/allocation write-back"| SupplySystems
+
+  linkStyle 10 stroke:#d32f2f,stroke-width:2px
+  linkStyle 11 stroke:#d32f2f,stroke-width:2px
+  linkStyle 12 stroke:#d32f2f,stroke-width:2px
 ```
 
 ## Notes

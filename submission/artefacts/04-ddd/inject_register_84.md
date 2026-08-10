@@ -67,7 +67,7 @@ Per the governing plan (`AEGIS_PROJECT_PLAN_FINAL.md` §8, Phase P2 row: "P2: 05
 | INJ-032 | Unapproved spreadsheet | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §1; `01-discovery/waste_register_downtime.md` |
 | INJ-033 | CAPA effectiveness failure | addressed | `02_DMAIC_WORKBOOK.md` §3 (fishbone) |
 | INJ-034 | Change-control bypass | in_scope_open | Carried to Prompt 05 |
-| INJ-035 | Record-retention conflict | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §6 (central example) |
+| INJ-035 | Record-retention conflict | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §6 (central example); `17_PRIVACY_ETHICS.md` §6 (deepened — 3-way legal-hold/GxP-retention/deletion conflict) |
 | INJ-036 | ALCOA+ provenance break | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §4 (central example) |
 
 ## D06 — Pharmacovigilance and benefit-risk (in scope — Workflow B core)
@@ -111,32 +111,32 @@ Per the governing plan (`AEGIS_PROJECT_PLAN_FINAL.md` §8, Phase P2 row: "P2: 05
 
 | Inject | Title | Status | Where addressed |
 |---|---|---|---|
-| INJ-059 | Genomic re-identification risk | in_scope_open | Carried to Prompt 05/06 |
-| INJ-060 | Cross-border secondary use | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §6 |
-| INJ-061 | Data-subject request versus GxP record | in_scope_open | Carried to Prompt 05/06 |
-| INJ-062 | Patient-support programme leakage | in_scope_open | Carried to Prompt 05/06 |
-| INJ-063 | Research-commercial boundary | in_scope_open | Carried to Prompt 05/06 |
-| INJ-064 | Regional residency failure | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §6 (central example) |
+| INJ-059 | Genomic re-identification risk | addressed | `17_PRIVACY_ETHICS.md` §3 (genomic quasi-identifier finding, `privacy_risk.csv` singling-out=high) |
+| INJ-060 | Cross-border secondary use | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §6; `17_PRIVACY_ETHICS.md` §4 |
+| INJ-061 | Data-subject request versus GxP record | addressed | `17_PRIVACY_ETHICS.md` §6 (central example — real DSR-17/LH-44 conflict) |
+| INJ-062 | Patient-support programme leakage | addressed | `17_PRIVACY_ETHICS.md` §1 (finding + explicit scope-boundary decision; residual gap tracked as R-001) |
+| INJ-063 | Research-commercial boundary | addressed | `17_PRIVACY_ETHICS.md` §4 |
+| INJ-064 | Regional residency failure | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §6 (central example); `17_PRIVACY_ETHICS.md` §5 |
 
 ## D10 — Cybersecurity, agentic security and Zero Trust (in scope — cross-cutting)
 
 | Inject | Title | Status | Where addressed |
 |---|---|---|---|
-| INJ-065 | Prompt injection in SOP | addressed | `04-ddd/domain_model.md` INV-09, POL-02 (central example) |
-| INJ-066 | Tool-manifest poisoning | addressed | `04-ddd/domain_model.md` POL-06 |
-| INJ-067 | Entitlement revocation lag | addressed | `04-ddd/domain_model.md` POL-01; `07_ONTOLOGY_SEMANTIC_LAYER.md` §6 |
-| INJ-068 | Safety-data exfiltration | in_scope_open | Carried to Prompt 06 (C4 threat surface) |
-| INJ-069 | Ransomware and OT segmentation | addressed | `06-c4/boundary_and_degraded_mode.md` — source-system unavailability produces explicit `gaps`, not a blocked response |
-| INJ-070 | Model supply-chain compromise | addressed | `01-discovery/waste_register_ai_specific.md` |
+| INJ-065 | Prompt injection in SOP | addressed | `04-ddd/domain_model.md` INV-09, POL-02 (central example); `16_THREAT_ABUSE_MODEL.md` §3; failing spec `submission/tests/test_knowledge_authority_gate.py` |
+| INJ-066 | Tool-manifest poisoning | addressed | `04-ddd/domain_model.md` POL-06; `16_THREAT_ABUSE_MODEL.md` §4; failing spec `submission/tests/test_knowledge_authority_gate.py` |
+| INJ-067 | Entitlement revocation lag | addressed | `04-ddd/domain_model.md` POL-01; `07_ONTOLOGY_SEMANTIC_LAYER.md` §6; `16_THREAT_ABUSE_MODEL.md` §4; failing spec `submission/tests/test_authorization_fail_closed.py` |
+| INJ-068 | Safety-data exfiltration | addressed | `16_THREAT_ABUSE_MODEL.md` §5 (finding + cross-affiliate scoping gap named; no ADR yet, tracked as R-002) |
+| INJ-069 | Ransomware and OT segmentation | addressed | `06-c4/boundary_and_degraded_mode.md` — source-system unavailability produces explicit `gaps`, not a blocked response; `16_THREAT_ABUSE_MODEL.md` §6 (threat-actor framing added) |
+| INJ-070 | Model supply-chain compromise | addressed | `01-discovery/waste_register_ai_specific.md`; `16_THREAT_ABUSE_MODEL.md` §6; `20_ISO42001_GOVERNANCE.md` §4; failing spec `submission/tests/test_model_supply_chain_integrity.py` |
 
 ## D11 — Human factors, responsible AI and adoption (in scope — cross-cutting)
 
 | Inject | Title | Status | Where addressed |
 |---|---|---|---|
-| INJ-071 | Automation bias in batch review | addressed | `04_PRODUCT_SERVICE_BLUEPRINT.md` §4; `04-ddd/gen_ai_boundaries.md` §3 |
-| INJ-072 | Language inequity | addressed | `04_PRODUCT_SERVICE_BLUEPRINT.md` §6 |
-| INJ-073 | Accessibility failure | addressed | `04_PRODUCT_SERVICE_BLUEPRINT.md` §6 |
-| INJ-074 | Role conflict | in_scope_open | Named in `03_STAKEHOLDER_DECISION_RIGHTS.md` context; not yet its own design response |
+| INJ-071 | Automation bias in batch review | addressed | `04_PRODUCT_SERVICE_BLUEPRINT.md` §4; `04-ddd/gen_ai_boundaries.md` §3; `15_QUALITY_RISK_MANAGEMENT.md` HAZ-02; `18_RESPONSIBLE_AI_HUMAN_FACTORS.md` §2 (concrete mitigation design added) |
+| INJ-072 | Language inequity | addressed | `04_PRODUCT_SERVICE_BLUEPRINT.md` §6; `18_RESPONSIBLE_AI_HUMAN_FACTORS.md` §4 (hard-gate control added) |
+| INJ-073 | Accessibility failure | addressed | `04_PRODUCT_SERVICE_BLUEPRINT.md` §6; `18_RESPONSIBLE_AI_HUMAN_FACTORS.md` §5 (binding build requirement added) |
+| INJ-074 | Role conflict | addressed | `03_STAKEHOLDER_DECISION_RIGHTS.md` context; `18_RESPONSIBLE_AI_HUMAN_FACTORS.md` §1 (own design response — inline accountable-owner labeling) |
 
 ## D12 — Economics, token efficiency and vendor concentration (in scope — cross-cutting)
 
@@ -162,14 +162,14 @@ Per the governing plan (`AEGIS_PROJECT_PLAN_FINAL.md` §8, Phase P2 row: "P2: 05
 
 | Status | Count |
 |---|---|
-| addressed | 53 |
-| in_scope_open (carried forward, real gap to close before defence) | 19 |
+| addressed | 59 |
+| in_scope_open (carried forward, real gap to close before defence) | 13 |
 | out_of_scope (stated exclusion — Discovery/Translational Science, Clinical Trial Management) | 12 |
 | **Total** | **84** |
 
-**INTERPRETATION**: 53/84 (63%) addressed after three phases (Discovery/Frame/Domain + Architecture) is expected and healthy — the `in_scope_open` items are not a quality failure, they are the explicit backlog for Prompt 05-equivalent/08 (Technical Design) work, which is exactly what this register exists to drive. The 12 `out_of_scope` items are a stated scope decision (two whole dimensions — Discovery/Translational Science, 5 of 6 injects, and Clinical Trial Management, 7 of 8 injects — are outside the three mandated workflows, with one addressed exception in each), not silently dropped injects.
+**INTERPRETATION**: 59/84 (70%) addressed after four phases (Discovery/Frame/Domain/Architecture + Secure Design) is expected and healthy — the `in_scope_open` items are not a quality failure, they are the explicit backlog for P5 (Technical Design/POC build) work, which is exactly what this register exists to drive. The 12 `out_of_scope` items are a stated scope decision (two whole dimensions — Discovery/Translational Science, 5 of 6 injects, and Clinical Trial Management, 7 of 8 injects — are outside the three mandated workflows, with one addressed exception in each), not silently dropped injects.
 
-*(Revision history: originally miscounted as 51/25/8 due to a hand-tally arithmetic error, corrected to 52/20/12 during Phase 3 cross-verification (2026-08-08); then INJ-069 upgraded from `in_scope_open` to `addressed` after Phase 3's degraded-mode design gave it substantive treatment, giving the current 53/19/12.)*
+*(Revision history: originally miscounted as 51/25/8 due to a hand-tally arithmetic error, corrected to 52/20/12 during Phase 3 cross-verification (2026-08-08); then INJ-069 upgraded from `in_scope_open` to `addressed` after Phase 3's degraded-mode design gave it substantive treatment, giving 53/19/12; then Phase 4 (artefacts 16-21) gave INJ-059, 061, 062, 063, 068 and 074 their own dedicated design response for the first time, upgrading all 6 from `in_scope_open` to `addressed` — mechanically confirmed via `grep -oh 'INJ-[0-9]\{3\}' submission/artefacts/{16,17,18,19,20,21}*.md`, giving the current 59/13/12.)*
 
 ## Risks, assumptions and unresolved gaps
 

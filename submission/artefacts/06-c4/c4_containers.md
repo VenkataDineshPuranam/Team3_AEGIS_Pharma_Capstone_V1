@@ -4,62 +4,63 @@
 
 ## Diagram
 
-```plantuml
-@startuml
-skinparam rectangle {
-  BackgroundColor<<Container>> #E8F0FE
-  BackgroundColor<<External>> #F5F5F5
-}
+*(Mermaid — renders natively in VS Code's built-in Markdown preview and on GitHub with no extension; see `.claude/skills/domain-and-architecture.md` "Diagram conventions" for the notation rules this follows.)*
 
-package "AEGIS-PHARMA Evidence Advisory System" {
-  rectangle "App / Demonstrator\n(submission/app)" <<Container>> as App
-  rectangle "Evidence-Resolver Service\n(shared kernel: hash, authority, as-of)" <<Container>> as Resolver
-  rectangle "Batch Evidence Container\n(Workflow A logic)" <<Container>> as BatchC
-  rectangle "PV Case Container\n(Workflow B logic)" <<Container>> as PVC
-  rectangle "Supply Option Container\n(Workflow C logic)" <<Container>> as SupplyC
-  rectangle "Product & Substance ACL" <<Container>> as ProductACL
-  rectangle "Knowledge Authority Gateway\n(status-gated citation)" <<Container>> as KnowledgeGW
-  rectangle "Authorization Service\n(Decision Authority & Accountability)" <<Container>> as AuthZ
-  rectangle "Audit / Evidence Store\n(append-only)" <<Container>> as AuditStore
-  rectangle "Contract Validator\n(evaluation/contracts schemas)" <<Container>> as Validator
-  database "Deterministic Fixtures / Test Data" <<Container>> as Fixtures
-}
+```mermaid
+flowchart TD
+  classDef container fill:#E8F0FE,stroke:#333,color:#111;
+  classDef external fill:#F5F5F5,stroke:#333,color:#111;
 
-rectangle "Model Endpoint (optional, scoped)" <<External>> as Model
+  subgraph SYS["AEGIS-PHARMA Evidence Advisory System"]
+    App["App / Demonstrator<br/>(submission/app)<br/>«Container»"]:::container
+    Resolver["Evidence-Resolver Service<br/>(shared kernel: hash, authority, as-of)<br/>«Container»"]:::container
+    BatchC["Batch Evidence Container<br/>(Workflow A logic)<br/>«Container»"]:::container
+    PVC["PV Case Container<br/>(Workflow B logic)<br/>«Container»"]:::container
+    SupplyC["Supply Option Container<br/>(Workflow C logic)<br/>«Container»"]:::container
+    ProductACL["Product & Substance ACL<br/>«Container»"]:::container
+    KnowledgeGW["Knowledge Authority Gateway<br/>(status-gated citation)<br/>«Container»"]:::container
+    AuthZ["Authorization Service<br/>(Decision Authority & Accountability)<br/>«Container»"]:::container
+    AuditStore["Audit / Evidence Store<br/>(append-only)<br/>«Container»"]:::container
+    Validator["Contract Validator<br/>(evaluation/contracts schemas)<br/>«Container»"]:::container
+    Fixtures[("Deterministic Fixtures / Test Data<br/>«Container»")]:::container
+  end
 
-App --> BatchC
-App --> PVC
-App --> SupplyC
+  Model["Model Endpoint (optional, scoped)<br/>«External»"]:::external
 
-BatchC --> Resolver
-PVC --> Resolver
-SupplyC --> Resolver
+  App --> BatchC
+  App --> PVC
+  App --> SupplyC
 
-BatchC --> ProductACL
-PVC --> ProductACL
-SupplyC --> ProductACL
+  BatchC --> Resolver
+  PVC --> Resolver
+  SupplyC --> Resolver
 
-BatchC --> KnowledgeGW
-PVC --> KnowledgeGW
-SupplyC --> KnowledgeGW
+  BatchC --> ProductACL
+  PVC --> ProductACL
+  SupplyC --> ProductACL
 
-BatchC --> AuthZ
-PVC --> AuthZ
-SupplyC --> AuthZ
+  BatchC --> KnowledgeGW
+  PVC --> KnowledgeGW
+  SupplyC --> KnowledgeGW
 
-BatchC --> AuditStore
-PVC --> AuditStore
-SupplyC --> AuditStore
+  BatchC --> AuthZ
+  PVC --> AuthZ
+  SupplyC --> AuthZ
 
-BatchC ..> Validator : validates against batch_response.schema.json
-PVC ..> Validator : validates against pv_response.schema.json
-SupplyC ..> Validator : validates against supply_response.schema.json
+  BatchC --> AuditStore
+  PVC --> AuditStore
+  SupplyC --> AuditStore
 
-BatchC --> Model : optional summary/scoring call
-PVC --> Model : optional duplicate-similarity call
+  BatchC -.->|validates against batch_response.schema.json| Validator
+  PVC -.->|validates against pv_response.schema.json| Validator
+  SupplyC -.->|validates against supply_response.schema.json| Validator
 
-BatchC -[#red,dashed]-> Fixtures : "PROHIBITED: write to production source"
-@enduml
+  BatchC -->|optional summary/scoring call| Model
+  PVC -->|optional duplicate-similarity call| Model
+
+  BatchC -.->|"PROHIBITED: write to production source"| Fixtures
+
+  linkStyle 23 stroke:#d32f2f,stroke-width:2px
 ```
 
 ## Container list and rationale

@@ -2,45 +2,45 @@
 
 **Artifact status: `provisional`.** Depth follows the skill's guidance ("deepen Code level only where risk warrants") — components are detailed for the Evidence-Resolver and Batch containers (highest invariant density); PV and Supply are described at the same pattern, not re-drawn in full.
 
+*(Mermaid — renders natively in VS Code's built-in Markdown preview and on GitHub with no extension; see `.claude/skills/domain-and-architecture.md` "Diagram conventions" for the notation rules this follows.)*
+
 ## Diagram — Evidence-Resolver Service (shared kernel, highest reuse risk)
 
-```plantuml
-@startuml
-skinparam rectangle {
-  BackgroundColor<<Container>> #FFF3E0
-}
+```mermaid
+flowchart TD
+  classDef container fill:#FFF3E0,stroke:#333,color:#111;
 
-rectangle "Evidence-Resolver Service" <<Container>> {
-  rectangle "Hash Engine\n(SHA-256, INV-08)" as Hash
-  rectangle "As-Of Time Stamper" as AsOf
-  rectangle "Source-Preservation Guard" as SourceGuard
-  rectangle "Contradiction Detector\n(unit/state/identity mismatch, INV-02/03)" as ContraDetect
-}
+  subgraph ER["Evidence-Resolver Service «Container»"]
+    Hash["Hash Engine<br/>(SHA-256, INV-08)"]:::container
+    AsOf["As-Of Time Stamper"]:::container
+    SourceGuard["Source-Preservation Guard"]:::container
+    ContraDetect["Contradiction Detector<br/>(unit/state/identity mismatch, INV-02/03)"]:::container
+  end
 
-Hash --> SourceGuard
-AsOf --> ContraDetect
-ContraDetect --> SourceGuard
-@enduml
+  Hash --> SourceGuard
+  AsOf --> ContraDetect
+  ContraDetect --> SourceGuard
 ```
 
 ## Diagram — Batch Evidence Container (Workflow A, worked example)
 
-```plantuml
-@startuml
-rectangle "Batch Evidence Container" <<Container>> {
-  rectangle "Evidence Assembler\n(genealogy, EM, lab, deviations, release packet)" as Assembler
-  rectangle "Readiness Classifier\n(INV-01, POL-03 — enum only, never a disposition)" as Classifier
-  rectangle "Contradiction Surface\n(INV-03: OOS/OOT/invalid triple-state)" as ContraSurface
-  rectangle "Human-Review Formatter\n(HITL touchpoint, gen_ai_boundaries §4)" as HITL
-  rectangle "Optional: Evidence Summarizer Agent\n(read-only, stop condition = omitted fact)" as Agent
-}
+```mermaid
+flowchart TD
+  classDef container fill:#E8F0FE,stroke:#333,color:#111;
 
-Assembler --> Classifier
-Classifier --> ContraSurface
-ContraSurface --> HITL
-Assembler ..> Agent : optional draft summary
-Agent --> HITL : summary + stop-condition flag
-@enduml
+  subgraph BEC["Batch Evidence Container «Container»"]
+    Assembler["Evidence Assembler<br/>(genealogy, EM, lab, deviations, release packet)"]:::container
+    Classifier["Readiness Classifier<br/>(INV-01, POL-03 — enum only, never a disposition)"]:::container
+    ContraSurface["Contradiction Surface<br/>(INV-03: OOS/OOT/invalid triple-state)"]:::container
+    HITL["Human-Review Formatter<br/>(HITL touchpoint, gen_ai_boundaries §4)"]:::container
+    Agent["Optional: Evidence Summarizer Agent<br/>(read-only, stop condition = omitted fact)"]:::container
+  end
+
+  Assembler --> Classifier
+  Classifier --> ContraSurface
+  ContraSurface --> HITL
+  Assembler -.->|optional draft summary| Agent
+  Agent -->|summary + stop-condition flag| HITL
 ```
 
 ## Component ↔ FR mapping
