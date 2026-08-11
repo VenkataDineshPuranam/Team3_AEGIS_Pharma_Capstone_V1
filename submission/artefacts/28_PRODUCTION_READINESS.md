@@ -2,7 +2,7 @@
 
 **Label key:** FACT = package-cited · INTERPRETATION = reasoned from facts · ASSUMPTION = unproven · DECISION = team choice.
 
-**Status: COMPLETE** — per `AEGIS_PROJECT_PLAN_FINAL.md` §12 artefact assignment matrix ("28 | Production readiness | P7/P9"), drafted at P7, completed here at P9/G9. All nine `AEGIS_PROJECT_PLAN_FINAL.md` §8.1 P9 workstreams have real evidence (not asserted); Blockers = 0; the RC (`v1.0.0-rc1`) has passed clean-room independently of the working branch. Per non-negotiable constraint 8 (dual-track honesty), this artefact still distinguishes what Track A already proved from what Track B specifically added — nothing here claims more than the evidence shows.
+**Status: COMPLETE** — per `AEGIS_PROJECT_PLAN_FINAL.md` §12 artefact assignment matrix ("28 | Production readiness | P7/P9"), drafted at P7, completed here at P9/G9. All nine `AEGIS_PROJECT_PLAN_FINAL.md` §8.1 P9 workstreams have real evidence (not asserted); Blockers = 0; the RC (`v1.0.0-rc2`) has passed clean-room independently of the working branch. Per non-negotiable constraint 8 (dual-track honesty), this artefact still distinguishes what Track A already proved from what Track B specifically added — nothing here claims more than the evidence shows.
 
 ## Document control
 
@@ -25,7 +25,7 @@ Tracks the readiness checklist through G9 (Track B). Every row below cites a rea
 | E-001 | `AEGIS_PROJECT_PLAN_FINAL.md` §8.1 | Package | G9 Go criteria: G1–G8 PASS; artefact 28 complete; no Blockers; hard gates hold on RC; clean-room on RC PASS; P4/P5/P1 sign-off | Immutable |
 | E-002 | `submission/evaluation/reports/summary.json` | Generated P6, re-run P9 | 18/18 regression scenarios PASS, 0 release gates blocked | `submission/scripts/evaluate.sh` |
 | E-003 | `submission/evidence/test_results.json` | Generated P6/P7, re-run P9 | 56/56 tests passing | `submission/scripts/test.sh` |
-| E-004 | `submission/RELEASE_CANDIDATE.md` | Generated P9 | RC `v1.0.0-rc1`, zero third-party runtime dependencies, tagged at this commit | This artefact §1 |
+| E-004 | `submission/RELEASE_CANDIDATE.md` | Generated P9 | RC `v1.0.0-rc2`, zero third-party runtime dependencies, tagged at this commit | This artefact §1 |
 | E-005 | `submission/evidence/security_retest_report.json` | Generated P9 | 38/38 security-relevant tests pass on the RC | `submission/scripts/security_retest.sh` |
 | E-006 | `submission/evidence/rollback_rehearsal_report.json` | Generated P9 | Real rollback rehearsal: RTO ~1.4s, rollback target verified working; RPO = 0 by construction | `submission/scripts/rollback_rehearsal.sh` |
 | E-007 | `submission/evidence/soak_test_report.json` | Generated P9 | 200 iterations × 3 workflows: 0 `execution_status` drift, p99 latency << 5ms budget | `submission/scripts/soak_test.sh` |
@@ -38,7 +38,7 @@ Tracks the readiness checklist through G9 (Track B). Every row below cites a rea
 |---|---|---|---|
 | Do the three workflows pass all hard gates? | **FACT — PASS**: 0/18 regression scenarios blocked (E-002); 56/56 tests passing (E-003) | FDE5 | E-002, E-003 |
 | Do setup/run/test/evaluate/reset/export commands exist and work? | **FACT — PASS**: all 6 verified working, including the reset↔evaluate regeneration cycle | FDE3 | `submission/runbooks/OPERATIONS.md` |
-| Is there a versioned release-candidate (RC) tag? | **FACT — PASS**: `v1.0.0-rc1`, zero third-party runtime dependencies (E-004) | FDE3 | `submission/RELEASE_CANDIDATE.md` |
+| Is there a versioned release-candidate (RC) tag? | **FACT — PASS**: `v1.0.0-rc2`, zero third-party runtime dependencies (E-004) | FDE3 | `submission/RELEASE_CANDIDATE.md` |
 | Has clean-room been rehearsed on the RC specifically? | **FACT — PASS**: `hash_submission.py --check`, `check_submission_structure.py --final`, and `test_contracts.py` all pass from a fresh extraction of the RC commit, distinct from the P7 clean-room run on the pre-RC branch | FDE4 | §7 below |
 
 ## 2. Open defects and risk acceptances
@@ -76,7 +76,7 @@ Tracks the readiness checklist through G9 (Track B). Every row below cites a rea
 | Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
 |---|---|---|---|
 | Is there a proven rollback path? | **FACT — PASS**: `submission/scripts/rollback_rehearsal.sh` actually clones the repo to a disposable directory, checks out the previous commit, and re-runs its test suite to confirm the rollback target genuinely works — not just that `git checkout` succeeds. Real RTO ~1.4 seconds. RPO = 0 by construction: no server-side mutable state exists between requests, so no in-flight side effect can be lost (E-006) | FDE3 | E-006 |
-| What is the release decision? | **DECISION**: **Go** for Track A+B as evidenced (`v1.0.0-rc1`) — see §7 for the full conditions | FDE4 chairs | This artefact |
+| What is the release decision? | **DECISION**: **Go** for Track A+B as evidenced (`v1.0.0-rc2`) — see §7 for the full conditions | FDE4 chairs | This artefact |
 
 ## 7. Conditions for go/no-go
 

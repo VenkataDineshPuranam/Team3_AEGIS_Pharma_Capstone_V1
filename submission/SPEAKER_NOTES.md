@@ -72,7 +72,7 @@ Presentation companion to `30_ELEVATOR_PITCH.md` and `FINAL_DEFENCE_DOSSIER.md`.
 
 ### P9 — Production Hardening (Gate G9, optional Track B)
 
-**What**: RC `v1.0.0-rc1`, security retest, rollback rehearsal, soak test, accessibility fix, SLO/error budget, a real kill switch.
+**What**: RC `v1.0.0-rc2`, security retest, rollback rehearsal, soak test, accessibility fix, SLO/error budget, a real kill switch.
 
 **Say**: "This last phase is the one most teams skip because it's optional for the capstone score. We didn't skip it. We tagged a release candidate, re-ran a security-scoped test pass against it specifically, rehearsed an actual rollback — cloned the repo, checked out the previous commit, and re-ran its tests to prove it still works, not just that the checkout succeeded — and soaked all three workflows 200 times each with zero drift."
 

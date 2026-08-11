@@ -54,7 +54,7 @@ def main():
 
     report = {
         "run_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "rc": "v1.0.0-rc1",
+        "rc": "v1.0.0-rc2",
         "scope": "security-relevant subset only (authorization, knowledge authority, replay/excessive-agency, "
                  "model supply-chain integrity, all 3 prohibited-action specs, 4 security-relevant graders)",
         "total_tests": result.testsRun,
