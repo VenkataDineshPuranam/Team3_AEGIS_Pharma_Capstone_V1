@@ -1,11 +1,11 @@
 {
-  "run_at": "2026-08-11T05:52:10Z",
-  "rollback_from_commit": "ef8230c6655d2dd400a619ee098b0ad2199e6889",
-  "rollback_to_commit": "b6ed8689fd85b42d2bc7dbdb89d860859c3b7820",
-  "rto_seconds": 1.413,
+  "run_at": "2026-08-11T06:12:13Z",
+  "rollback_from_commit": "7fca0a80ec3742e52ef44b141abc0ee2453ad457",
+  "rollback_to_commit": "725859d978c55d5b8c45b4f1d1585a2d48456c07",
+  "rto_seconds": 0.616,
   "rto_breakdown": {
-    "clone_and_checkout_seconds": 1.198,
-    "test_verification_seconds": 0.216
+    "clone_and_checkout_seconds": 0.563,
+    "test_verification_seconds": 0.053
   },
   "rollback_verified_working": true,
   "rpo_statement": "0 \u2014 no server-side mutable state exists between requests; every commit is a self-consistent, hash-verified snapshot (INV-01/05/06/07: execution_status never leaves not_executed, so no in-flight side effect can be lost)",
