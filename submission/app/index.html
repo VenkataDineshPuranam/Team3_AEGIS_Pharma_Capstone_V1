@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AEGIS-PHARMA Advisory Demonstrator</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: -apple-system, Segoe UI, Helvetica, Arial, sans-serif; margin: 0; padding: 1.5rem;
+         max-width: 1100px; margin-inline: auto; line-height: 1.4; }
+  h1 { font-size: 1.3rem; margin-bottom: 0.1rem; }
+  .subtitle { color: #666; margin-top: 0; margin-bottom: 1.2rem; }
+  .banner { border: 2px solid #b45309; background: #fffbeb; color: #713f12; padding: 0.6rem 0.9rem;
+             border-radius: 6px; margin-bottom: 1.2rem; font-size: 0.92rem; }
+  .tabs { display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .tab-btn { padding: 0.5rem 0.9rem; border: 1px solid #ccc; background: #f4f4f5; border-radius: 6px;
+             cursor: pointer; font-size: 0.9rem; }
+  .tab-btn[aria-selected="true"] { background: #1d4ed8; color: white; border-color: #1d4ed8; }
+  section.panel { display: none; border: 1px solid #ddd; border-radius: 8px; padding: 1rem 1.2rem; }
+  section.panel.active { display: block; }
+  h2 { font-size: 1.05rem; margin-top: 0; }
+  .field-label { font-weight: 600; font-size: 0.85rem; color: #444; margin-top: 0.9rem; }
+  .badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.78rem;
+           font-weight: 600; margin-right: 0.3rem; }
+  .badge-allow { background: #dcfce7; color: #166534; }
+  .badge-deny { background: #fee2e2; color: #991b1b; }
+  .badge-not-executed { background: #e0e7ff; color: #3730a3; }
+  .badge-required { background: #fef9c3; color: #854d0e; }
+  ul.evidence-list { padding-left: 1.1rem; margin: 0.3rem 0; }
+  ul.evidence-list li { margin-bottom: 0.25rem; font-size: 0.9rem; }
+  .contradiction { color: #b91c1c; font-weight: 600; }
+  .gap { color: #a16207; font-weight: 600; }
+  .quality-hold { color: #b91c1c; }
+  select, button.run { font-size: 0.9rem; padding: 0.35rem 0.6rem; }
+  button.run { background: #1d4ed8; color: white; border: none; border-radius: 6px; cursor: pointer; margin-left: 0.5rem; }
+  pre.raw { background: #f4f4f5; padding: 0.7rem; border-radius: 6px; overflow-x: auto; font-size: 0.78rem; margin-top: 0.6rem; }
+  footer { margin-top: 1.5rem; font-size: 0.78rem; color: #888; }
+  @media (prefers-color-scheme: dark) {
+    body { background: #0b0b0d; color: #e5e5e5; }
+    .tab-btn { background: #1c1c1f; border-color: #333; color: #e5e5e5; }
+    section.panel { border-color: #333; }
+    pre.raw { background: #1c1c1f; color: #e5e5e5; }
+    .subtitle, footer { color: #999; }
+  }
+</style>
+</head>
+<body>
+  <h1>AEGIS-PHARMA Advisory Demonstrator</h1>
+  <p class="subtitle">Offline, decision-support only. Every response below is <code>execution_status: "not_executed"</code> — nothing here releases, decides, allocates or ships anything.</p>
+
+  <div class="banner" id="authBanner" role="status"></div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab-btn" role="tab" data-panel="batch">Workflow A — Batch Evidence</button>
+    <button class="tab-btn" role="tab" data-panel="pv">Workflow B — PV Case Intake</button>
+    <button class="tab-btn" role="tab" data-panel="supply">Workflow C — Supply Options</button>
+  </div>
+
+  <section class="panel" id="panel-batch" aria-labelledby="batch-heading">
+    <h2 id="batch-heading">Batch Evidence Review — NCB204-B24071</h2>
+    <div class="field-label">Scenario</div>
+    <select id="batchScenario">
+      <option value="conflicted">Contradictory lab states (LIMS vs stats vs notebook)</option>
+      <option value="noEvidence">No evidence attached</option>
+      <option value="clean">Complete, non-contradictory evidence</option>
+    </select>
+    <button class="run" id="batchRun">Assemble response</button>
+    <div id="batchOutput"></div>
+  </section>
+
+  <section class="panel" id="panel-pv" aria-labelledby="pv-heading">
+    <h2 id="pv-heading">PV Case Intake — Duplicate Candidates</h2>
+    <div class="field-label">Scenario</div>
+    <select id="pvScenario">
+      <option value="highSimilarity">PV-1001 / PV-1014 (similarity 0.93)</option>
+      <option value="lowSimilarity">PV-1001 / PV-1009 (similarity 0.71)</option>
+    </select>
+    <button class="run" id="pvRun">Assemble response</button>
+    <div id="pvOutput"></div>
+  </section>
+
+  <section class="panel" id="panel-supply" aria-labelledby="supply-heading">
+    <h2 id="supply-heading">Supply Options — NCB-204</h2>
+    <div class="field-label">Scenario</div>
+    <select id="supplyScenario">
+      <option value="withQuarantine">Quarantined + released stock in one event</option>
+      <option value="releasedOnly">Released stock only</option>
+    </select>
+    <button class="run" id="supplyRun">Assemble response</button>
+    <div id="supplyOutput"></div>
+  </section>
+
+  <footer>
+    Mirrors <code>submission/src/services/*</code> and <code>submission/src/workflows/*</code> (Python) in vanilla JS for
+    offline client-side use — no server, no network calls, no <code>innerHTML</code>. Fixture data drawn from real
+    package rows: <code>data/downtime_events.csv</code>, <code>data/duplicate_candidates.csv</code>, <code>data/inventory.csv</code>.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

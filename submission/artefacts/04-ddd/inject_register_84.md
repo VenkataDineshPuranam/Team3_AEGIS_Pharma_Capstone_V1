@@ -151,7 +151,7 @@ Per the governing plan (`AEGIS_PROJECT_PLAN_FINAL.md` §8, Phase P2 row: "P2: 05
 
 | Inject | Title | Status | Where addressed |
 |---|---|---|---|
-| INJ-079 | Regional platform outage | in_scope_open | Carried to Prompt 06 (degraded-mode design) |
+| INJ-079 | Regional platform outage | addressed | `submission/scripts/ai_disabled_offline_demo.py` (P5) — mechanically proves all 3 workflows succeed with `socket.connect` blocked, i.e. zero dependency on the AI region that INJ-079 describes as failing. **Correction**: previously marked "carried to Prompt 06" but never actually treated by name in `06-c4/boundary_and_degraded_mode.md` or `16_THREAT_ABUSE_MODEL.md` — found and fixed during Phase 5 cross-verification |
 | INJ-080 | Checkpoint corruption | addressed | `04-ddd/domain_model.md` §4 (Improve, error-path idempotency) |
 | INJ-081 | Model substitution regression | addressed | `01-discovery/waste_register_ai_specific.md` |
 | INJ-082 | AI-disabled continuity | addressed | `01_BUSINESS_CASE.md`; `04_PRODUCT_SERVICE_BLUEPRINT.md` §5 (central example) |
@@ -162,14 +162,14 @@ Per the governing plan (`AEGIS_PROJECT_PLAN_FINAL.md` §8, Phase P2 row: "P2: 05
 
 | Status | Count |
 |---|---|
-| addressed | 59 |
-| in_scope_open (carried forward, real gap to close before defence) | 13 |
+| addressed | 60 |
+| in_scope_open (carried forward, real gap to close before defence) | 12 |
 | out_of_scope (stated exclusion — Discovery/Translational Science, Clinical Trial Management) | 12 |
 | **Total** | **84** |
 
-**INTERPRETATION**: 59/84 (70%) addressed after four phases (Discovery/Frame/Domain/Architecture + Secure Design) is expected and healthy — the `in_scope_open` items are not a quality failure, they are the explicit backlog for P5 (Technical Design/POC build) work, which is exactly what this register exists to drive. The 12 `out_of_scope` items are a stated scope decision (two whole dimensions — Discovery/Translational Science, 5 of 6 injects, and Clinical Trial Management, 7 of 8 injects — are outside the three mandated workflows, with one addressed exception in each), not silently dropped injects.
+**INTERPRETATION**: 60/84 (71%) addressed after five phases (Discovery/Frame/Domain/Architecture/Secure Design + POC Build) is expected and healthy — the `in_scope_open` items are not a quality failure, they are the explicit backlog for P6/P7 (Evaluation/Ops) work, which is exactly what this register exists to drive. The 12 `out_of_scope` items are a stated scope decision (two whole dimensions — Discovery/Translational Science, 5 of 6 injects, and Clinical Trial Management, 7 of 8 injects — are outside the three mandated workflows, with one addressed exception in each), not silently dropped injects.
 
-*(Revision history: originally miscounted as 51/25/8 due to a hand-tally arithmetic error, corrected to 52/20/12 during Phase 3 cross-verification (2026-08-08); then INJ-069 upgraded from `in_scope_open` to `addressed` after Phase 3's degraded-mode design gave it substantive treatment, giving 53/19/12; then Phase 4 (artefacts 16-21) gave INJ-059, 061, 062, 063, 068 and 074 their own dedicated design response for the first time, upgrading all 6 from `in_scope_open` to `addressed` — mechanically confirmed via `grep -oh 'INJ-[0-9]\{3\}' submission/artefacts/{16,17,18,19,20,21}*.md`, giving the current 59/13/12.)*
+*(Revision history: originally miscounted as 51/25/8 due to a hand-tally arithmetic error, corrected to 52/20/12 during Phase 3 cross-verification (2026-08-08); then INJ-069 upgraded from `in_scope_open` to `addressed` after Phase 3's degraded-mode design gave it substantive treatment, giving 53/19/12; then Phase 4 (artefacts 16-21) gave INJ-059, 061, 062, 063, 068 and 074 their own dedicated design response for the first time, upgrading all 6 from `in_scope_open` to `addressed`, giving 59/13/12; then Phase 5 cross-verification found INJ-079 was marked "carried to Prompt 06" but never actually treated by name anywhere — `submission/scripts/ai_disabled_offline_demo.py`'s real socket-blocked proof now closes it, giving the current 60/12/12 — mechanically confirmed via `grep -oh 'INJ-[0-9]\{3\}' submission/artefacts/{16,17,18,19,20,21}*.md submission/scripts/*.py`.)*
 
 ## Risks, assumptions and unresolved gaps
 
