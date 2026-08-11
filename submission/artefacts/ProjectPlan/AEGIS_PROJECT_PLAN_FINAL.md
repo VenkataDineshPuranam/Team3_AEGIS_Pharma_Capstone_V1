@@ -709,15 +709,17 @@ Per `runbooks/REPO_EXECUTION.md`, outsider member:
 
 ### DoD mirror (`DEFINITION_OF_DONE.md`)
 
+Updated at P9/G9 close — see `submission/artefacts/28_PRODUCTION_READINESS.md` for the full evidence trail behind every row below; nothing here is marked PASS without a cited, reproducible artefact.
+
 | # | Criterion | Status |
 |---|---|---|
-| 1 | Problem, baseline, decisions, users, constraints, no-AI | PENDING |
-| 2a–c | Three workflows advisory-only as specified | PENDING |
-| 3 | Reproducible commands; RTM; brownfield migration | PENDING |
-| 4 | GxP/security/privacy; fail-closed; authz-now | PENDING |
-| 5 | Suites; SLOs; FinOps; continuity | PENDING |
-| 6 | 30 artefacts; manifest; hashes; `--final` | PENDING |
-| 7 | Defence demos + recommendation | PENDING |
+| 1 | Problem, baseline, decisions, users, constraints, no-AI | PASS — current-state release-lead-time baseline is explicitly **abstained**, not fabricated (`01_BUSINESS_CASE.md` R-001, carried to `29_NINETY_DAY_ROADMAP_HANDOVER.md`); everything else evidenced |
+| 2a–c | Three workflows advisory-only as specified | PASS — 56/56 tests, 18/18 regression scenarios, 0 release gates blocked, 38/38 RC security retest |
+| 3 | Reproducible commands; RTM; brownfield migration | PASS — 6-script suite clean-room-verified on both the branch (P7) and the RC (P9); RTM in `09_REQUIREMENTS_TRACEABILITY.md`; brownfield contrast proven by execution in `22_EVALUATION_SCORECARD.md` §3 |
+| 4 | GxP/security/privacy; fail-closed; authz-now | PASS — artefacts 13–21; POL-01 deny-by-default; `security_retest_report.json` |
+| 5 | Suites; SLOs; FinOps; continuity | PASS — 12 suites (`submission/evaluation/`); SLO + error budget (`slo_error_budget_report.json`); FinOps (`23_TOKEN_FINOPS.md`); AI-disabled continuity proof (`ai_disabled_offline_demo.py`) |
+| 6 | 30 artefacts; manifest; hashes; `--final` | PASS — 30/30 present; `submission_manifest.csv`/`file_hashes.csv` regenerated from the RC; `check_submission_structure.py --final` PASS |
+| 7 | Defence demos + recommendation | PASS — `FINAL_DEFENCE_DOSSIER.md`, 13/13 elements rehearsed live; recommendation: Go (Track A+B), conditions stated in `28_PRODUCTION_READINESS.md` §7 |
 
 ---
 

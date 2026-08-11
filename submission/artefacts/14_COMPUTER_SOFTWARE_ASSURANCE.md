@@ -11,7 +11,7 @@ CSA principle applied throughout: critical thinking and risk-based testing depth
 | Team / owner | FDE4 (GxP/Quality Lead) primary, FDE5 (Security/Eval) co-owner |
 | Version / date | v0.1 — 2026-08-08 |
 | Reviewers | FDE3, FDE1 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | ADR-004, ADR-009; `requirements/ASSESSMENT_RUBRIC.csv` RUB-09 |
 
 ## Purpose

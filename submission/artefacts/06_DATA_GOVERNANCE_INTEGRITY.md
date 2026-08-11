@@ -11,7 +11,7 @@ Methodology: `data-and-knowledge` skill's four discovery questions (EXISTS / USA
 | Team / owner | FDE2 (Domain/Evidence Lead) primary, FDE4 (GxP/Quality) co-owner |
 | Version / date | v0.1 — 2026-08-08 |
 | Reviewers | FDE3, FDE5 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `requirements/ASSESSMENT_RUBRIC.csv` RUB-04,05,06 (hard-gate related) |
 
 ## Purpose

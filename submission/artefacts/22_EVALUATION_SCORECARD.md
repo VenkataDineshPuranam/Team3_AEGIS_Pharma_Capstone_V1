@@ -9,7 +9,7 @@
 | Team / owner | FDE5 (Security/Privacy/Eval/Reliability Lead) |
 | Version / date | v1.0 — 2026-08-11 |
 | Reviewers | FDE4, FDE3 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `evaluation/EVALUATION_PLAN.md`; `AEGIS_PROJECT_PLAN_FINAL.md` §11.4/§11.8; RUB-13 |
 
 ## Purpose

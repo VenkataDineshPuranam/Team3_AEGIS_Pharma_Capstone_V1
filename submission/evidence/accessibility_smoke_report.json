@@ -1,0 +1,46 @@
+{
+  "scope": "submission/app/index.html + app.js \u2014 static structural checks, not a live browser/screen-reader run (no automation tool available offline)",
+  "checks": [
+    {
+      "check": "no_div_span_click_handlers",
+      "pass": true,
+      "detail": "every interactive control is a native <button>/<select>, never a non-focusable <div>/<span> with a click handler bolted on (which would need manual tabindex/keydown wiring to be reachable)"
+    },
+    {
+      "check": "critical_actions_are_native_elements",
+      "pass": true,
+      "detail": "found 6 <button> (3 tabs + 3 'Assemble response' actions) and 3 <select> (1 scenario picker per workflow) \u2014 all natively focusable and activatable via Tab/Enter/Space/arrows, with no JS required to make them keyboard-reachable"
+    },
+    {
+      "check": "tablist_has_aria_roles",
+      "pass": true,
+      "detail": "tab container has role=\"tablist\", each tab button has role=\"tab\", per the ARIA Authoring Practices tabs pattern"
+    },
+    {
+      "check": "tab_panels_labelled",
+      "pass": true,
+      "detail": "each of the 3 content panels is aria-labelledby its own heading, so a screen reader announces which workflow is active"
+    },
+    {
+      "check": "arrow_key_tab_navigation",
+      "pass": true,
+      "detail": "Left/Right arrow keys move focus between tabs and activate the newly focused one (added this phase, completing the ARIA tabs pattern \u2014 previously only Tab-key-to-each-button worked, not roving arrow nav)"
+    },
+    {
+      "check": "live_region_for_authorization_banner",
+      "pass": true,
+      "detail": "the authorization banner uses role=\"status\" so assistive tech announces authorization state changes without moving focus"
+    },
+    {
+      "check": "no_innerHTML_or_unsafe_dom",
+      "pass": true,
+      "detail": "all rendering goes through createElement/textContent (safe-DOM discipline, also closes an XSS class), confirmed by regex for actual .innerHTML=/document.write( usage (not just the word appearing in a comment) \u2014 this doubles as an accessibility check since innerHTML-built content frequently loses semantic structure/ARIA wiring"
+    },
+    {
+      "check": "dark_mode_respects_system_preference",
+      "pass": true,
+      "detail": "color scheme (contrast) follows the user's OS setting via @media (prefers-color-scheme: dark), not fixed to a single palette"
+    }
+  ],
+  "all_passed": true
+}

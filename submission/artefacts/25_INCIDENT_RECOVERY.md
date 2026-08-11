@@ -9,7 +9,7 @@
 | Team / owner | FDE5 (Security/Privacy/Eval/Reliability Lead) |
 | Version / date | v1.0 — 2026-08-11 |
 | Reviewers | FDE1, FDE4 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `knowledge/AI_INCIDENT_RESPONSE.md` (K-004); `16_THREAT_ABUSE_MODEL.md`; RUB-15 |
 
 ## Purpose

@@ -11,7 +11,7 @@ Awareness-level AI Management System (AIMS) mapping per `.claude/skills/trust-ri
 | Team / owner | FDE4 (GxP/Quality/ISO/Assurance Lead) |
 | Version / date | v0.1 — 2026-08-10 |
 | Reviewers | FDE5, FDE1 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `data/audit_findings.csv` AF-2; `knowledge/AI_MODEL_CHANGE_CONTROL.md` (K-005) |
 
 ## Purpose

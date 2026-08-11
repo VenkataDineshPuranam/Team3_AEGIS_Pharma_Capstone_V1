@@ -2,8 +2,8 @@
   "request_id": "IR-72H",
   "agency": "joint fictional inspection",
   "deadline_hours": 72,
-  "generated_at": "2026-08-11T05:35:59Z",
-  "automated_retrieval_seconds": 0.0002,
+  "generated_at": "2026-08-11T06:01:20Z",
+  "automated_retrieval_seconds": 0.0001,
   "scope_response": [
     {
       "scope_item": "trial",

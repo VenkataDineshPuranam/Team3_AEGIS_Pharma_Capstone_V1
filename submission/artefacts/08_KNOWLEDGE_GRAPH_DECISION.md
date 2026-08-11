@@ -11,7 +11,7 @@ Per `data-and-knowledge` skill's meaning ladder (`Pure RAG → +metadata → +se
 | Team / owner | FDE2 (Domain/Evidence Lead) primary, FDE3 (Architecture/Build) co-owner |
 | Version / date | v0.1 — 2026-08-08 |
 | Reviewers | FDE3, FDE4 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `requirements/ASSESSMENT_RUBRIC.csv` RUB-06; feeds artefact 10 (C4), artefact 11 (ADR) |
 
 ## Purpose

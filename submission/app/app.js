@@ -255,8 +255,21 @@ function switchTab(panelId) {
   }
 }
 
-document.querySelectorAll(".tab-btn").forEach((btn) => {
+const tabButtons = Array.from(document.querySelectorAll(".tab-btn"));
+tabButtons.forEach((btn) => {
   btn.addEventListener("click", () => switchTab(btn.dataset.panel));
+  // ARIA Authoring Practices "tabs" pattern: Left/Right arrow moves focus
+  // between tabs and activates the newly focused one (P9 accessibility
+  // smoke workstream, AEGIS_PROJECT_PLAN_FINAL.md §8.1 "keyboard/critical-path").
+  btn.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    const index = tabButtons.indexOf(btn);
+    const delta = event.key === "ArrowRight" ? 1 : -1;
+    const next = tabButtons[(index + delta + tabButtons.length) % tabButtons.length];
+    next.focus();
+    switchTab(next.dataset.panel);
+  });
 });
 
 document.getElementById("batchRun").addEventListener("click", () => {

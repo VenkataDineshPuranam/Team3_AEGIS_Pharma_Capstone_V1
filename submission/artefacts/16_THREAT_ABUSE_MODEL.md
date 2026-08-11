@@ -11,7 +11,7 @@ Scope: adversarial/security risk to the AEGIS-PHARMA system itself (distinct fro
 | Team / owner | FDE5 (Security/Privacy/Eval/Reliability Lead) |
 | Version / date | v0.1 — 2026-08-10 |
 | Reviewers | FDE4, FDE3 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | ADR-005, ADR-006, ADR-007; `04-ddd/domain_model.md` INV-08/09, POL-01/02/06 |
 
 ## Purpose

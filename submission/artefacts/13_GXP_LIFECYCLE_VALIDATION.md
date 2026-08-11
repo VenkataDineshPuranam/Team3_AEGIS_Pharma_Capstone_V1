@@ -9,7 +9,7 @@
 | Team / owner | FDE4 (GxP/Quality/ISO Lead) |
 | Version / date | v0.1 — 2026-08-08 |
 | Reviewers | FDE3, FDE5 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | ADR-001, ADR-004, ADR-008; `requirements/ASSESSMENT_RUBRIC.csv` RUB-09 (hard-gate) |
 
 ## Purpose

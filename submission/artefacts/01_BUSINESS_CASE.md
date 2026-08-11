@@ -9,7 +9,7 @@
 | Team / owner | AEGIS-PHARMA delivery team (seats FDE1–FDE5; names TBD at kickoff per `submission/artefacts/ProjectPlan/AEGIS_PROJECT_PLAN_FINAL.md` §6.1) |
 | Version / date | v0.1 — 2026-08-06 |
 | Reviewers | FDE4 (GxP/Quality), FDE5 (Security/Eval) |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `requirements/ASSESSMENT_RUBRIC.csv` RUB-01…03; Discovery register `submission/artefacts/01-discovery/evidence_register.md` |
 
 ## Purpose

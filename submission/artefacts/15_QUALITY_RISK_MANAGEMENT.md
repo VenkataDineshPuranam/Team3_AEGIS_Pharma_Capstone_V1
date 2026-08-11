@@ -11,7 +11,7 @@ ICH Q9-style quality risk management applied to the AEGIS-PHARMA system itself (
 | Team / owner | FDE4 (GxP/Quality Lead) |
 | Version / date | v0.1 — 2026-08-08 |
 | Reviewers | FDE5, FDE1 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `04-ddd/domain_model.md` INV-*/POL-*; `requirements/ASSESSMENT_RUBRIC.csv` RUB-09 |
 
 ## Purpose

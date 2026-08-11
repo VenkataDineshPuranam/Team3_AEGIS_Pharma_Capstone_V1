@@ -9,7 +9,7 @@
 | Team / owner | FDE1 (Product/Value Lead) primary, FDE3 (Architecture/Build) co-owner for frontstage/backstage design |
 | Version / date | v0.1 — 2026-08-06 |
 | Reviewers | FDE4, FDE5 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `requirements/ASSESSMENT_RUBRIC.csv` RUB-01…03; feeds artefact 10 (C4), artefact 18 (Responsible AI/Human Factors) |
 
 ## Purpose

@@ -9,7 +9,7 @@
 | Team / owner | FDE1 (Product) + FDE5 (Eval) |
 | Version / date | v1.0 — 2026-08-11 |
 | Reviewers | FDE4, FDE3 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `AEGIS_PROJECT_PLAN_FINAL.md` §11.9; RUB-14; `evaluation/public_fixtures/PUB-14.json` |
 
 ## Purpose

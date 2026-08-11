@@ -11,7 +11,7 @@
 | Team / owner | FDE4 (GxP/Quality/ISO/Assurance Lead) |
 | Version / date | v0.1 — 2026-08-10 |
 | Reviewers | FDE5, FDE1 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `case/REGULATORY_BOUNDARY_PACK.md` line 15; `01_BUSINESS_CASE.md` §5 (prohibited actions) |
 
 ## Purpose

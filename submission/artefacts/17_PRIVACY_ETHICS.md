@@ -11,7 +11,7 @@ Awareness-level analysis per `.claude/skills/trust-risk-security.md` — not a l
 | Team / owner | FDE5 (Security/Privacy/Eval/Reliability Lead) |
 | Version / date | v0.1 — 2026-08-10 |
 | Reviewers | FDE4, FDE2 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `04-ddd/domain_model.md` INV-02/04; `AEGIS_PROJECT_PLAN_FINAL.md` line 260 (declared conflict: "Privacy vs GxP retention → P5 (17; INJ-035)") |
 
 ## Purpose

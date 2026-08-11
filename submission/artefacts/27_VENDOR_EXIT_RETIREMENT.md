@@ -9,7 +9,7 @@
 | Team / owner | FDE5 (Security/Privacy/Eval/Reliability Lead) |
 | Version / date | v1.0 — 2026-08-11 |
 | Reviewers | FDE1, FDE3 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | RUB-15; `04-ddd/inject_register_84.md` INJ-078/083/084 |
 
 ## Purpose

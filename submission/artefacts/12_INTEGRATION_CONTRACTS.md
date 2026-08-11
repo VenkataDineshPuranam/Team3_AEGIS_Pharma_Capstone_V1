@@ -9,7 +9,7 @@
 | Team / owner | FDE3 (Architecture/Build Lead) |
 | Version / date | v0.1 — 2026-08-08 |
 | Reviewers | FDE4, FDE5 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | ADR-001, ADR-004, ADR-010; `requirements/ASSESSMENT_RUBRIC.csv` RUB-04,07 |
 
 ## Purpose

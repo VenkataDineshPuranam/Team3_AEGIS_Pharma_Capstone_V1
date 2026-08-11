@@ -11,7 +11,7 @@ GSN-style claim/argument/evidence structure, synthesizing artefacts 01-20 into a
 | Team / owner | FDE4 (GxP/Quality/ISO/Assurance Lead) |
 | Version / date | v0.1 — 2026-08-10 |
 | Reviewers | FDE5, FDE1 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | All of `07-adr/adrs.md`; `11_ADR_REGISTER.md`; artefacts 13-20 |
 
 ## Purpose

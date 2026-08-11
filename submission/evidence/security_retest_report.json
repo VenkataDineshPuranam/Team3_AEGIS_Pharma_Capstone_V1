@@ -1,0 +1,17 @@
+{
+  "run_at": "2026-08-11T06:01:03Z",
+  "rc": "v1.0.0-rc1",
+  "scope": "security-relevant subset only (authorization, knowledge authority, replay/excessive-agency, model supply-chain integrity, all 3 prohibited-action specs, 4 security-relevant graders)",
+  "total_tests": 38,
+  "passed": 38,
+  "failed": 0,
+  "errors": 0,
+  "threat_controls_verified": [
+    "POL-01 deny-by-default authorization (live iam_state, cached ai_gateway_state ignored \u2014 ADR-006)",
+    "INV-09/POL-02 knowledge citation status-gate (untrusted/superseded never citable)",
+    "INV-01 disposition-write denial independent of tool approval",
+    "Idempotency-key replay detection, no duplicate execution",
+    "Model artifact hash/signature integrity gate",
+    "INV-01/05/06/07 no prohibited terminal action across all 3 workflows"
+  ]
+}

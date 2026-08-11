@@ -11,7 +11,7 @@
 | Team / owner | FDE3 (Architecture/Build Lead) |
 | Version / date | v0.1 — 2026-08-08 |
 | Reviewers | FDE4, FDE5 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `requirements/ASSESSMENT_RUBRIC.csv` RUB-04,05,07; feeds artefact 11 (ADR), artefact 12 (Contracts) |
 
 ## Purpose

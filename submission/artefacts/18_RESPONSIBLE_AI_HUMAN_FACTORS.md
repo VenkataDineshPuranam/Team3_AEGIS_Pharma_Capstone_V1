@@ -11,7 +11,7 @@ Scope: the 4 D11 human-factors injects (INJ-071…074), plus the automation-bias
 | Team / owner | FDE1 (Product/Value Lead) |
 | Version / date | v0.1 — 2026-08-10 |
 | Reviewers | FDE4, FDE5 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `04-ddd/gen_ai_boundaries.md` §3; `15_QUALITY_RISK_MANAGEMENT.md` HAZ-02 |
 
 ## Purpose

@@ -9,7 +9,7 @@
 | Team / owner | FDE1 (Product) |
 | Version / date | v1.0 — 2026-08-11 |
 | Reviewers | FDE4, FDE5 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | RUB-16; `case/STAKEHOLDER_PACK.md`; `data/decision_rights.csv` |
 
 ## Purpose

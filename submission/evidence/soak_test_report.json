@@ -1,0 +1,46 @@
+{
+  "run_at": "2026-08-11T06:01:03Z",
+  "iterations_per_workflow": 200,
+  "latency_budget_ms_p99": 5.0,
+  "results": [
+    {
+      "workflow": "batch_evidence",
+      "iterations": 200,
+      "execution_status_violations": 0,
+      "latency_ms": {
+        "p50": 0.0013,
+        "p95": 0.0014,
+        "p99": 0.005,
+        "max": 0.0063
+      },
+      "within_budget_p99": true
+    },
+    {
+      "workflow": "pv_intake",
+      "iterations": 200,
+      "execution_status_violations": 0,
+      "latency_ms": {
+        "p50": 0.0016,
+        "p95": 0.0017,
+        "p99": 0.0042,
+        "max": 0.0058
+      },
+      "within_budget_p99": true
+    },
+    {
+      "workflow": "supply_options",
+      "iterations": 200,
+      "execution_status_violations": 0,
+      "latency_ms": {
+        "p50": 0.0016,
+        "p95": 0.0017,
+        "p99": 0.0037,
+        "max": 0.0047
+      },
+      "within_budget_p99": true
+    }
+  ],
+  "all_within_budget": true,
+  "zero_execution_status_drift": true,
+  "note": "Cost-per-successful-task budget ($0.20/task, 23_TOKEN_FINOPS.md \u00a76) is not re-derived here \u2014 no model inference exists in this code path to soak; this measures deterministic-layer latency stability under repeated load instead."
+}

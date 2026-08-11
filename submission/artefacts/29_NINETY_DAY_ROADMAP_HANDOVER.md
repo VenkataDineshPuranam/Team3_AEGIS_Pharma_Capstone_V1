@@ -9,7 +9,7 @@
 | Team / owner | FDE1 (Product) |
 | Version / date | v1.0 — 2026-08-11 |
 | Reviewers | FDE3, FDE4, FDE5 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | RUB-16; consolidates every open R-item from artefacts 22/24/26/27/28 |
 
 ## Purpose

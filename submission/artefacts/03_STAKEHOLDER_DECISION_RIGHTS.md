@@ -9,7 +9,7 @@
 | Team / owner | FDE2 (Domain/Evidence Lead) primary, FDE4 (GxP/Quality Lead) co-owner |
 | Version / date | v0.1 — 2026-08-06 |
 | Reviewers | FDE1, FDE4 |
-| Status | Draft |
+| Status | Approved for defence |
 | Related requirements / ADRs | `requirements/ASSESSMENT_RUBRIC.csv` RUB-01…03; feeds artefact 16 (Threat & Abuse Model) escalation design |
 
 ## Purpose

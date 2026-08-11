@@ -22,6 +22,8 @@ There is no "override" path in the code for a denied action:
 
 If an incident requires disabling AI/model dependency entirely, cutting network connectivity is safe and does not stop the three workflows — see `AI_DISABLED.md`.
 
+**Literal kill switch (P9)**: this system has no live server/daemon to "kill" — it is a stateless CLI + static-file app. `submission/scripts/run.sh` checks for `submission/evidence/KILL_SWITCH` (a sentinel file) or `AEGIS_KILL_SWITCH=1` (an env var) before doing anything else, and refuses to run if either is set. To halt operation during a real incident: `touch submission/evidence/KILL_SWITCH`. To resume: remove that file. Verified this phase — both the file and env-var forms correctly block `run.sh` with exit code 1, and normal operation resumes cleanly once cleared.
+
 ## Evidence preservation
 
 `evidence_resolver.verify_integrity` requires a real SHA-256 and `source_preserved: true` on every evidence item at all times — nothing in the workflow code path can mutate or drop an evidence item during an incident. Run `submission/scripts/export.sh` to snapshot current `evidence/` + `evaluation/reports/` + `artefacts/` before further changes.
