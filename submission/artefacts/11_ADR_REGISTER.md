@@ -28,9 +28,20 @@ Records the decision memory behind the C4 map (artefact 10) and the architecture
 
 ## 1. ADR index
 
-| Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
-|---|---|---|---|
-| What are the 10 ADRs? | **DECISION**: ADR-001 Evidence-Resolver shared kernel; 002 Product identity resolve-per-request; 003 AI agents in-process; 004 Contract validation build+runtime; 005 Audit Store hash-chained file; 006 AuthZ live IAM check; 007 Knowledge Gateway live status check; 008 Single offline-capable process; 009 Explicit health/SLO checks; 010 Adopt package fixture pattern | FDE3 | `07-adr/adrs.md` |
+Full record (context, alternatives considered, consequences, guardrails, validation, revisit trigger) for each ADR below lives in `07-adr/adrs.md`; this table inlines the decision and driving evidence for every one so the register is readable without leaving this file.
+
+| ADR | Title | Status | Decision | Driving evidence |
+|---|---|---|---|---|
+| ADR-001 | Evidence-Resolver as a shared kernel | proposed | Implement Evidence & Provenance as one shared service called by all three workflow containers, not three copies or a forked shared library | INV-08 (integrity hash); zero-divergence requirement |
+| ADR-002 | Product & Substance identity resolution — resolve-per-request | proposed | Resolve per-request against current `product_master_aliases`/`idmp_mappings`/`substance_master` state, not a nightly precomputed cache | `idmp_mappings.csv` small enumerable conflict set (`ambiguous_strength_presentation`, INJ-045) |
+| ADR-003 | Optional AI agents run in-process | proposed | Both optional AI agents run as in-process function calls behind a feature flag, not a separate tool-calling runtime | Governing plan's agent-freeze until G4 PASS; minimizes AI-specific Integration/Observability waste |
+| ADR-004 | Contract validation at build time AND runtime | proposed | Every response validated against its schema both in the test suite and as a runtime gate before leaving the workflow container | INV-01/06 hard-gate status; defence element 4 needs both layers |
+| ADR-005 | Audit/Evidence Store — hash-chained append-only file | proposed | Append-only, hash-chained flat file, no database dependency | `PACKAGE_SCOPE_AND_ASSUMPTIONS.md` offline requirement; ALCOA+ applied to the system's own audit trail |
+| ADR-006 | Authorization checked live against IAM state | proposed | Authorization Service checks `iam_state` directly per request; any gateway cache is informational only, never authoritative | INJ-067 — an already-occurred incident, not hypothetical |
+| ADR-007 | Knowledge Authority Gateway performs a live per-citation status check | proposed | Check `knowledge_catalog.status`/`trust` live at citation time, not from a periodically-synced copy | INV-09; catalog is small (32 docs), live-check cost negligible |
+| ADR-008 | Single offline-capable process (Track A) | proposed | All 9 containers run within one deployable process, satisfying the offline-deterministic-mode requirement by construction | Package's own offline/no-hidden-services rule |
+| ADR-009 | Explicit health/SLO check per shared container | proposed | Each of the 4 shared containers plus the Audit Store exposes an explicit, actively-monitored health check | `06-c4/dmaic_lens.md` §5 Control priorities |
+| ADR-010 | Adopt the package's existing shared fixture pattern | proposed | Adopt and extend the package's own `PUB-*` fixture pattern rather than inventing a per-workflow format | Consistency with package-supplied evaluation infrastructure; avoids Overproduction waste |
 
 ## 2. Context and forces
 

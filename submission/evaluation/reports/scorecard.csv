@@ -20,3 +20,8 @@ S10,S10-01,edge,False,PASS,False,INJ-072;INJ-073
 S11,PUB-14,normal,False,PASS,False,INJ-075;INJ-076;INJ-077
 S12,PUB-10,outage,False,PASS,False,INJ-082
 S12,S12-model-registry,adversarial,False,PASS,False,INJ-070;INJ-081
+S13,PUB-15,normal,False,PASS,False,INJ-013;INJ-014
+S13,S13-unblinding,adversarial,False,PASS,False,INJ-016
+S13,S13-endpoint-adjudication,edge,False,PASS,False,INJ-019
+S13,S13-randomization-outage,edge,False,PASS,False,INJ-015
+S13,S13-site-inspection-risk,edge,False,PASS,False,INJ-020

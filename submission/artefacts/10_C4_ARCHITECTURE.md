@@ -33,12 +33,114 @@ Shows the structure (containers/components) that realizes the domain model (arte
 |---|---|---|---|
 | Who and what interacts with the system? | **DECISION**: 5 person types (EU QP, Safety Physician, Supply Governance Board, Data Steward, CISO) and 5 external system classes (source systems ×3, knowledge corpus, optional model endpoint), all read/citation-only toward the system's dependencies, with 3 explicit PROHIBITED write paths drawn | FDE3 | `06-c4/c4_context.md` |
 
+```mermaid
+flowchart TD
+  classDef person fill:#E8F0FE,stroke:#333,color:#111;
+  classDef system fill:#FFF3E0,stroke:#333,color:#111;
+  classDef external fill:#F5F5F5,stroke:#333,color:#111;
+
+  QP["EU Qualified Person<br/>«Person»"]:::person
+  SafetyPhys["Safety Physician<br/>«Person»"]:::person
+  SupplyBoard["Supply Governance Board<br/>«Person»"]:::person
+  Steward["Data Steward<br/>«Person»"]:::person
+  CISO["CISO / Security Reviewer<br/>«Person»"]:::person
+
+  AEGIS["AEGIS-PHARMA Evidence Advisory System<br/>«System»"]:::system
+
+  SourceSystems["LIMS / MES / eQMS<br/>(source of record, read-only)<br/>«External»"]:::external
+  SafetyDB["Global Safety Database<br/>(source of record, read-only)<br/>«External»"]:::external
+  SupplySystems["ERP / Warehouse / CMO Portals<br/>(source of record, read-only)<br/>«External»"]:::external
+  KnowledgeCorpus["knowledge/*.md Policy Corpus<br/>«External»"]:::external
+  ModelEndpoint["AI Model Endpoint<br/>(optional, scoped)<br/>«External»"]:::external
+
+  QP -->|requests batch evidence view| AEGIS
+  SafetyPhys -->|requests PV case support| AEGIS
+  SupplyBoard -->|requests supply options| AEGIS
+  Steward -->|maintains knowledge catalog status| AEGIS
+  CISO -->|reviews security/audit evidence| AEGIS
+
+  AEGIS -->|read-only evidence retrieval| SourceSystems
+  AEGIS -->|read-only evidence retrieval| SafetyDB
+  AEGIS -->|read-only evidence retrieval| SupplySystems
+  AEGIS -->|status-gated citation retrieval| KnowledgeCorpus
+  AEGIS -->|scoped drafting/scoring calls, optional| ModelEndpoint
+
+  AEGIS -.->|"PROHIBITED: disposition write-back"| SourceSystems
+  AEGIS -.->|"PROHIBITED: case decision write-back"| SafetyDB
+  AEGIS -.->|"PROHIBITED: reservation/allocation write-back"| SupplySystems
+
+  linkStyle 10 stroke:#d32f2f,stroke-width:2px
+  linkStyle 11 stroke:#d32f2f,stroke-width:2px
+  linkStyle 12 stroke:#d32f2f,stroke-width:2px
+```
+
+*Full notes on this diagram: `06-c4/c4_context.md` "Notes" section.*
+
 ## 2. Container view
 
 | Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
 |---|---|---|---|
 | What are the containers? | **DECISION**: 9 — App, Evidence-Resolver (shared kernel), 3 workflow containers, Product & Substance ACL, Knowledge Authority Gateway, Authorization Service, Audit/Evidence Store, Contract Validator | FDE3 | `06-c4/c4_containers.md` |
 | Does every container trace to a bounded context? | **FACT**: yes, per the container-list rationale table — each container names its owning context and the specific waste it removes | FDE2 | `06-c4/c4_containers.md` |
+
+```mermaid
+flowchart TD
+  classDef container fill:#E8F0FE,stroke:#333,color:#111;
+  classDef external fill:#F5F5F5,stroke:#333,color:#111;
+
+  subgraph SYS["AEGIS-PHARMA Evidence Advisory System"]
+    App["App / Demonstrator<br/>(submission/app)<br/>«Container»"]:::container
+    Resolver["Evidence-Resolver Service<br/>(shared kernel: hash, authority, as-of)<br/>«Container»"]:::container
+    BatchC["Batch Evidence Container<br/>(Workflow A logic)<br/>«Container»"]:::container
+    PVC["PV Case Container<br/>(Workflow B logic)<br/>«Container»"]:::container
+    SupplyC["Supply Option Container<br/>(Workflow C logic)<br/>«Container»"]:::container
+    ProductACL["Product & Substance ACL<br/>«Container»"]:::container
+    KnowledgeGW["Knowledge Authority Gateway<br/>(status-gated citation)<br/>«Container»"]:::container
+    AuthZ["Authorization Service<br/>(Decision Authority & Accountability)<br/>«Container»"]:::container
+    AuditStore["Audit / Evidence Store<br/>(append-only)<br/>«Container»"]:::container
+    Validator["Contract Validator<br/>(evaluation/contracts schemas)<br/>«Container»"]:::container
+    Fixtures[("Deterministic Fixtures / Test Data<br/>«Container»")]:::container
+  end
+
+  Model["Model Endpoint (optional, scoped)<br/>«External»"]:::external
+
+  App --> BatchC
+  App --> PVC
+  App --> SupplyC
+
+  BatchC --> Resolver
+  PVC --> Resolver
+  SupplyC --> Resolver
+
+  BatchC --> ProductACL
+  PVC --> ProductACL
+  SupplyC --> ProductACL
+
+  BatchC --> KnowledgeGW
+  PVC --> KnowledgeGW
+  SupplyC --> KnowledgeGW
+
+  BatchC --> AuthZ
+  PVC --> AuthZ
+  SupplyC --> AuthZ
+
+  BatchC --> AuditStore
+  PVC --> AuditStore
+  SupplyC --> AuditStore
+
+  BatchC -.->|validates against batch_response.schema.json| Validator
+  PVC -.->|validates against pv_response.schema.json| Validator
+  SupplyC -.->|validates against supply_response.schema.json| Validator
+
+  BatchC -->|optional summary/scoring call| Model
+  PVC -->|optional duplicate-similarity call| Model
+
+  BatchC -.->|"PROHIBITED: write to production source"| Fixtures
+
+  linkStyle 23 stroke:#d32f2f,stroke-width:2px
+```
+
+*Full container-list rationale table: `06-c4/c4_containers.md`.*
 
 ## 3. Component view
 

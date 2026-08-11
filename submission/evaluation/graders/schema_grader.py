@@ -16,23 +16,28 @@ if str(ROOT) not in sys.path:
 
 from tools.test_contracts import validate as _validate  # noqa: E402
 
-CONTRACTS_DIR = ROOT / "evaluation" / "contracts"
+CONTRACTS_DIR = ROOT / "evaluation" / "contracts"  # immutable — the 3 mandated workflows
+SUBMISSION_CONTRACTS_DIR = ROOT / "submission" / "evaluation" / "contracts"  # submission-owned — additional/optional workflows
 
 _SCHEMA_BY_WORKFLOW = {
-    "batch_evidence": "batch_response.schema.json",
-    "pv_intake": "pv_response.schema.json",
-    "supply_options": "supply_response.schema.json",
+    "batch_evidence": (CONTRACTS_DIR, "batch_response.schema.json"),
+    "pv_intake": (CONTRACTS_DIR, "pv_response.schema.json"),
+    "supply_options": (CONTRACTS_DIR, "supply_response.schema.json"),
+    # Workflow D — additional, optional scope, not one of the three mandated
+    # workflows. See submission/artefacts/WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md.
+    "clinical_trial_context": (SUBMISSION_CONTRACTS_DIR, "clinical_response.schema.json"),
 }
 
 
 def grade_schema(workflow, response):
-    """response must be a dict; workflow must be one of the three contract
-    workflows. Returns {"pass": bool, "reason": str, "errors": [...]}."""
-    schema_name = _SCHEMA_BY_WORKFLOW.get(workflow)
-    if schema_name is None:
+    """response must be a dict; workflow must be a registered contract
+    workflow. Returns {"pass": bool, "reason": str, "errors": [...]}."""
+    entry = _SCHEMA_BY_WORKFLOW.get(workflow)
+    if entry is None:
         return {"pass": False, "reason": f"no contract registered for workflow={workflow!r}", "errors": []}
     if not isinstance(response, dict):
         return {"pass": False, "reason": "response is not an object", "errors": ["$: expected object"]}
-    schema = __import__("json").loads((CONTRACTS_DIR / schema_name).read_text(encoding="utf-8"))
+    contracts_dir, schema_name = entry
+    schema = __import__("json").loads((contracts_dir / schema_name).read_text(encoding="utf-8"))
     errors = _validate(response, schema)
     return {"pass": not errors, "reason": "schema_valid" if not errors else "schema_invalid", "errors": errors}

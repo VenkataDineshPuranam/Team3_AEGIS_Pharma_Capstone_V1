@@ -31,18 +31,18 @@ Per the governing plan (`AEGIS_PROJECT_PLAN_FINAL.md` §8, Phase P2 row: "P2: 05
 | INJ-011 | Unqualified research model | out_of_scope | Same |
 | INJ-012 | Target-evidence conflict | out_of_scope | Same |
 
-## D03 — Clinical development and trial integrity (out of scope, one exception)
+## D03 — Clinical development and trial integrity (addressed via Workflow D — ADDITIONAL, OPTIONAL SCOPE, not one of the three mandated workflows; see `WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md`)
 
 | Inject | Title | Status | Where addressed / reason |
 |---|---|---|---|
-| INJ-013 | Protocol-version divergence | out_of_scope | Clinical Trial Management bounded context not built |
-| INJ-014 | Eligibility ambiguity | out_of_scope | Same |
-| INJ-015 | Randomization service outage | out_of_scope | Same |
-| INJ-016 | Potential unblinding | out_of_scope | Same |
-| INJ-017 | eConsent withdrawal mismatch | out_of_scope | Same (privacy pattern is structurally similar to INV-01-class invariants, but this specific inject not modeled) |
+| INJ-013 | Protocol-version divergence | **addressed** (Workflow D) | `WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` §2; POL-07; live suite S13 scenario `PUB-15` |
+| INJ-014 | Eligibility ambiguity | **addressed** (Workflow D) | `WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` §2; INV-11; live suite S13 scenario `PUB-15` |
+| INJ-015 | Randomization service outage | **addressed** (Workflow D) | `WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` §2; live suite S13 scenario `S13-randomization-outage` |
+| INJ-016 | Potential unblinding | **addressed** (Workflow D) | `WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` §2; INV-12; live suite S13 scenario `S13-unblinding` |
+| INJ-017 | eConsent withdrawal mismatch | **addressed** | `17_PRIVACY_ETHICS.md` §6; `06_DATA_GOVERNANCE_INTEGRITY.md` §6 (first treatment); Workflow D adds a second, complementary demonstration of the same stale-cache pattern |
 | INJ-018 | Decentralized-device clock skew | **addressed** (exception) | `07_ONTOLOGY_SEMANTIC_LAYER.md` §4 — cited as the concrete instance behind the general timezone/DST temporal-semantics requirement |
-| INJ-019 | Endpoint adjudication backlog | out_of_scope | Clinical Trial Management not built |
-| INJ-020 | Site inspection risk | out_of_scope | Same |
+| INJ-019 | Endpoint adjudication backlog | **addressed** (Workflow D) | `WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` §2; INV-13; live suite S13 scenario `S13-endpoint-adjudication` |
+| INJ-020 | Site inspection risk | **addressed** (Workflow D) | `WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` §2; live suite S13 scenario `S13-site-inspection-risk` |
 
 ## D04 — GMP manufacturing, laboratories and batch release (in scope — Workflow A core)
 
@@ -162,12 +162,14 @@ Per the governing plan (`AEGIS_PROJECT_PLAN_FINAL.md` §8, Phase P2 row: "P2: 05
 
 | Status | Count |
 |---|---|
-| addressed | 61 |
+| addressed (61 via the three mandated workflows/cross-cutting design + 7 via Workflow D, ADDITIONAL/OPTIONAL SCOPE — see note below) | 68 |
 | in_scope_open (carried forward, real gap to close before defence) | 11 |
-| out_of_scope (stated exclusion — Discovery/Translational Science, Clinical Trial Management) | 12 |
+| out_of_scope (stated exclusion — Discovery/Translational Science; Clinical Trial Management is now fully addressed via Workflow D) | 5 |
 | **Total** | **84** |
 
-**INTERPRETATION**: 61/84 (73%) addressed after seven phases (Discovery through Defence) is expected and healthy — the `in_scope_open` items are not a quality failure, they are the explicit backlog now carried into `29_NINETY_DAY_ROADMAP_HANDOVER.md`. The 12 `out_of_scope` items are a stated scope decision (two whole dimensions — Discovery/Translational Science, 5 of 6 injects, and Clinical Trial Management, 7 of 8 injects — are outside the three mandated workflows, with one addressed exception in each), not silently dropped injects.
+**Workflow D note**: 7 of the 8 D03 injects (all but INJ-018, already addressed separately) moved from `out_of_scope` to `addressed` because a fourth, participant-added workflow (`WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md`) was built to cover Clinical Trial Management. This is **additional, optional scope** — `case/INTEGRATED_CASE.md` §4 mandates exactly three workflows, and `RUB-08` scores those three specifically. The 68/84 figure should not be read as the graded mandate having expanded; it reflects real design/code/test coverage that happens to exist, cited honestly rather than left as a stale `out_of_scope` label now that it's no longer true.
+
+**INTERPRETATION**: 68/84 (81%) addressed after eight phases plus one additional-scope workflow is expected and healthy — the `in_scope_open` items are not a quality failure, they are the explicit backlog now carried into `29_NINETY_DAY_ROADMAP_HANDOVER.md`. The remaining 5 `out_of_scope` items (Discovery/Translational Science, 5 of 6 injects, one addressed exception) are a stated scope decision under the three mandated workflows (`case/INTEGRATED_CASE.md` §4) — Clinical Trial Management (D03) is no longer `out_of_scope` because Workflow D (additional, optional scope beyond the mandate) now covers it; see the Workflow D note above.
 
 *(Revision history: originally miscounted as 51/25/8 due to a hand-tally arithmetic error, corrected to 52/20/12 during Phase 3 cross-verification (2026-08-08); then INJ-069 upgraded from `in_scope_open` to `addressed` after Phase 3's degraded-mode design gave it substantive treatment, giving 53/19/12; then Phase 4 (artefacts 16-21) gave INJ-059, 061, 062, 063, 068 and 074 their own dedicated design response for the first time, upgrading all 6 from `in_scope_open` to `addressed`, giving 59/13/12; then Phase 5 cross-verification found INJ-079 was marked "carried to Prompt 06" but never actually treated by name anywhere — `submission/scripts/ai_disabled_offline_demo.py`'s real socket-blocked proof now closes it, giving the current 60/12/12 — mechanically confirmed via `grep -oh 'INJ-[0-9]\{3\}' submission/artefacts/{16,17,18,19,20,21}*.md submission/scripts/*.py`.)*
 

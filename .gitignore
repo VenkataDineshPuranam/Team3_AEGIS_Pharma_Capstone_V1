@@ -7,3 +7,5 @@ CONVERSATION_SUMMARY.md
 submission/evidence/exports/
 .pytest_cache/
 .cursor/
+.vscode/
+eval-ai-cache/

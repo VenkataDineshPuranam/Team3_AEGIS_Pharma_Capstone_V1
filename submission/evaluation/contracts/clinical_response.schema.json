@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "clinical_response.schema.json",
+  "$comment": "Workflow D (clinical trial context support) — ADDITIONAL, OPTIONAL SCOPE, not one of the three mandated evaluation/contracts/*.schema.json workflows. Submission-owned (this directory, not the immutable evaluation/contracts/), per CLAUDE.md 'Do not edit: evaluation/'. Modeled on batch_response.schema.json's envelope. See submission/artefacts/WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_id",
+    "workflow",
+    "as_of",
+    "authorization",
+    "evidence",
+    "contradictions",
+    "gaps",
+    "abstentions",
+    "human_review",
+    "execution_status",
+    "audit",
+    "subject_id",
+    "trial_id",
+    "protocol_conflicts",
+    "unblinding_risk_flags",
+    "site_inspection_risk_flags",
+    "required_reviews"
+  ],
+  "properties": {
+    "request_id": { "type": "string", "minLength": 1 },
+    "workflow": { "const": "clinical_trial_context" },
+    "as_of": { "type": "string", "minLength": 1 },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["user", "purpose", "checked_at", "decision"],
+      "properties": {
+        "user": { "type": "string" },
+        "purpose": { "type": "string" },
+        "checked_at": { "type": "string" },
+        "decision": { "enum": ["allow", "deny"] },
+        "reason": { "type": "string" }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "evidence_item.schema.json" }
+    },
+    "contradictions": { "type": "array", "items": { "type": "object" } },
+    "gaps": { "type": "array", "items": { "type": "object" } },
+    "abstentions": { "type": "array", "items": { "type": "object" } },
+    "human_review": { "type": "object" },
+    "execution_status": { "const": "not_executed" },
+    "audit": { "type": "object" },
+    "subject_id": { "type": "string" },
+    "trial_id": { "type": "string" },
+    "protocol_conflicts": { "type": "array", "items": { "type": "object" } },
+    "unblinding_risk_flags": { "type": "array", "items": { "type": "object" } },
+    "site_inspection_risk_flags": { "type": "array", "items": { "type": "object" } },
+    "required_reviews": { "type": "array", "items": { "type": "string" } }
+  }
+}

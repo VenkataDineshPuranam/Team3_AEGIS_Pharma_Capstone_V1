@@ -42,6 +42,18 @@ Establishes the domain model — bounded contexts, ubiquitous language, aggregat
 | What are the bounded contexts and their subdomain class? | **DECISION**: 3 Core (Batch Evidence & Release Readiness; PV Case Intake & Signal Support; Supply & Cold-Chain Option Planning), 2 Generic (Evidence & Provenance; Decision Authority & Accountability — required by methodology), 2 Supporting (Product & Substance Master; Regulatory & Knowledge Authority) | FDE2, ratified at G2 | `04-ddd/domain_model.md` §2, full canvases in `context_map.md` |
 | Does every context have a named human owner and decisions it does NOT own? | **FACT**: yes for all 7 — e.g. Batch Evidence owns no decisions (readiness classification only); Batch certification itself is explicitly NOT owned (EU Qualified Person only) | FDE4 | `04-ddd/context_map.md` canvases |
 
+Full canvas per context (business purpose, language, upstream/downstream, gaps): `04-ddd/context_map.md`. Decisions owned/not-owned and the accountable human, inlined here:
+
+| Context | Class | Decisions owned | Decisions NOT owned | Accountable human |
+|---|---|---|---|---|
+| Batch Evidence & Release Readiness | Core | None — classification only (`readiness_state`) | Release, reject, reprocess, relabel, recall | EU Qualified Person |
+| PV Case Intake & Signal Support | Core | None — extraction/normalization/clustering only | Final seriousness, causality, expectedness, reportability, signal confirmation | Safety Physician |
+| Supply & Cold-Chain Option Planning | Core | None — option generation only | Reserve, allocate, ship, change quality status, initiate recall | Supply Governance Board |
+| Evidence & Provenance | Generic (shared kernel) | None | Any business decision — purely infrastructural | Data Steward (cross-functional) |
+| Decision Authority & Accountability | Generic (published language) | None | Everything — its purpose is to name who decides, never to decide | EU QP / Safety Physician / Supply Board (as named roles) |
+| Product & Substance Master | Supporting (anti-corruption layer) | None — identity mapping only, conflicts surfaced not resolved | Which identity is "correct" when ambiguous | Regulatory Affairs |
+| Regulatory & Knowledge Authority | Supporting (published language) | None — status gating only | Whether a policy's content is correct | Data Steward, Regulatory Affairs |
+
 ## 3. Aggregates and invariants
 
 | Item / question | Evidence-based response | Decision / owner | Acceptance evidence |

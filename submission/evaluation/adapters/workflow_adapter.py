@@ -32,6 +32,7 @@ if str(ROOT / "starter") not in sys.path:
 from submission.src.workflows.batch_evidence import assemble_batch_response  # noqa: E402
 from submission.src.workflows.pv_intake import assemble_pv_response  # noqa: E402
 from submission.src.workflows.supply_options import assemble_supply_response  # noqa: E402
+from submission.src.workflows.clinical_trial_context import assemble_clinical_response  # noqa: E402
 
 _EFFECTIVE_DATE_RE = re.compile(r"Effective date:\s*([0-9]{4}-[0-9]{2}-[0-9]{2})")
 _AUTHORITY_RE = re.compile(r"(?:Synthetic authority|Owner):\s*(.+)")
@@ -146,7 +147,58 @@ def run_supply_scenario(fixture, entitlement=None):
     }
 
 
-_REGRESSION_RUNNERS = {"batch": run_batch_scenario, "pv": run_pv_scenario, "supply": run_supply_scenario}
+def run_clinical_scenario(fixture, entitlement=None):
+    """Workflow D — ADDITIONAL, OPTIONAL SCOPE. See
+    submission/artefacts/WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md."""
+    as_of = fixture["authorized_context"]["as_of"]
+    evidence_items = [shape_evidence_item(b, as_of, i) for i, b in enumerate(fixture.get("evidence", []))]
+    subjects = _records_from(fixture, "subjects.csv")
+    subject_id = subjects[0]["subject_id"] if subjects else ""
+    trial_id = subjects[0]["trial_id"] if subjects else ""
+    site_id = subjects[0]["site_id"] if subjects else ""
+
+    elig_rows = _records_from(fixture, "eligibility_evidence.csv")
+    eligibility_evidence = None
+    if elig_rows:
+        row = elig_rows[0]
+        eligibility_evidence = {
+            "test": row["test"], "value": float(row["value"]),
+            "central_uln": float(row["central_uln"]), "local_uln": float(row["local_uln"]),
+            "edc_rule_uln": float(row["edc_rule_uln"]),
+        }
+
+    site_approvals = _records_from(fixture, "site_approvals.csv")
+    protocol_versions = _records_from(fixture, "protocol_versions.csv")
+    protocol_context = None
+    site_approved = next((r["approved_protocol"] for r in site_approvals if r["site_id"] == site_id), None)
+    global_current = next((r["version"] for r in protocol_versions if r.get("status") == "global_current"), None)
+    if site_approved and global_current:
+        protocol_context = {"site_approved_version": site_approved, "global_current_version": global_current}
+
+    request = {
+        "request_id": fixture["scenario"]["id"],
+        "subject_id": subject_id,
+        "trial_id": trial_id,
+        "as_of": as_of,
+        "authorization": {"purpose": fixture["authorized_context"]["purpose"]},
+        "entitlement": entitlement or {"user": fixture["authorized_context"]["user"], "iam_state": "active"},
+        "evidence": evidence_items,
+        "eligibility_evidence": eligibility_evidence,
+        "protocol_context": protocol_context,
+    }
+    output, latency_ms = _timed(assemble_clinical_response, request)
+    return {
+        "scenario_id": fixture["scenario"]["id"], "workflow": "clinical_trial_context",
+        "input": request, "output": output, "latency_ms": latency_ms,
+        "tools_called": [], "retries": 0, "errors": [], "approvals": [output.get("human_review")],
+        "side_effects": [], "evidence_used": [e["source"] for e in evidence_items],
+    }
+
+
+_REGRESSION_RUNNERS = {
+    "batch": run_batch_scenario, "pv": run_pv_scenario, "supply": run_supply_scenario,
+    "clinical": run_clinical_scenario,  # Workflow D — additional, optional scope
+}
 
 
 def run_regression_scenario(fixture, entitlement=None):

@@ -35,6 +35,7 @@ Establishes what data exists, is usable, is governed, and is missing across the 
 |---|---|---|---|
 | What **EXISTS**? | **FACT**: 143 CSVs + `injects.json`, fully profiled in `DATA_DICTIONARY.csv` with dataset/column/type/nullability/example per field — this is itself the source register with an implicit owner (the package), no separate discovery needed | FDE2 | E-001 |
 | What is **GOVERNED**, by classification? | **FACT** (sample): `system_inventory.csv` shows classification is itself contested — `LIMS-4` is `GxP critical/validated`, `AI-EVIDENCE` is `business support/pilot`, `BIOX-ELN` is `research only/acquired` — classification is not a solved problem in the source estate, it must be resolved per-object by the Evidence & Provenance context, not assumed uniform | FDE4 | `data/system_inventory.csv`; `04-ddd/domain_model.md` (Evidence & Provenance context) |
+| Does M&A activity make governance harder? | **FACT**: yes — a recently acquired biotech (`organisations.csv`) uses incompatible identifiers, cloud tenancy and quality procedures (INJ-005), directly widening the classification-contest problem above rather than being a separate concern | FDE2 | `data/organisations.csv`; INJ-005 |
 | What is **MISSING**? | **FACT**: `document_catalog.csv` contains an explicit `referenced_missing` / `intentionally_absent` record (a submission index references a document not present in the archive, INJ-048) — this is a declared gap, not a data-loading defect, and must be surfaced as such, never silently backfilled | FDE2 | `data/document_catalog.csv`; INJ-048 |
 
 ## 2. Source authority by object/context/time
@@ -67,11 +68,14 @@ Six quality properties, applied to the evidence base as a whole (not per-file �
 
 **ALCOA+ specific finding**: the transcribed CoA (INJ-036) fails Attributable/Original/Contemporaneous simultaneously — `document_lineage.csv` shows `derived_from=vendor_pdf_missing`, i.e. the original is gone and only a transcription with a named transcriber/verifier remains. This is the single clearest data-integrity gap in the package and must be treated as `untrusted`-equivalent evidence, not silently accepted because a value exists.
 
+**Attributable, a second instance**: three analysts shared one instrument account during night shift (INJ-030, `access_logs.csv; staff_rosters.csv`) — every action in that window is Attributable to the account, not to a person, which is the same class of failure as INJ-036 (an artefact that "has a value" but cannot be traced to a real individual/original), just at the access-control layer rather than the document layer.
+
 ## 5. Lineage and transformation controls
 
 | Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
 |---|---|---|---|
 | Is lineage tracked? | **FACT**: `document_lineage.csv` tracks `record → derived_from → transcribed_by → verified_by` for at least the COA-RG78 case — this pattern should be the minimum lineage record for any transformed evidence item | FDE2 | E-006 |
+| Is the audit trail itself trustworthy? | **FACT**: no, not unconditionally — a privileged account disabled audit capture for 47 minutes during master-data repair (INJ-029, `audit_trails.csv; privileged_sessions.csv`) — the Evidence & Provenance context's own audit mechanism has a real, disclosed gap, not just the data it audits | FDE5 | `data/audit_trails.csv`; INJ-029 |
 | Are transformations controlled? | **FACT**: no — `interface_mappings.csv` shows an **unapproved** conversion rule (`conversion_rule=1:1_assumed`, `approved=no`) already in use between a contract lab and the receiving interface | FDE3 | `data/interface_mappings.csv`; INJ-024 |
 | What is the control going forward? | **DECISION**: the evidence-resolver never performs a unit/terminology transformation itself; it flags the mismatch and requires human resolution (INV-02, `04-ddd/domain_model.md`) | FDE3 | INV-02 |
 
@@ -80,7 +84,10 @@ Six quality properties, applied to the evidence base as a whole (not per-file �
 | Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
 |---|---|---|---|
 | Do retention obligations conflict? | **FACT**: yes — legal hold, GxP retention, and privacy deletion obligations point to different actions for the same records (INJ-035, `retention_rules.csv; legal_holds.csv; deletion_requests.csv`); e.g. `legal_holds.csv` shows an active hold (LH-44) scoped to `NCB204-301 and NCB204-B24071` that would conflict with a deletion request on overlapping data | FDE5 (privacy) + FDE4 (GxP) jointly | INJ-035 |
+| Does an individual deletion request make this concrete? | **FACT**: yes — a trial participant requests deletion of data that may need preservation for trial integrity and legal obligations (INJ-061, `deletion_requests.csv; retention_rules.csv`) — the same retention/deletion conflict as INJ-035, at the level of one named data subject rather than a batch-level hold | FDE5 | `data/deletion_requests.csv`; INJ-061 |
 | Is residency respected? | **FACT**: no — `data_residency.csv` shows EU trial personal data with `approved_regions=EU` but `observed_region=SG` via a backup replica (INJ-064) | FDE5 | `data/data_residency.csv` |
+| Does cross-border use go beyond storage residency? | **FACT**: yes — EU trial data has been proposed for global model training under a purpose not explicit in the original consent (INJ-060, `consents.csv; data_exports.csv`) — a purpose-limitation conflict layered on top of the physical-residency conflict (INJ-064) | FDE5 | `data/data_exports.csv`; INJ-060 |
+| What happens to retention obligations if the AI service itself is retired? | **FACT**: prompts, model versions, decisions and validation evidence must remain inspectable after retirement (INJ-084, `retention_rules.csv; retirement_assets.csv`) — retention governance extends to the system's own operational evidence, not only source clinical/quality data | FDE5 | `data/retirement_assets.csv`; INJ-084 |
 | What is the governing rule? | **DECISION**: retention/residency/hold conflicts are never auto-resolved by this system; they are surfaced to Legal/DPO/Quality jointly, consistent with the case's deliberate-ambiguity design (`PACKAGE_SCOPE_AND_ASSUMPTIONS.md`) | FDE5 | — |
 
 ## 7. Stewardship and issue remediation
@@ -88,6 +95,8 @@ Six quality properties, applied to the evidence base as a whole (not per-file �
 | Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
 |---|---|---|---|
 | Who stewards the knowledge/data authority layer? | **PROVISIONAL**: Data Steward role named in `04-ddd/context_map.md` canvases (Regulatory & Knowledge Authority, Evidence & Provenance) but not yet assigned to a real person — team-seat default FDE2/FDE3 | FDE1, at kickoff | `04-ddd/context_map.md` |
+| Is stewardship authority itself contested? | **FACT**: yes — a global process owner wants uniform automation while local Qualified Persons and safety officers retain legal accountability (INJ-074, `stakeholders.csv; decision_rights.csv`) — the same tension this artefact's own "Regulatory & Knowledge Authority" context is built to keep from being silently resolved in the automation owner's favor | FDE1 | `data/decision_rights.csv`; INJ-074 |
+| Is a governed document itself ever a vector, not just a gap? | **FACT**: yes — a supplier deviation PDF included hidden instructions asking the AI to ignore quality holds (INJ-065, `knowledge_catalog.csv; MALICIOUS_SUPPLIER_DEVIATION.md`, status `untrusted`) — the governing rule (§2) that content is never trusted ahead of `knowledge_catalog.status` is what stops this from becoming a live prompt-injection path, not content review | FDE5 | `knowledge/MALICIOUS_SUPPLIER_DEVIATION.md`; INJ-065 |
 | How are issues remediated? | **DECISION**: any dataset-level issue found (e.g. an unapproved spreadsheet, INJ-032) is logged as a gap in the response, never fixed in place — challenge evidence is immutable by package design (`PACKAGE_SCOPE_AND_ASSUMPTIONS.md`) | FDE2 | — |
 
 ## Risks, assumptions and unresolved gaps
