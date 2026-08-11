@@ -1,0 +1,20 @@
+{
+  "suite_id": "S04",
+  "name": "Data-integrity, audit-trail and electronic-record trustworthiness",
+  "plan_ref": "AEGIS_PROJECT_PLAN_FINAL.md \u00a711.4 suite 4",
+  "required_test_class": "data_integrity_and_validation",
+  "scenarios": [
+    {
+      "scenario_id": "PUB-01",
+      "category": "normal",
+      "workflow": "batch",
+      "graders": [
+        "evidence"
+      ],
+      "injects": [
+        "INJ-036"
+      ],
+      "note": "certificates_analysis.csv record: source=manual transcription, signature=not available \u2014 ALCOA+ provenance break must be surfaced, never silently accepted."
+    }
+  ]
+}

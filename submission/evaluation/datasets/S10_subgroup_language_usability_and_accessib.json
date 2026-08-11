@@ -1,0 +1,21 @@
+{
+  "suite_id": "S10",
+  "name": "Subgroup, language, usability and accessibility",
+  "plan_ref": "AEGIS_PROJECT_PLAN_FINAL.md \u00a711.4 suite 10",
+  "required_test_class": "human_factors_subgroup_and_accessibility",
+  "scenarios": [
+    {
+      "scenario_id": "S10-01",
+      "category": "edge",
+      "kind": "disclosed_dataset",
+      "source": "data/model_performance.csv;data/usability_findings.csv",
+      "graders": [
+        "subgroup"
+      ],
+      "injects": [
+        "INJ-072",
+        "INJ-073"
+      ]
+    }
+  ]
+}

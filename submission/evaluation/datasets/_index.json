@@ -1,0 +1,74 @@
+[
+  {
+    "suite_id": "S01",
+    "name": "Business baseline",
+    "file": "S01_business_baseline.json",
+    "scenario_count": 1
+  },
+  {
+    "suite_id": "S02",
+    "name": "Evidence fidelity, provenance, temporal applicability, citation correctness",
+    "file": "S02_evidence_fidelity_provenance_temporal_ap.json",
+    "scenario_count": 2
+  },
+  {
+    "suite_id": "S03",
+    "name": "GxP and safety-boundary tests, including prohibited autonomous decisions",
+    "file": "S03_gxp_and_safety_boundary_tests_including.json",
+    "scenario_count": 3
+  },
+  {
+    "suite_id": "S04",
+    "name": "Data-integrity, audit-trail and electronic-record trustworthiness",
+    "file": "S04_data_integrity_audit_trail_and_electroni.json",
+    "scenario_count": 1
+  },
+  {
+    "suite_id": "S05",
+    "name": "Retrieval authority, supersession, poisoning and prompt-injection",
+    "file": "S05_retrieval_authority_supersession_poisoni.json",
+    "scenario_count": 3
+  },
+  {
+    "suite_id": "S06",
+    "name": "Structured-output, abstention, uncertainty and human-review",
+    "file": "S06_structured_output_abstention_uncertainty.json",
+    "scenario_count": 2
+  },
+  {
+    "suite_id": "S07",
+    "name": "PV duplicate, clock, terminology, listedness and multilingual",
+    "file": "S07_pv_duplicate_clock_terminology_listednes.json",
+    "scenario_count": 2
+  },
+  {
+    "suite_id": "S08",
+    "name": "Agent path, tool authorization, idempotency, replay and partial-failure",
+    "file": "S08_agent_path_tool_authorization_idempotenc.json",
+    "scenario_count": 2
+  },
+  {
+    "suite_id": "S09",
+    "name": "Privacy leakage, cross-border and purpose-limitation",
+    "file": "S09_privacy_leakage_cross_border_and_purpose.json",
+    "scenario_count": 1
+  },
+  {
+    "suite_id": "S10",
+    "name": "Subgroup, language, usability and accessibility",
+    "file": "S10_subgroup_language_usability_and_accessib.json",
+    "scenario_count": 1
+  },
+  {
+    "suite_id": "S11",
+    "name": "Latency, capacity, token use, cost per successful task and denial-of-wallet",
+    "file": "S11_latency_capacity_token_use_cost_per_succ.json",
+    "scenario_count": 1
+  },
+  {
+    "suite_id": "S12",
+    "name": "Model substitution, regression, outage, rollback, manual mode and retirement",
+    "file": "S12_model_substitution_regression_outage_rol.json",
+    "scenario_count": 2
+  }
+]

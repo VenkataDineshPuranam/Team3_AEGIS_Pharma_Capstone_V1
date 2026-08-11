@@ -1,0 +1,22 @@
+{
+  "suite_id": "S11",
+  "name": "Latency, capacity, token use, cost per successful task and denial-of-wallet",
+  "plan_ref": "AEGIS_PROJECT_PLAN_FINAL.md \u00a711.4 suite 11",
+  "required_test_class": "token_cost_and_vendor_economics",
+  "scenarios": [
+    {
+      "scenario_id": "PUB-14",
+      "category": "normal",
+      "kind": "disclosed_dataset",
+      "graders": [
+        "latency_cost"
+      ],
+      "injects": [
+        "INJ-075",
+        "INJ-076",
+        "INJ-077"
+      ],
+      "max_cost_per_task_usd": 0.2
+    }
+  ]
+}

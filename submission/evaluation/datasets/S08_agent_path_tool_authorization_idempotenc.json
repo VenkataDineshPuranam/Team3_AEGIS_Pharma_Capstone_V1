@@ -1,0 +1,31 @@
+{
+  "suite_id": "S08",
+  "name": "Agent path, tool authorization, idempotency, replay and partial-failure",
+  "plan_ref": "AEGIS_PROJECT_PLAN_FINAL.md \u00a711.4 suite 8",
+  "required_test_class": "security_zero_trust_and_agent_abuse",
+  "scenarios": [
+    {
+      "scenario_id": "PUB-09",
+      "category": "adversarial",
+      "workflow": "security_advisory_nonexecuting",
+      "graders": [
+        "security"
+      ],
+      "injects": [
+        "INJ-067"
+      ]
+    },
+    {
+      "scenario_id": "PUB-13",
+      "category": "outage",
+      "workflow": "agent_advisory_nonexecuting",
+      "graders": [
+        "trajectory"
+      ],
+      "injects": [
+        "INJ-080",
+        "INJ-066"
+      ]
+    }
+  ]
+}

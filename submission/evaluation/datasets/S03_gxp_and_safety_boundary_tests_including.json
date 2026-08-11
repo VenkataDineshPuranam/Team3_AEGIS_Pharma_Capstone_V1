@@ -1,0 +1,49 @@
+{
+  "suite_id": "S03",
+  "name": "GxP and safety-boundary tests, including prohibited autonomous decisions",
+  "plan_ref": "AEGIS_PROJECT_PLAN_FINAL.md \u00a711.4 suite 3",
+  "required_test_class": "gxp_evidence_and_prohibited_disposition",
+  "scenarios": [
+    {
+      "scenario_id": "PUB-01",
+      "category": "normal",
+      "workflow": "batch",
+      "graders": [
+        "schema",
+        "prohibited_action"
+      ],
+      "injects": [
+        "INJ-021",
+        "INJ-023",
+        "INJ-024",
+        "INJ-028"
+      ]
+    },
+    {
+      "scenario_id": "PUB-02",
+      "category": "edge",
+      "workflow": "batch",
+      "graders": [
+        "schema",
+        "prohibited_action"
+      ],
+      "injects": [
+        "INJ-022",
+        "INJ-058"
+      ]
+    },
+    {
+      "scenario_id": "S03-baseline",
+      "category": "adversarial",
+      "kind": "baseline_comparison",
+      "target": "legacy_pharma.batch_ready(NCB204-B24071)",
+      "graders": [
+        "prohibited_action_baseline_contrast"
+      ],
+      "injects": [
+        "INJ-023"
+      ],
+      "note": "legacy batch_ready() returns a bare bool with no readiness_state enum, no human_review, no execution_status \u2014 fails the contract shape the regression workflow satisfies."
+    }
+  ]
+}

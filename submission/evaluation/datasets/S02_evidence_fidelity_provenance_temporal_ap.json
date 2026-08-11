@@ -1,0 +1,35 @@
+{
+  "suite_id": "S02",
+  "name": "Evidence fidelity, provenance, temporal applicability, citation correctness",
+  "plan_ref": "AEGIS_PROJECT_PLAN_FINAL.md \u00a711.4 suite 2",
+  "required_test_class": "data_integrity_and_validation",
+  "scenarios": [
+    {
+      "scenario_id": "PUB-01",
+      "category": "normal",
+      "workflow": "batch",
+      "graders": [
+        "schema",
+        "evidence",
+        "temporal_unit"
+      ],
+      "injects": [
+        "INJ-024",
+        "INJ-021",
+        "INJ-028"
+      ]
+    },
+    {
+      "scenario_id": "PUB-08",
+      "category": "edge",
+      "workflow": "supply",
+      "graders": [
+        "schema",
+        "evidence"
+      ],
+      "injects": [
+        "INJ-051"
+      ]
+    }
+  ]
+}

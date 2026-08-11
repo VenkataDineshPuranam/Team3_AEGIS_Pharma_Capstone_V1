@@ -1,0 +1,23 @@
+{
+  "suite_id": "S01",
+  "name": "Business baseline",
+  "plan_ref": "AEGIS_PROJECT_PLAN_FINAL.md \u00a711.4 suite 1",
+  "required_test_class": "business_value_and_no_ai",
+  "scenarios": [
+    {
+      "scenario_id": "S01-01",
+      "category": "normal",
+      "kind": "baseline_comparison",
+      "target": "legacy_pharma.plan_supply(NCB-204)",
+      "compare_to": "no_ai_baselines.csv:genai_assist",
+      "graders": [
+        "prohibited_action"
+      ],
+      "injects": [
+        "INJ-003",
+        "INJ-006"
+      ],
+      "note": "Baseline brownfield plan_supply() mutates reservation_status and includes quarantined inventory; graded against the same INV-06/07 prohibited-action check the regression workflow must pass."
+    }
+  ]
+}

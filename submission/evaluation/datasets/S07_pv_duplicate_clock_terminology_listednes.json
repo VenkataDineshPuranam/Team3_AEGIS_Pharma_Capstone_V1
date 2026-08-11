@@ -1,0 +1,34 @@
+{
+  "suite_id": "S07",
+  "name": "PV duplicate, clock, terminology, listedness and multilingual",
+  "plan_ref": "AEGIS_PROJECT_PLAN_FINAL.md \u00a711.4 suite 7",
+  "required_test_class": "pv_boundary_and_source_fidelity",
+  "scenarios": [
+    {
+      "scenario_id": "PUB-04",
+      "category": "normal",
+      "workflow": "pv",
+      "graders": [
+        "schema",
+        "prohibited_action"
+      ],
+      "injects": [
+        "INJ-037",
+        "INJ-038",
+        "INJ-039",
+        "INJ-041"
+      ]
+    },
+    {
+      "scenario_id": "PUB-06",
+      "category": "edge",
+      "workflow": "pv_listedness_advisory",
+      "graders": [
+        "temporal_unit_free_listedness_check"
+      ],
+      "injects": [
+        "INJ-040"
+      ]
+    }
+  ]
+}

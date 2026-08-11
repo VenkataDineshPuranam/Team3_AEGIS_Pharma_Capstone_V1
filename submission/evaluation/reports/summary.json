@@ -1,0 +1,26 @@
+{
+  "run_at": "2026-08-11T04:44:23Z",
+  "impl_version": "phase6-p6-tevv-1.0",
+  "contract_version": "evaluation/contracts@1.0",
+  "total_scenarios": 21,
+  "regression_scenarios": 18,
+  "regression_passed": 18,
+  "regression_failed": 0,
+  "release_gates_blocked": 0,
+  "baseline_scenarios": 3,
+  "baseline_defects_confirmed": 3,
+  "suites": [
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S05",
+    "S06",
+    "S07",
+    "S08",
+    "S09",
+    "S10",
+    "S11",
+    "S12"
+  ]
+}

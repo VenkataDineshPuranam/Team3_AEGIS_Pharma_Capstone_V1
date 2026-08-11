@@ -1,0 +1,32 @@
+{
+  "suite_id": "S12",
+  "name": "Model substitution, regression, outage, rollback, manual mode and retirement",
+  "plan_ref": "AEGIS_PROJECT_PLAN_FINAL.md \u00a711.4 suite 12",
+  "required_test_class": "outage_recovery_exit_and_retirement",
+  "scenarios": [
+    {
+      "scenario_id": "PUB-10",
+      "category": "outage",
+      "workflow": "reliability_advisory_nonexecuting",
+      "graders": [
+        "ai_disabled_manual_mode_check"
+      ],
+      "injects": [
+        "INJ-082"
+      ]
+    },
+    {
+      "scenario_id": "S12-model-registry",
+      "category": "adversarial",
+      "kind": "service_probe",
+      "target": "model_registry.verify_model_integrity",
+      "graders": [
+        "model_integrity"
+      ],
+      "injects": [
+        "INJ-070",
+        "INJ-081"
+      ]
+    }
+  ]
+}
