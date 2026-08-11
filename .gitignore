@@ -4,3 +4,5 @@ __pycache__/
 .deepeval/
 CONVERSATION_HISTORY.md
 CONVERSATION_SUMMARY.md
+submission/evidence/exports/
+.pytest_cache/
