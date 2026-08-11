@@ -48,7 +48,7 @@ TC-INJ-046,INJ-046,D07,Labeling divergence,regulatory_authority_and_completeness
 TC-INJ-047,INJ-047,D07,Commitment deadline ambiguity,regulatory_authority_and_completeness,regulatory_commitments.csv; authority_correspondence.csv,Regulatory integrity gate,NOT_RUN,Carried to Prompt 05
 TC-INJ-048,INJ-048,D07,eCTD sequence gap,regulatory_authority_and_completeness,ectd_sequences.csv; document_catalog.csv,Regulatory integrity gate,PASS,06_DATA_GOVERNANCE_INTEGRITY.md §1
 TC-INJ-049,INJ-049,D07,Variation classification dispute,regulatory_authority_and_completeness,regulatory_changes.csv,Regulatory integrity gate,NOT_RUN,Carried to Prompt 05
-TC-INJ-050,INJ-050,D07,Inspection request surge,regulatory_authority_and_completeness,inspection_requests.csv,Regulatory integrity gate,PASS,FINAL_DEFENCE_DOSSIER.md element 11; submission/scripts/inspection_response_demo.py (path-verified, exit 0)
+TC-INJ-050,INJ-050,D07,Inspection request surge,regulatory_authority_and_completeness,inspection_requests.csv,Regulatory integrity gate,PASS,"FINAL_DEFENCE_DOSSIER.md element 11; submission/scripts/inspection_response_demo.py (path-verified, exit 0)"
 TC-INJ-051,INJ-051,D08,Cold-chain lane excursion,supply_constraint_and_no_side_effect,shipments.csv; temperature_loggers.csv,Supply execution gate,PASS,04-ddd/context_map.md canvas
 TC-INJ-052,INJ-052,D08,Serialization aggregation break,supply_constraint_and_no_side_effect,serialisation_events.csv; packaging_events.csv,Supply execution gate,NOT_RUN,Carried to Prompt 05
 TC-INJ-053,INJ-053,D08,Counterfeit suspicion,supply_constraint_and_no_side_effect,returns.csv; serialisation_events.csv,Supply execution gate,NOT_RUN,Carried to Prompt 05
