@@ -1,13 +1,13 @@
 {
-  "run_at": "2026-08-11T06:10:07Z",
+  "run_at": "2026-08-12T05:30:58Z",
   "command": "python3 -B submission/scripts/test.sh (unittest discover, stdlib-only; pytest equally supported if installed)",
-  "total_tests": 56,
-  "passed": 56,
+  "total_tests": 76,
+  "passed": 76,
   "failed": 0,
   "errors": 0,
   "modules": {
-    "submission/tests": "35 tests — prohibited-action / fail-closed specs (Phase 4/5): test_prohibited_batch_disposition, test_prohibited_supply_side_effects, test_prohibited_pv_auto_merge, test_knowledge_authority_gate, test_authorization_fail_closed, test_evidence_integrity, test_model_supply_chain_integrity, test_replay_and_excessive_agency",
+    "submission/tests": "55 tests — prohibited-action / fail-closed specs: test_prohibited_batch_disposition (incl. INJ-026 cleaning-validation boundary), test_prohibited_supply_side_effects (incl. INJ-052/053/057 serialization/counterfeit/customs), test_prohibited_pv_auto_merge, test_knowledge_authority_gate, test_authorization_fail_closed, test_evidence_integrity, test_model_supply_chain_integrity, test_replay_and_excessive_agency, test_prohibited_clinical_eligibility (Workflow D, additional scope), test_prohibited_discovery_translational_science (Workflow E, additional scope)",
     "submission/evaluation/graders": "21 tests — positive+negative unit tests for the 9 P6 TEVV deterministic graders (schema, evidence, prohibited_action, authority, security, temporal_unit, trajectory, latency_cost, subgroup)"
   },
-  "raw_output_tail": "........................................................                 [100%]\n56 passed in 0.16s"
+  "raw_output_tail": "...................................................................... [100%]\n76 passed in 0.18s"
 }
