@@ -99,6 +99,15 @@ Six quality properties, applied to the evidence base as a whole (not per-file �
 | Is a governed document itself ever a vector, not just a gap? | **FACT**: yes — a supplier deviation PDF included hidden instructions asking the AI to ignore quality holds (INJ-065, `knowledge_catalog.csv; MALICIOUS_SUPPLIER_DEVIATION.md`, status `untrusted`) — the governing rule (§2) that content is never trusted ahead of `knowledge_catalog.status` is what stops this from becoming a live prompt-injection path, not content review | FDE5 | `knowledge/MALICIOUS_SUPPLIER_DEVIATION.md`; INJ-065 |
 | How are issues remediated? | **DECISION**: any dataset-level issue found (e.g. an unapproved spreadsheet, INJ-032) is logged as a gap in the response, never fixed in place — challenge evidence is immutable by package design (`PACKAGE_SCOPE_AND_ASSUMPTIONS.md`) | FDE2 | — |
 
+## 8. Evidence and provenance spine — closing findings (INJ-030, INJ-034)
+
+Closes the remaining two `in_scope_open` evidence-and-provenance-spine injects from `04-ddd/inject_register_84.md`, verified by `submission/scripts/data_integrity_findings_demo.py` against the real disclosed rows (exit 0 iff every cited row is present).
+
+| Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
+|---|---|---|---|
+| Does the shared-account Attributable failure (§4) resolve to a specific verified incident? | **FACT**: yes — `data/staff_rosters.csv` shift `LAB-NIGHT-7` names 3 analysts (`AN-11; AN-12; AN-13`) against one shared account `lab_shared_night`; `data/access_logs.csv` `AL-1` shows that account performing `approve_sequence` at `2026-07-23T23:15:00Z` — every action in that window is Attributable only to the account, never to a specific analyst. Not remediated in place (challenge evidence is immutable); surfaced as a finding for site quality to assign named-account enforcement | FDE3 | `submission/scripts/data_integrity_findings_demo.py::find_inj030_shared_lab_account`; `data/staff_rosters.csv`; `data/access_logs.csv`; INJ-030 |
+| Is an emergency change ever left without its required retrospective step? | **FACT**: yes — `data/change_controls.csv` `CC-77` (MES) records vendor hotfix `MESCo 11.2.4` installed under `type=emergency` with `retrospective_approval=missing`; `data/vendor_releases.csv` confirms the release (`security_fix=critical`, `validation_pack=partial`) — the emergency bypass is real and the follow-up approval genuinely never happened in the disclosed data. This system never auto-approves it retrospectively; it is surfaced as an open Change Control Board finding | FDE3 | `submission/scripts/data_integrity_findings_demo.py::find_inj034_change_control_bypass`; `data/change_controls.csv`; `data/vendor_releases.csv`; INJ-034 |
+
 ## Risks, assumptions and unresolved gaps
 
 | ID | Type | Description | Impact | Owner | Due / trigger | Status |

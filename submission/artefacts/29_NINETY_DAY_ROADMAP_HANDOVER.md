@@ -26,7 +26,7 @@ Sequences the real open items already recorded across P6/P7 artefacts into a 0�
 | E-004 | `submission/artefacts/26_TARGET_OPERATING_MODEL.md` R-001, R-002 | Generated P7 | Unconfirmed operating structure; no named model-change-approval forum | — |
 | E-005 | `submission/artefacts/27_VENDOR_EXIT_RETIREMENT.md` R-001, R-002 | Generated P7 | No real vendor-export rehearsal; single-vendor concentration | — |
 | E-006 | `submission/artefacts/28_PRODUCTION_READINESS.md` §1/§4/§6 PENDING rows | Generated P7 | RC tag/packaging, load/soak test, backup/restore/rollback — all explicit P9 scope | — |
-| E-007 | `04-ddd/inject_register_84.md` "Coverage summary" | Generated P2, updated P6 | 12 `in_scope_open` injects (INJ-026/030/034/046/047/049/050/052/053/057/083/084) | — |
+| E-007 | `04-ddd/inject_register_84.md` "Coverage summary" | Generated P2, updated P8 | **Superseded below** — was 12 `in_scope_open` (INJ-026/030/034/046/047/049/050/052/053/057/083/084) as of P6; INJ-050 closed at P7 (`inspection_response_demo.py`); the remaining 11 (INJ-026/030/034/046/047/049/052/053/057/083/084) closed at P8 — register is now 84/84 `addressed`, 0 `in_scope_open` | `submission/src/workflows/batch_evidence.py`, `supply_options.py`; `submission/scripts/data_integrity_findings_demo.py`; `06_DATA_GOVERNANCE_INTEGRITY.md` §8; `09_REQUIREMENTS_TRACEABILITY.md` §6a; `27_VENDOR_EXIT_RETIREMENT.md` §8; this artefact §6 |
 
 ## 1. Prioritized backlog
 
@@ -34,7 +34,7 @@ Sequences the real open items already recorded across P6/P7 artefacts into a 0�
 |---|---|---|---|
 | What is P0 (do first)? | **DECISION**: close the 2 unblocked denial-of-wallet events (E-002) with a runtime guard — highest severity because it's a live, already-occurring, already-disclosed gap, not a hypothetical | FDE5 | `data/security_events.csv` |
 | What is P1? | **DECISION**: instantiate the regulatory-notification decision tree (E-003) — currently a named-but-unfilled gap in an incident path that will eventually fire for real | FDE4 | `25_INCIDENT_RECOVERY.md` R-001 |
-| What is P2? | **DECISION**: treat the 12 `in_scope_open` injects (E-007) as the P7-carried backlog the register already promised — D05 (change-control/shared-account, 3 items), D07 (regulatory/eCTD, 4 items), D08 (serialization/counterfeit/customs, 3 items), D13 (vendor exit/retirement, 2 items) | FDE2/FDE4 | `04-ddd/inject_register_84.md` |
+| What is P2? | **CLOSED at P8** (was: treat the then-12 `in_scope_open` injects (E-007) as the P7-carried backlog) — D05 (change-control/shared-account) closed via `data_integrity_findings_demo.py`; D07 (regulatory/eCTD) closed via `data_integrity_findings_demo.py` + `09_REQUIREMENTS_TRACEABILITY.md` §6a; D08 (serialization/counterfeit/customs) closed via `supply_options.py` gap/contradiction detectors + `test_prohibited_supply_side_effects.py`; D13 (vendor exit/retirement) closed via `27_VENDOR_EXIT_RETIREMENT.md` §8 + this artefact §6 | FDE2/FDE4 | `04-ddd/inject_register_84.md` (84/84 addressed) |
 
 ## 2. 0–30 day actions
 
@@ -46,13 +46,13 @@ Sequences the real open items already recorded across P6/P7 artefacts into a 0�
 
 | Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
 |---|---|---|---|
-| What ships in days 31–60? | **DECISION**: close the D05/D08 in-scope-open injects (6 of the 12, E-007) — these touch already-built bounded contexts (data integrity, supply) so extend existing services rather than adding new ones; rehearse a real `AIVENDOR-X` export (`27_VENDOR_EXIT_RETIREMENT.md` R-001) | FDE2/FDE3 | Updated `04-ddd/inject_register_84.md` count |
+| What ships in days 31–60? | **CLOSED at P8** — D05/D08 in-scope-open injects were closed by extending the already-built bounded contexts (data integrity, supply) rather than adding new ones. Still open: rehearse a real `AIVENDOR-X` export (`27_VENDOR_EXIT_RETIREMENT.md` R-001) | FDE2/FDE3 | Updated `04-ddd/inject_register_84.md` count |
 
 ## 4. 61–90 day actions
 
 | Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
 |---|---|---|---|
-| What ships in days 61–90? | **DECISION**: close the remaining D07/D13 injects (6 of the 12, E-007) — these are the ones with no existing workflow to extend (regulatory/eCTD, vendor exit/retirement), so budget more design time per item; begin Track B (P9) scoping if a production-ready claim is commissioned (E-006) | FDE4/FDE1 | Updated register; P9 kickoff decision |
+| What ships in days 61–90? | **CLOSED at P8** — D07/D13 injects (regulatory/eCTD, vendor exit/retirement) closed via `09_REQUIREMENTS_TRACEABILITY.md` §6a and `27_VENDOR_EXIT_RETIREMENT.md` §8, both backed by `data_integrity_findings_demo.py`; begin Track B (P9) scoping if a production-ready claim is commissioned (E-006) | FDE4/FDE1 | Updated register; P9 kickoff decision |
 
 ## 5. Dependencies and owners
 
@@ -67,12 +67,13 @@ Sequences the real open items already recorded across P6/P7 artefacts into a 0�
 |---|---|---|---|
 | What does a receiving team get? | **FACT**: 29 numbered artefacts, `submission/src` (3 workflows + 5 services), `submission/tests` (35 specs), `submission/evaluation` (12-suite harness, 9 graders, reports), `submission/app` (offline demonstrator), `submission/runbooks` (4), `submission/scripts` (6), `submission/evidence` (manifest, hashes, test/eval results) — all reproducible via `submission/scripts/setup.sh` → `test.sh` → `evaluate.sh` on a clean machine | FDE1 | `submission/` tree; this phase's clean-room rehearsal |
 | What does the receiving team need to read first? | **DECISION**: `submission/runbooks/SETUP.md`, then this artefact's backlog (§1–4), then `28_PRODUCTION_READINESS.md` for the Track A/B boundary | FDE1 | — |
+| INJ-084 closure — does retirement of the AI service itself endanger handover evidence? | **FACT**: no, by design — `data/retention_rules.csv` sets "AI prompt logs: delete after 90 days unless evidence hold" while `data/retirement_assets.csv` requires model cards, prompt versions and risk-based decision evidence to remain inspectable regardless of retirement. Verified by `submission/scripts/data_integrity_findings_demo.py::find_inj084_retirement_evidence_preservation` against those exact rows — the handover package above (this §, row 1) is exactly the "decision evidence" class this rule protects | FDE5 | `submission/scripts/data_integrity_findings_demo.py`; `data/retention_rules.csv`; `data/retirement_assets.csv`; INJ-084 |
 
 ## 7. Success and stop criteria
 
 | Item / question | Evidence-based response | Decision / owner | Acceptance evidence |
 |---|---|---|---|
-| What does success look like at day 90? | **DECISION**: inject register at 84/84 addressed-or-explicitly-out-of-scope (0 remaining `in_scope_open`, currently 12); denial-of-wallet runtime guard live; regulatory-notification tree named; P9 either completed or explicitly deferred with a stated reason, never silently dropped | FDE1 | Updated `04-ddd/inject_register_84.md`; updated `28_PRODUCTION_READINESS.md` |
+| What does success look like at day 90? | **PARTIALLY MET at P8**: inject register is now 84/84 `addressed`, 0 remaining `in_scope_open` (was 12 at P6/P7, closed via §1 above); denial-of-wallet runtime guard and regulatory-notification tree remain open; P9 either completed or explicitly deferred with a stated reason, never silently dropped | FDE1 | Updated `04-ddd/inject_register_84.md`; updated `28_PRODUCTION_READINESS.md` |
 | What triggers a stop/pivot on this backlog? | **DECISION**: if the receiving team's actual operating structure diverges materially from `26_TARGET_OPERATING_MODEL.md`'s proposal (R-001), replan §2–4 around the real structure rather than forcing the proposed one | FDE1 | — |
 
 ## Risks, assumptions and unresolved gaps

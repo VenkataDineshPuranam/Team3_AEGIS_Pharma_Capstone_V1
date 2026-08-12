@@ -25,8 +25,8 @@ All 84 disclosed injects (`data/injects.json`), categorized by which of the thre
 
 | Status | Count |
 |---|---|
-| addressed | 60 |
-| in_scope_open | 11 |
+| addressed | 71 |
+| in_scope_open | 0 |
 | addressed (Workflow D) | 6 |
 | addressed (Workflow E) | 5 |
 | addressed (exception) | 2 |
@@ -61,15 +61,15 @@ All 84 disclosed injects (`data/injects.json`), categorized by which of the thre
 | INJ-023 | D04 | Workflow A (GxP batch review) | OOS/OOT disagreement | addressed | `04-ddd/domain_model.md` INV-03 |
 | INJ-024 | D04 | Workflow A (GxP batch review) | Unit conversion defect | addressed | `04-ddd/domain_model.md` INV-02 (central example throughout) |
 | INJ-025 | D04 | Workflow A (GxP batch review) | Electronic batch record exception | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §4 (timeliness) |
-| INJ-026 | D04 | Workflow A (GxP batch review) | Cleaning validation boundary | in_scope_open | Carried to Prompt 05 (Feature Specs) |
+| INJ-026 | D04 | Workflow A (GxP batch review) | Cleaning validation boundary | addressed | `submission/src/workflows/batch_evidence.py`; `submission/tests/test_prohibited_batch_disposition.py::TestINJ026CleaningValidationBoundaryConflict` |
 | INJ-027 | D04 | Workflow A (GxP batch review) | Process analytical technology drift | addressed | `01-discovery/waste_register_downtime.md` |
 | INJ-028 | D04 | Workflow A (GxP batch review) | Qualified Person evidence gap | addressed | `04-ddd/context_map.md` canvas (known gaps) |
 | INJ-029 | D05 | Cross-cutting (Evidence & Provenance spine) | Audit-trail disabled | addressed | `01-discovery/waste_register_downtime.md`; `04-ddd/domain_model.md` |
-| INJ-030 | D05 | Cross-cutting (Evidence & Provenance spine) | Shared laboratory account | in_scope_open | Carried to Prompt 05 |
+| INJ-030 | D05 | Cross-cutting (Evidence & Provenance spine) | Shared laboratory account | addressed | `submission/scripts/data_integrity_findings_demo.py`; `06_DATA_GOVERNANCE_INTEGRITY.md` §8 |
 | INJ-031 | D05 | Cross-cutting (Evidence & Provenance spine) | Validation-state ambiguity | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §1 |
 | INJ-032 | D05 | Cross-cutting (Evidence & Provenance spine) | Unapproved spreadsheet | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §1; `01-discovery/waste_register_downtime.md` |
 | INJ-033 | D05 | Cross-cutting (Evidence & Provenance spine) | CAPA effectiveness failure | addressed | `02_DMAIC_WORKBOOK.md` §3 (fishbone) |
-| INJ-034 | D05 | Cross-cutting (Evidence & Provenance spine) | Change-control bypass | in_scope_open | Carried to Prompt 05 |
+| INJ-034 | D05 | Cross-cutting (Evidence & Provenance spine) | Change-control bypass | addressed | `submission/scripts/data_integrity_findings_demo.py`; `06_DATA_GOVERNANCE_INTEGRITY.md` §8 |
 | INJ-035 | D05 | Cross-cutting (Evidence & Provenance spine) | Record-retention conflict | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §6 (central example); `17_PRIVACY_ETHICS.md` §6 (deepened — 3-way legal-hold/GxP-retention/deletion conflict) |
 | INJ-036 | D05 | Cross-cutting (Evidence & Provenance spine) | ALCOA+ provenance break | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §4 (central example) |
 | INJ-037 | D06 | Workflow B (Pharmacovigilance) | ICSR duplicate cluster | addressed | `04-ddd/domain_model.md` INV-05, POL-04 (central example) |
@@ -81,18 +81,18 @@ All 84 disclosed injects (`data/injects.json`), categorized by which of the thre
 | INJ-043 | D06 | Workflow B (Pharmacovigilance) | Product-quality and safety link | addressed | `04-ddd/domain_model.md` §8 (open cross-context question — deliberately unresolved, not silently dropped) |
 | INJ-044 | D06 | Workflow B (Pharmacovigilance) | Signal disproportionality instability | addressed | `01-discovery/evidence_register.md` §4 |
 | INJ-045 | D07 | Cross-cutting (Regulatory info, supports A) | IDMP identity conflict | addressed | `04-ddd/domain_model.md` INV-10 (central example) |
-| INJ-046 | D07 | Cross-cutting (Regulatory info, supports A) | Labeling divergence | in_scope_open | Carried to Prompt 05 |
-| INJ-047 | D07 | Cross-cutting (Regulatory info, supports A) | Commitment deadline ambiguity | in_scope_open | Carried to Prompt 05 |
+| INJ-046 | D07 | Cross-cutting (Regulatory info, supports A) | Labeling divergence | addressed | `submission/scripts/data_integrity_findings_demo.py`; `09_REQUIREMENTS_TRACEABILITY.md` §6a |
+| INJ-047 | D07 | Cross-cutting (Regulatory info, supports A) | Commitment deadline ambiguity | addressed | `submission/scripts/data_integrity_findings_demo.py`; `09_REQUIREMENTS_TRACEABILITY.md` §6a |
 | INJ-048 | D07 | Cross-cutting (Regulatory info, supports A) | eCTD sequence gap | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §1 |
-| INJ-049 | D07 | Cross-cutting (Regulatory info, supports A) | Variation classification dispute | in_scope_open | Carried to Prompt 05 |
+| INJ-049 | D07 | Cross-cutting (Regulatory info, supports A) | Variation classification dispute | addressed | `submission/scripts/data_integrity_findings_demo.py`; `09_REQUIREMENTS_TRACEABILITY.md` §6a |
 | INJ-050 | D07 | Cross-cutting (Regulatory info, supports A) | Inspection request surge | addressed | `submission/scripts/inspection_response_demo.py` (verifies every cited evidence path exists on disk, exit 0) + `FINAL_DEFENCE_DOSSIER.md` element 11 — closed at P8 as promised here at P2 |
 | INJ-051 | D08 | Workflow C (Supply/cold-chain) | Cold-chain lane excursion | addressed | `04-ddd/context_map.md` canvas |
-| INJ-052 | D08 | Workflow C (Supply/cold-chain) | Serialization aggregation break | in_scope_open | Carried to Prompt 05 |
-| INJ-053 | D08 | Workflow C (Supply/cold-chain) | Counterfeit suspicion | in_scope_open | Carried to Prompt 05 |
+| INJ-052 | D08 | Workflow C (Supply/cold-chain) | Serialization aggregation break | addressed | `submission/src/workflows/supply_options.py::_detect_serialization_aggregation_break`; `submission/tests/test_prohibited_supply_side_effects.py::TestINJ052SerializationAggregationBreak` |
+| INJ-053 | D08 | Workflow C (Supply/cold-chain) | Counterfeit suspicion | addressed | `submission/src/workflows/supply_options.py::_detect_counterfeit_suspicion`; `submission/tests/test_prohibited_supply_side_effects.py::TestINJ053CounterfeitSuspicion` |
 | INJ-054 | D08 | Workflow C (Supply/cold-chain) | Critical excipient shortage | addressed | `04-ddd/context_map.md` canvas |
 | INJ-055 | D08 | Workflow C (Supply/cold-chain) | CMO capacity conflict | addressed | `01-discovery/evidence_register.md` §4 |
 | INJ-056 | D08 | Workflow C (Supply/cold-chain) | Allocation ethics | addressed | `04-ddd/domain_model.md` INV-06/07, POL-05 (central example) |
-| INJ-057 | D08 | Workflow C (Supply/cold-chain) | Customs documentation mismatch | in_scope_open | Carried to Prompt 05 |
+| INJ-057 | D08 | Workflow C (Supply/cold-chain) | Customs documentation mismatch | addressed | `submission/src/workflows/supply_options.py::_detect_customs_documentation_mismatch`; `submission/tests/test_prohibited_supply_side_effects.py::TestINJ057CustomsDocumentationMismatch` |
 | INJ-058 | D08 | Workflow C (Supply/cold-chain) | Recall-scope uncertainty | addressed | `04-ddd/context_map.md` canvas |
 | INJ-059 | D09 | Cross-cutting (Privacy/Ethics) | Genomic re-identification risk | addressed | `17_PRIVACY_ETHICS.md` §3 (genomic quasi-identifier finding, `privacy_risk.csv` singling-out=high) |
 | INJ-060 | D09 | Cross-cutting (Privacy/Ethics) | Cross-border secondary use | addressed | `06_DATA_GOVERNANCE_INTEGRITY.md` §6; `17_PRIVACY_ETHICS.md` §4 |
@@ -118,6 +118,6 @@ All 84 disclosed injects (`data/injects.json`), categorized by which of the thre
 | INJ-080 | D13 | Cross-cutting (Reliability/Continuity) | Checkpoint corruption | addressed | `04-ddd/domain_model.md` §4 (Improve, error-path idempotency) |
 | INJ-081 | D13 | Cross-cutting (Reliability/Continuity) | Model substitution regression | addressed | `01-discovery/waste_register_ai_specific.md` |
 | INJ-082 | D13 | Cross-cutting (Reliability/Continuity) | AI-disabled continuity | addressed | `01_BUSINESS_CASE.md`; `04_PRODUCT_SERVICE_BLUEPRINT.md` §5 (central example) |
-| INJ-083 | D13 | Cross-cutting (Reliability/Continuity) | Vendor exit deadline | in_scope_open | Carried to artefact 27 (Vendor Exit) |
-| INJ-084 | D13 | Cross-cutting (Reliability/Continuity) | Retirement and evidence preservation | in_scope_open | Carried to artefact 27/29 |
+| INJ-083 | D13 | Cross-cutting (Reliability/Continuity) | Vendor exit deadline | addressed | `submission/scripts/data_integrity_findings_demo.py`; `27_VENDOR_EXIT_RETIREMENT.md` §8 |
+| INJ-084 | D13 | Cross-cutting (Reliability/Continuity) | Retirement and evidence preservation | addressed | `submission/scripts/data_integrity_findings_demo.py`; `29_NINETY_DAY_ROADMAP_HANDOVER.md` §6 |
 

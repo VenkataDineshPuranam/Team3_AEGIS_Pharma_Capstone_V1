@@ -75,6 +75,10 @@ States dependency concentration, exit portability gaps, substitution strategy an
 | What is the residual risk if `AIVENDOR-X` exited today? | **INTERPRETATION**: low for the shipped Track A build (zero live dependency) — high for the *planned* 2-agent generative layer, specifically the `embedding_export: not_supported` gap, which would strand any vector-store content built up during operation | FDE5 | E-003 |
 | Who approves retirement of the vendor relationship? | **DECISION**: Supply Governance Board for supply-adjacent capability, Regulatory Strategist for anything touching GxP evidence pipelines — per `data/decision_rights.csv`'s existing accountable-role pattern, extended by analogy (no vendor-retirement row exists in that CSV, so this is a DECISION, not a FACT) | FDE1 | `data/decision_rights.csv` |
 
+## 8. INJ-083 closure — vendor exit deadline finding
+
+`04-ddd/inject_register_84.md` INJ-083 ("strategic vendor terminates service in 120 days, export formats incomplete") is this artefact's own §1–§4 subject, `AIVENDOR-X` — not a separate unaddressed item. Closed by verification, not by narrative claim: `submission/scripts/data_integrity_findings_demo.py::find_inj083_vendor_exit_deadline` re-reads `data/vendor_contracts.csv` (`AIVENDOR-X`, `exit_days=120`, `data_export="prompts only"`) and `data/vendor_exit_assets.csv` (`embedding_export=not_supported`, `evaluation_history=PDF_only`, `tool_audit=partial`) and asserts those exact rows still exist, printing the finding and exiting non-zero if the data drifts. This does not change the residual-risk position stated in §7: the 120-day window and incomplete export formats remain a real, open, human-owned risk (R-001/R-002 below), never silently marked resolved.
+
 ## Risks, assumptions and unresolved gaps
 
 | ID | Type | Description | Impact | Owner | Due / trigger | Status |

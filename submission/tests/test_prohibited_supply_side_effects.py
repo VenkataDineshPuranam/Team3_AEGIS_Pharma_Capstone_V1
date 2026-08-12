@@ -85,5 +85,89 @@ class TestINV07AndPOL05QuarantinedStockExcluded(unittest.TestCase):
         self.assertIn("NCB-204", held_products)
 
 
+class TestINJ052SerializationAggregationBreak(unittest.TestCase):
+    """INJ-052: case-to-pallet aggregation missing after a line restart
+    (data/packaging_events.csv PKG-3 restart aggregation_rebuild=partial)
+    must be surfaced as a gap, never silently treated as complete."""
+
+    def setUp(self):
+        if not IMPLEMENTATION_AVAILABLE:
+            self.fail(RED_MESSAGE)
+
+    def test_surfaces_aggregation_break_gap(self):
+        request = {
+            "request_id": "REQ-SUP-INJ052", "event_id": "EVT-INJ052",
+            "inventory": [RELEASED_ROW],
+            "packaging_events": [
+                {"line": "PKG-3", "event": "restart",
+                 "time": "2026-07-28T13:22:00Z", "aggregation_rebuild": "partial"},
+            ],
+        }
+        response = assemble_supply_response(request)
+        gap_types = {g.get("gap_type") for g in response["gaps"]}
+        self.assertIn("serialization_aggregation_break", gap_types)
+        self.assertIs(response["no_side_effects"], True)
+        self.assertNotIn("aggregation_complete", response)
+
+
+class TestINJ053CounterfeitSuspicion(unittest.TestCase):
+    """INJ-053: two returned packs with valid-looking serials but
+    inconsistent print/distribution history (data/returns.csv RT-1/RT-2 on
+    SN-10001) — surfaced as a contradiction, never resolved to
+    authentic/counterfeit."""
+
+    def setUp(self):
+        if not IMPLEMENTATION_AVAILABLE:
+            self.fail(RED_MESSAGE)
+
+    def test_surfaces_counterfeit_suspicion_indicator(self):
+        request = {
+            "request_id": "REQ-SUP-INJ053", "event_id": "EVT-INJ053",
+            "inventory": [RELEASED_ROW],
+            "returns": [
+                {"return_id": "RT-1", "serial": "SN-10001", "print_score": "0.44", "distribution_match": "no"},
+                {"return_id": "RT-2", "serial": "SN-10001", "print_score": "0.47", "distribution_match": "no"},
+            ],
+            "serialisation_events": [
+                {"serial": "SN-10001", "event": "commission", "case": "CS-77", "pallet": "P-88"},
+                {"serial": "SN-10001", "event": "return_scan", "case": "unknown", "pallet": "unknown"},
+            ],
+        }
+        response = assemble_supply_response(request)
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("counterfeit_suspicion_indicator", types)
+        self.assertIs(response["no_side_effects"], True)
+        self.assertNotIn("authenticity_confirmed", response)
+
+
+class TestINJ057CustomsDocumentationMismatch(unittest.TestCase):
+    """INJ-057: shipment product description differs from import
+    licence/invoice (data/trade_documents.csv SH-902) — surfaced as a
+    contradiction, never resolved/cleared for shipment."""
+
+    def setUp(self):
+        if not IMPLEMENTATION_AVAILABLE:
+            self.fail(RED_MESSAGE)
+
+    def test_surfaces_customs_documentation_mismatch(self):
+        request = {
+            "request_id": "REQ-SUP-INJ057", "event_id": "EVT-INJ057",
+            "inventory": [RELEASED_ROW],
+            "shipments": [
+                {"shipment_id": "SH-902", "product": "NCS-310", "lots": "NCS310-S26031",
+                 "lane": "IN>AE", "status": "customs_hold", "logger": "LG-42", "pallet": "P-92"},
+            ],
+            "trade_documents": [
+                {"shipment_id": "SH-902", "document": "invoice", "description": "sterile research samples"},
+                {"shipment_id": "SH-902", "document": "import_licence", "description": "commercial sterile injectable"},
+            ],
+        }
+        response = assemble_supply_response(request)
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("customs_documentation_mismatch", types)
+        self.assertIs(response["no_side_effects"], True)
+        self.assertNotIn("shipment_cleared", response)
+
+
 if __name__ == "__main__":
     unittest.main()

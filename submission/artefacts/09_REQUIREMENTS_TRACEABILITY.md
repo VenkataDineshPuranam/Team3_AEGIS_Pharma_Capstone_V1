@@ -111,6 +111,16 @@ Derived directly from the domain model's invariants/policies and the three workf
 
 Model-substitution and replay/excessive-agency controls (ADR-010's fixture pattern; ADR-003's in-process agent scope) are cross-cutting rather than FR-specific: `submission/tests/test_model_supply_chain_integrity.py`, `test_replay_and_excessive_agency.py`.
 
+## 6a. Regulatory-information findings — closing INJ-046, INJ-047, INJ-049
+
+Closes the three remaining regulatory-information `in_scope_open` injects from `04-ddd/inject_register_84.md`, each verified against the real disclosed CSV rows by `submission/scripts/data_integrity_findings_demo.py` (exit 0 iff every cited row is present; fails loud if the data drifts).
+
+| ID | Finding (real evidence) | Never auto-resolved to | Acceptance evidence |
+|---|---|---|---|
+| INJ-046 | `data/product_labels.csv` shows NCB-204's risk-statement text and version diverge by market: EU v6 "severe infusion reactions including anaphylaxis", US v5 "serious infusion reactions", IN v3 "infusion reactions" — while `data/market_authorisations.csv` confirms all three markets are authorised at exactly those label versions, so the divergence is a real, currently-authorised cross-market wording gap, not a data error | One harmonized risk statement across markets | `submission/scripts/data_integrity_findings_demo.py::find_inj046_labeling_divergence`; `data/product_labels.csv`; `data/market_authorisations.csv` |
+| INJ-047 | `data/regulatory_commitments.csv` `PMC-88` (NCB-204) records `tracker_due=2026-10-15` while `authority_letter_due=2026-09-30`; `data/authority_correspondence.csv` shows the authority's own letter (`EMA_letter_2026_114.pdf`) states the due date in natural language as "within 60 calendar days of receipt" of `2026-07-28T09:14:00Z`, machine-tracked as `2026-09-30` — a real 15-day disagreement between the tracker clock and the authority-letter clock | A single silently-picked due date | `submission/scripts/data_integrity_findings_demo.py::find_inj047_commitment_deadline_ambiguity`; `data/regulatory_commitments.csv`; `data/authority_correspondence.csv` |
+| INJ-049 | `data/regulatory_changes.csv` `RC-19` (PAT model and control limit update) shows `EU_classification="Type II proposed"`, `US_classification="CBE-30 proposed"`, `dispute=open` — regulatory teams genuinely disagree on reportability-before-implementation across jurisdictions | A single reportability classification decided by this system | `submission/scripts/data_integrity_findings_demo.py::find_inj049_variation_classification_dispute`; `data/regulatory_changes.csv` |
+
 ## 7. Change and waiver control
 
 **PENDING (Prompt 07 ADR / governing plan §17).** Change control process is already specified at the plan level ("Plan changes: new RAID row + version bump — not silent edit," `AEGIS_PROJECT_PLAN_FINAL.md` §17) but this artefact's own waiver process (e.g. how an NFR target gets waived with justification) is not yet instantiated — deferred to P3 completion of this artefact.

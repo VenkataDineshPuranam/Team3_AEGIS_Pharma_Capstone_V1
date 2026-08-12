@@ -95,5 +95,59 @@ class TestPOL03ConflictedEvidenceNeverAutoReady(unittest.TestCase):
         self.assertIn(response["readiness_state"], {"insufficient_evidence", "conflicted_evidence"})
 
 
+class TestINJ026CleaningValidationBoundaryConflict(unittest.TestCase):
+    """INJ-026: campaign sequencing changed after a new high-potency product
+    was introduced (data/production_schedule.csv C-882 on BLEND-04:
+    NCX-101>HP-NEW>NCX-101), but the cleaning-validation record for that
+    equipment (data/cleaning_validation.csv BLEND-04) scopes only "NCX only"
+    and is status=gap — never auto-cleared."""
+
+    def setUp(self):
+        if not IMPLEMENTATION_AVAILABLE:
+            self.fail(
+                "RED (expected at G4): submission.src.workflows.batch_evidence "
+                "is not implemented yet — implement in P5 POC build"
+            )
+
+    def _request(self):
+        return {
+            "request_id": "REQ-TEST-INJ026",
+            "batch_id": "NCB204-B24071",
+            "as_of": "2026-08-10T00:00:00Z",
+            "authorization": {"user": "qp_eu_1", "purpose": "batch_review"},
+            "evidence": [{"source": "production_schedule"}],
+            "cleaning_validation": [
+                {"equipment": "BLEND-04", "previous_product": "NCX-101",
+                 "next_product": "HP-NEW", "validation_scope": "NCX only",
+                 "status": "gap"},
+            ],
+            "production_schedule": [
+                {"equipment": "BLEND-04", "campaign": "C-882",
+                 "product_sequence": "NCX-101>HP-NEW>NCX-101", "start": "2026-08-04"},
+            ],
+        }
+
+    def test_surfaces_cleaning_validation_boundary_conflict(self):
+        response = assemble_batch_response(self._request())
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("cleaning_validation_boundary_conflict", types)
+        self.assertNotEqual(response["readiness_state"], "ready_for_authorized_review")
+
+    def test_never_carries_cleaning_cleared_or_campaign_approved_field(self):
+        response = assemble_batch_response(self._request())
+        self.assertNotIn("cleaning_cleared", response)
+        self.assertNotIn("campaign_approved", response)
+        self.assertEqual(response.get("execution_status"), "not_executed")
+
+    def test_no_conflict_when_cleaning_validation_covers_boundary(self):
+        # Green control: if the cleaning-validation status is not "gap", no
+        # contradiction should be manufactured out of thin air.
+        request = self._request()
+        request["cleaning_validation"][0]["status"] = "validated"
+        response = assemble_batch_response(request)
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertNotIn("cleaning_validation_boundary_conflict", types)
+
+
 if __name__ == "__main__":
     unittest.main()
