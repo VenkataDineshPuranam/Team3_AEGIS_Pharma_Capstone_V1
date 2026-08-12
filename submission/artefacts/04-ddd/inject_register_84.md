@@ -7,7 +7,7 @@ Per the governing plan (`AEGIS_PROJECT_PLAN_FINAL.md` §8, Phase P2 row: "P2: 05
 **Status legend**:
 - **addressed** — cited by ID with a concrete design response (an `INV-*`/`POL-*`, a context canvas, or a named analysis) in at least one artefact.
 - **in_scope_open** — belongs to one of the three mandated workflows or a cross-cutting spine context (Evidence & Provenance, Decision Authority & Accountability, Regulatory & Knowledge Authority, Product & Substance Master), but not yet individually treated. Carried forward to Prompt 05 (Feature Specs) or Prompt 06 (C4) — not a gap in this register, a gap in later work.
-- **out_of_scope** — belongs to a domain this engagement does not build a workflow for (Discovery/Translational Science, Clinical Trial Management), per the Business Case's explicit scope narrowing (`01_BUSINESS_CASE.md` §5). Recorded here so the exclusion is a stated decision, not a silent omission.
+- **out_of_scope** — belongs to a domain outside the three *mandated* workflows (Discovery/Translational Science, Clinical Trial Management), per the Business Case's explicit scope narrowing (`01_BUSINESS_CASE.md` §5). Recorded here so the exclusion from the mandate is a stated decision, not a silent omission. As of this revision, no inject retains this status: both excluded domains were subsequently given additional, optional-scope workflow coverage (Workflow D for Clinical Trial Management, Workflow E for Discovery/Translational Science) — neither changes the mandated three-workflow scope or `RUB-08` scoring; see the D02/D03 section notes and Coverage summary below.
 
 ## D01 — Portfolio, strategy and product value (in scope — cross-cutting business framing)
 
@@ -20,16 +20,16 @@ Per the governing plan (`AEGIS_PROJECT_PLAN_FINAL.md` §8, Phase P2 row: "P2: 05
 | INJ-005 | Acquisition integration | addressed | `01-discovery/evidence_register.md` §9 |
 | INJ-006 | Prohibited optimization | addressed | `01_BUSINESS_CASE.md` §5; `04-ddd/domain_model.md` INV-01 |
 
-## D02 — Discovery, translational science and model risk (out of scope, one exception)
+## D02 — Discovery, translational science and model risk (addressed via Workflow E — ADDITIONAL, OPTIONAL SCOPE, not one of the three mandated workflows; see `WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` — one exception addressed separately)
 
 | Inject | Title | Status | Where addressed / reason |
 |---|---|---|---|
-| INJ-007 | Assay drift | out_of_scope | Discovery/Translational Science bounded context not built — not one of the three mandated workflows |
+| INJ-007 | Assay drift | **addressed** (Workflow E) | `WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` §2; INV-14; live suite S14 scenario `S14-assay-qualification-conflict` |
 | INJ-008 | Compound genealogy collision | **addressed** (exception) | `04-ddd/domain_model.md` §7, Product & Substance Master ACL — identity-collision pattern recurs at the product-master level the three workflows *do* depend on |
-| INJ-009 | Omics cohort bias | out_of_scope | Same as INJ-007 |
-| INJ-010 | Preclinical image manipulation concern | out_of_scope | Same |
-| INJ-011 | Unqualified research model | out_of_scope | Same |
-| INJ-012 | Target-evidence conflict | out_of_scope | Same |
+| INJ-009 | Omics cohort bias | **addressed** (Workflow E) | `WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` §2; INV-15; live suite S14 scenario `S14-omics-cohort-subgroup-gap` |
+| INJ-010 | Preclinical image manipulation concern | **addressed** (Workflow E) | `WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` §2; INV-16; live suite S14 scenario `S14-preclinical-image-forensics` |
+| INJ-011 | Unqualified research model | **addressed** (Workflow E) | `WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` §2; INV-17; live suite S14 scenario `S14-unqualified-research-model` |
+| INJ-012 | Target-evidence conflict | **addressed** (Workflow E) | `WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` §2; INV-18; live suite S14 scenario `S14-target-evidence-conflict` |
 
 ## D03 — Clinical development and trial integrity (addressed via Workflow D — ADDITIONAL, OPTIONAL SCOPE, not one of the three mandated workflows; see `WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md`)
 
@@ -162,14 +162,16 @@ Per the governing plan (`AEGIS_PROJECT_PLAN_FINAL.md` §8, Phase P2 row: "P2: 05
 
 | Status | Count |
 |---|---|
-| addressed (61 via the three mandated workflows/cross-cutting design + 7 via Workflow D, ADDITIONAL/OPTIONAL SCOPE — see note below) | 68 |
+| addressed (61 via the three mandated workflows/cross-cutting design + 7 via Workflow D + 5 via Workflow E, both ADDITIONAL/OPTIONAL SCOPE — see notes below) | 73 |
 | in_scope_open (carried forward, real gap to close before defence) | 11 |
-| out_of_scope (stated exclusion — Discovery/Translational Science; Clinical Trial Management is now fully addressed via Workflow D) | 5 |
+| out_of_scope (stated exclusion — none remaining; both previously-excluded dimensions, Discovery/Translational Science and Clinical Trial Management, are now fully addressed via Workflow E and Workflow D respectively) | 0 |
 | **Total** | **84** |
 
-**Workflow D note**: 7 of the 8 D03 injects (all but INJ-018, already addressed separately) moved from `out_of_scope` to `addressed` because a fourth, participant-added workflow (`WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md`) was built to cover Clinical Trial Management. This is **additional, optional scope** — `case/INTEGRATED_CASE.md` §4 mandates exactly three workflows, and `RUB-08` scores those three specifically. The 68/84 figure should not be read as the graded mandate having expanded; it reflects real design/code/test coverage that happens to exist, cited honestly rather than left as a stale `out_of_scope` label now that it's no longer true.
+**Workflow D note**: 7 of the 8 D03 injects (all but INJ-018, already addressed separately) moved from `out_of_scope` to `addressed` because a fourth, participant-added workflow (`WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md`) was built to cover Clinical Trial Management. This is **additional, optional scope** — `case/INTEGRATED_CASE.md` §4 mandates exactly three workflows, and `RUB-08` scores those three specifically. The 68/84 figure (at that point) should not be read as the graded mandate having expanded; it reflects real design/code/test coverage that happens to exist, cited honestly rather than left as a stale `out_of_scope` label now that it's no longer true.
 
-**INTERPRETATION**: 68/84 (81%) addressed after eight phases plus one additional-scope workflow is expected and healthy — the `in_scope_open` items are not a quality failure, they are the explicit backlog now carried into `29_NINETY_DAY_ROADMAP_HANDOVER.md`. The remaining 5 `out_of_scope` items (Discovery/Translational Science, 5 of 6 injects, one addressed exception) are a stated scope decision under the three mandated workflows (`case/INTEGRATED_CASE.md` §4) — Clinical Trial Management (D03) is no longer `out_of_scope` because Workflow D (additional, optional scope beyond the mandate) now covers it; see the Workflow D note above.
+**Workflow E note**: the 5 remaining D02 injects (all but INJ-008, already addressed separately as an exception) moved from `out_of_scope` to `addressed` because a fifth, participant-added workflow (`WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md`) was built to cover Discovery/Translational Science, using the same real disclosed evidence (assay results, instrument/reagent qualification, omics cohorts, model performance, preclinical image forensics, model registry, target evidence, data licenses) that previously justified the `out_of_scope` label. This is likewise **additional, optional scope** — it does not change `RUB-08` scoring of the three mandated workflows. The revised 73/84 figure should not be read as the graded mandate having expanded; it reflects real design/code/test coverage (`submission/tests/test_prohibited_discovery_translational_science.py`, live suite S14) that happens to exist, cited honestly rather than left as a stale `out_of_scope` label now that it's no longer true.
+
+**INTERPRETATION**: 73/84 (87%) addressed after eight phases plus two additional-scope workflows is expected and healthy — the `in_scope_open` items are not a quality failure, they are the explicit backlog now carried into `29_NINETY_DAY_ROADMAP_HANDOVER.md`. There are no remaining `out_of_scope` items: Discovery/Translational Science (D02) is no longer `out_of_scope` because Workflow E (additional, optional scope beyond the mandate) now covers it, and Clinical Trial Management (D03) is no longer `out_of_scope` because Workflow D (same status) covers it; see the Workflow D and Workflow E notes above. Both dimensions remain outside the three mandated workflows named in `case/INTEGRATED_CASE.md` §4 and outside `RUB-08` scoring — "addressed" here means "given a real, tested, evaluated design response," not "part of the graded mandate."
 
 *(Revision history: originally miscounted as 51/25/8 due to a hand-tally arithmetic error, corrected to 52/20/12 during Phase 3 cross-verification (2026-08-08); then INJ-069 upgraded from `in_scope_open` to `addressed` after Phase 3's degraded-mode design gave it substantive treatment, giving 53/19/12; then Phase 4 (artefacts 16-21) gave INJ-059, 061, 062, 063, 068 and 074 their own dedicated design response for the first time, upgrading all 6 from `in_scope_open` to `addressed`, giving 59/13/12; then Phase 5 cross-verification found INJ-079 was marked "carried to Prompt 06" but never actually treated by name anywhere — `submission/scripts/ai_disabled_offline_demo.py`'s real socket-blocked proof now closes it, giving the current 60/12/12 — mechanically confirmed via `grep -oh 'INJ-[0-9]\{3\}' submission/artefacts/{16,17,18,19,20,21}*.md submission/scripts/*.py`.)*
 
@@ -182,4 +184,4 @@ Per the governing plan (`AEGIS_PROJECT_PLAN_FINAL.md` §8, Phase P2 row: "P2: 05
 | ID | Type | Description | Impact | Owner | Due / trigger | Status |
 |---|---|---|---|---|---|---|
 | R-001 | Risk | The `submission/evaluation` inject-test-coverage mirror (`submission/evaluation/inject_test_coverage.csv`, built P6) now shows `PASS` for 61 injects, `OUT_OF_SCOPE` for 12, `NOT_RUN` for the 11 still-open ones (INJ-050 closed at P8, see addendum above) — those 11 (D05/D07/D08/D13 items) are carried into `29_NINETY_DAY_ROADMAP_HANDOVER.md`'s 0–90-day backlog, not left as a silent `NOT_RUN` label | Could under-deliver defence element 6 in a live re-defence if not closed per the roadmap | FDE2 | Per `29_NINETY_DAY_ROADMAP_HANDOVER.md` §2–4 | Open (narrowed from Phase 3 → 7) |
-| R-002 | Decision | Two full dimensions (D02, D03) are scoped out entirely, with one addressed exception each (INJ-008, INJ-018) picked up incidentally via cross-cutting identity/temporal patterns | Correctly narrows scope per `01_BUSINESS_CASE.md` §5; must be defended explicitly at G8 defence if challenged | FDE1 | Defence prep | Closed — decision recorded here |
+| R-002 | Decision | Two full dimensions (D02, D03) were originally scoped out entirely, with one addressed exception each (INJ-008, INJ-018) picked up incidentally via cross-cutting identity/temporal patterns; both dimensions were subsequently given additional, optional-scope workflow coverage (D03 via Workflow D, D02 via Workflow E) rather than left `out_of_scope` | Correctly narrows the *mandated* (three-workflow) scope per `01_BUSINESS_CASE.md` §5 and `case/INTEGRATED_CASE.md` §4; the additional workflows are a defensible choice, not a requirement, and do not change `RUB-08` scoring; must be defended explicitly at G8 defence if challenged | FDE1 | Defence prep | Closed — decision recorded here |

@@ -33,6 +33,7 @@ from submission.src.workflows.batch_evidence import assemble_batch_response  # n
 from submission.src.workflows.pv_intake import assemble_pv_response  # noqa: E402
 from submission.src.workflows.supply_options import assemble_supply_response  # noqa: E402
 from submission.src.workflows.clinical_trial_context import assemble_clinical_response  # noqa: E402
+from submission.src.workflows.discovery_translational_science import assemble_discovery_response  # noqa: E402
 
 _EFFECTIVE_DATE_RE = re.compile(r"Effective date:\s*([0-9]{4}-[0-9]{2}-[0-9]{2})")
 _AUTHORITY_RE = re.compile(r"(?:Synthetic authority|Owner):\s*(.+)")
@@ -195,9 +196,32 @@ def run_clinical_scenario(fixture, entitlement=None):
     }
 
 
+def run_discovery_scenario(fixture, entitlement=None):
+    """Workflow E — ADDITIONAL, OPTIONAL SCOPE. See
+    submission/artefacts/WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md."""
+    as_of = fixture["authorized_context"]["as_of"]
+    evidence_items = [shape_evidence_item(b, as_of, i) for i, b in enumerate(fixture.get("evidence", []))]
+    request = {
+        "request_id": fixture["scenario"]["id"],
+        "subject_ref": fixture["scenario"].get("id", ""),
+        "as_of": as_of,
+        "authorization": {"purpose": fixture["authorized_context"]["purpose"]},
+        "entitlement": entitlement or {"user": fixture["authorized_context"]["user"], "iam_state": "active"},
+        "evidence": evidence_items,
+    }
+    output, latency_ms = _timed(assemble_discovery_response, request)
+    return {
+        "scenario_id": fixture["scenario"]["id"], "workflow": "discovery_translational_science",
+        "input": request, "output": output, "latency_ms": latency_ms,
+        "tools_called": [], "retries": 0, "errors": [], "approvals": [output.get("human_review")],
+        "side_effects": [], "evidence_used": [e["source"] for e in evidence_items],
+    }
+
+
 _REGRESSION_RUNNERS = {
     "batch": run_batch_scenario, "pv": run_pv_scenario, "supply": run_supply_scenario,
     "clinical": run_clinical_scenario,  # Workflow D — additional, optional scope
+    "discovery": run_discovery_scenario,  # Workflow E — additional, optional scope
 }
 
 

@@ -26,6 +26,9 @@ _SCHEMA_BY_WORKFLOW = {
     # Workflow D — additional, optional scope, not one of the three mandated
     # workflows. See submission/artefacts/WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md.
     "clinical_trial_context": (SUBMISSION_CONTRACTS_DIR, "clinical_response.schema.json"),
+    # Workflow E — additional, optional scope, not one of the three mandated
+    # workflows. See submission/artefacts/WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md.
+    "discovery_translational_science": (SUBMISSION_CONTRACTS_DIR, "discovery_response.schema.json"),
 }
 
 

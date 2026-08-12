@@ -1,6 +1,6 @@
 # Inject-to-Workflow Categorization
 
-All 84 disclosed injects (`data/injects.json`), categorized by which of the three mandated workflows (A/B/C), the additional-scope Workflow D, a cross-cutting spine, or an explicit out-of-scope decision each belongs to. Derived from `submission/artefacts/04-ddd/inject_register_84.md` (source of truth for status and citations); this file adds the workflow grouping on top and does not change any status.
+All 84 disclosed injects (`data/injects.json`), categorized by which of the three mandated workflows (A/B/C), the additional-scope Workflow D or Workflow E, a cross-cutting spine, or an explicit out-of-scope decision each belongs to. Derived from `submission/artefacts/04-ddd/inject_register_84.md` (source of truth for status and citations); this file adds the workflow grouping on top and does not change any status.
 
 ## Summary by workflow
 
@@ -10,6 +10,7 @@ All 84 disclosed injects (`data/injects.json`), categorized by which of the thre
 | Workflow B (Pharmacovigilance) | 8 |
 | Workflow C (Supply/cold-chain) | 8 |
 | Workflow D (clinical trial, additional scope) | 8 |
+| Workflow E (discovery/translational science, additional scope) | 6 |
 | Cross-cutting (business framing) | 6 |
 | Cross-cutting (Evidence & Provenance spine) | 8 |
 | Cross-cutting (Regulatory info, supports A) | 6 |
@@ -18,7 +19,6 @@ All 84 disclosed injects (`data/injects.json`), categorized by which of the thre
 | Cross-cutting (Human factors/Responsible AI) | 4 |
 | Cross-cutting (Economics/Token FinOps) | 4 |
 | Cross-cutting (Reliability/Continuity) | 6 |
-| Out of scope (Discovery/Translational Science) | 6 |
 | **Total** | **84** |
 
 ## Summary by status
@@ -28,7 +28,7 @@ All 84 disclosed injects (`data/injects.json`), categorized by which of the thre
 | addressed | 60 |
 | in_scope_open | 11 |
 | addressed (Workflow D) | 6 |
-| out_of_scope | 5 |
+| addressed (Workflow E) | 5 |
 | addressed (exception) | 2 |
 | **Total** | **84** |
 
@@ -42,12 +42,12 @@ All 84 disclosed injects (`data/injects.json`), categorized by which of the thre
 | INJ-004 | D01 | Cross-cutting (business framing) | Patent-cliff urgency | addressed | `01_BUSINESS_CASE.md` E-007 |
 | INJ-005 | D01 | Cross-cutting (business framing) | Acquisition integration | addressed | `01-discovery/evidence_register.md` §9 |
 | INJ-006 | D01 | Cross-cutting (business framing) | Prohibited optimization | addressed | `01_BUSINESS_CASE.md` §5; `04-ddd/domain_model.md` INV-01 |
-| INJ-007 | D02 | Out of scope (Discovery/Translational Science) | Assay drift | out_of_scope | Discovery/Translational Science bounded context not built — not one of the three mandated workflows |
-| INJ-008 | D02 | Out of scope (Discovery/Translational Science) | Compound genealogy collision | addressed (exception) | `04-ddd/domain_model.md` §7, Product & Substance Master ACL — identity-collision pattern recurs at the product-master level the three workflows *do* depend on |
-| INJ-009 | D02 | Out of scope (Discovery/Translational Science) | Omics cohort bias | out_of_scope | Same as INJ-007 |
-| INJ-010 | D02 | Out of scope (Discovery/Translational Science) | Preclinical image manipulation concern | out_of_scope | Same |
-| INJ-011 | D02 | Out of scope (Discovery/Translational Science) | Unqualified research model | out_of_scope | Same |
-| INJ-012 | D02 | Out of scope (Discovery/Translational Science) | Target-evidence conflict | out_of_scope | Same |
+| INJ-007 | D02 | Workflow E (discovery/translational science, additional scope) | Assay drift | addressed (Workflow E) | `WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` §2; INV-14; live suite S14 scenario `S14-assay-qualification-conflict` |
+| INJ-008 | D02 | Workflow E (discovery/translational science, additional scope) | Compound genealogy collision | addressed (exception) | `04-ddd/domain_model.md` §7, Product & Substance Master ACL — identity-collision pattern recurs at the product-master level the three workflows *do* depend on |
+| INJ-009 | D02 | Workflow E (discovery/translational science, additional scope) | Omics cohort bias | addressed (Workflow E) | `WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` §2; INV-15; live suite S14 scenario `S14-omics-cohort-subgroup-gap` |
+| INJ-010 | D02 | Workflow E (discovery/translational science, additional scope) | Preclinical image manipulation concern | addressed (Workflow E) | `WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` §2; INV-16; live suite S14 scenario `S14-preclinical-image-forensics` |
+| INJ-011 | D02 | Workflow E (discovery/translational science, additional scope) | Unqualified research model | addressed (Workflow E) | `WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` §2; INV-17; live suite S14 scenario `S14-unqualified-research-model` |
+| INJ-012 | D02 | Workflow E (discovery/translational science, additional scope) | Target-evidence conflict | addressed (Workflow E) | `WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` §2; INV-18; live suite S14 scenario `S14-target-evidence-conflict` |
 | INJ-013 | D03 | Workflow D (clinical trial, additional scope) | Protocol-version divergence | addressed (Workflow D) | `WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` §2; POL-07; live suite S13 scenario `PUB-15` |
 | INJ-014 | D03 | Workflow D (clinical trial, additional scope) | Eligibility ambiguity | addressed (Workflow D) | `WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` §2; INV-11; live suite S13 scenario `PUB-15` |
 | INJ-015 | D03 | Workflow D (clinical trial, additional scope) | Randomization service outage | addressed (Workflow D) | `WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` §2; live suite S13 scenario `S13-randomization-outage` |

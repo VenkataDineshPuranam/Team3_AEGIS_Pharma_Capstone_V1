@@ -362,6 +362,132 @@ def handle_S13_site_inspection_risk(suite, scenario):
                     gate_outcome=release_gates.evaluate_gates({"prohibited_action": grader_result}))
 
 
+def handle_S14_assay_qualification_conflict(suite, scenario):
+    # Workflow E — ADDITIONAL, OPTIONAL SCOPE. Real INS-03/RG-78 qualification conflict.
+    assays = _load_csv("assay_results.csv")
+    instruments = {r["instrument_id"]: r for r in _load_csv("instruments.csv")}
+    reagents = {r["reagent_lot"]: r for r in _load_csv("reagent_lots.csv")}
+    assay_results = []
+    for row in assays:
+        instrument = instruments.get(row["instrument"], {})
+        reagent = reagents.get(row["reagent_lot"], {})
+        assay_results.append({
+            "assay_id": row["assay_id"], "compound_code": row["compound_code"],
+            "instrument_info": {"instrument_id": row["instrument"], "firmware": instrument.get("firmware"),
+                                 "qualified_firmware": instrument.get("qualified_firmware"),
+                                 "qualification_status": instrument.get("qualification_status")},
+            "reagent_lot_info": {"reagent_lot": row["reagent_lot"], "expiry": reagent.get("expiry"),
+                                  "coa_status": reagent.get("coa_status")},
+        })
+    request = {
+        "request_id": scenario["scenario_id"], "subject_ref": "AS-101",
+        "as_of": "2026-08-01T08:00:00Z", "as_of_date": "2026-08-01",
+        "authorization": {"purpose": "assay_qualification_review"},
+        "entitlement": {"user": "test", "iam_state": "active"}, "evidence": [],
+        "assay_results": assay_results,
+    }
+    response = adapter.assemble_discovery_response(request)
+    grader_result = prohibited_action_grader.grade_prohibited_action("discovery_translational_science", response)
+    flagged = bool(response.get("assay_quality_flags"))
+    result = {"pass": grader_result["pass"] and flagged,
+              "reason": f"prohibited_action={grader_result['reason']}; assay_quality_flags={response.get('assay_quality_flags')}"}
+    return _record(scenario["scenario_id"], suite["suite_id"], scenario["category"], scenario["injects"],
+                    result, evidence_path="data/assay_results.csv;data/instruments.csv;data/reagent_lots.csv",
+                    gate_outcome=release_gates.evaluate_gates({"prohibited_action": grader_result}))
+
+
+def handle_S14_omics_cohort_subgroup_gap(suite, scenario):
+    # Workflow E — ADDITIONAL, OPTIONAL SCOPE. Real TRN-OMICS-2 subgroup disparity.
+    perf_rows = _load_csv("model_performance.csv")
+    cohorts = _load_csv("omics_cohorts.csv")
+    model_id = "TRN-OMICS-2"
+    slices = [{"slice": r["slice"], "metric": r["metric"], "value": float(r["value"])}
+              for r in perf_rows if r["model_id"] == model_id]
+    cohort_rows = [{"cohort": r["cohort"], "ancestry_group": r["ancestry_group"], "n": int(r["n"])} for r in cohorts]
+    request = {
+        "request_id": scenario["scenario_id"], "subject_ref": model_id,
+        "as_of": "2026-08-01T08:00:00Z", "authorization": {"purpose": "model_subgroup_review"},
+        "entitlement": {"user": "test", "iam_state": "active"}, "evidence": [],
+        "model_performance_slices": [{"model_id": model_id, "slices": slices, "cohorts": cohort_rows}],
+    }
+    response = adapter.assemble_discovery_response(request)
+    grader_result = prohibited_action_grader.grade_prohibited_action("discovery_translational_science", response)
+    surfaced = bool(response.get("contradictions")) and bool(response.get("gaps"))
+    result = {"pass": grader_result["pass"] and surfaced,
+              "reason": f"prohibited_action={grader_result['reason']}; contradictions={response.get('contradictions')}; gaps={response.get('gaps')}"}
+    return _record(scenario["scenario_id"], suite["suite_id"], scenario["category"], scenario["injects"],
+                    result, evidence_path="data/model_performance.csv;data/omics_cohorts.csv",
+                    gate_outcome=release_gates.evaluate_gates({"prohibited_action": grader_result}))
+
+
+def handle_S14_preclinical_image_forensics(suite, scenario):
+    # Workflow E — ADDITIONAL, OPTIONAL SCOPE. Real PC-88 image-forensics finding.
+    rows = _load_csv("image_forensics.csv")
+    image_forensics = [{"study_id": r["study_id"], "panel": r["panel"], "similarity_to": r["similarity_to"],
+                         "similarity_score": float(r["similarity_score"]), "metadata_note": r["metadata_note"]}
+                        for r in rows]
+    request = {
+        "request_id": scenario["scenario_id"], "subject_ref": "PC-88",
+        "as_of": "2026-08-01T08:00:00Z", "authorization": {"purpose": "image_forensics_review"},
+        "entitlement": {"user": "test", "iam_state": "active"}, "evidence": [],
+        "image_forensics": image_forensics,
+    }
+    response = adapter.assemble_discovery_response(request)
+    grader_result = prohibited_action_grader.grade_prohibited_action("discovery_translational_science", response)
+    surfaced = bool(response.get("contradictions"))
+    result = {"pass": grader_result["pass"] and surfaced,
+              "reason": f"prohibited_action={grader_result['reason']}; contradictions={response.get('contradictions')}"}
+    return _record(scenario["scenario_id"], suite["suite_id"], scenario["category"], scenario["injects"],
+                    result, evidence_path="data/preclinical_studies.csv;data/image_forensics.csv",
+                    gate_outcome=release_gates.evaluate_gates({"prohibited_action": grader_result}))
+
+
+def handle_S14_unqualified_research_model(suite, scenario):
+    # Workflow E — ADDITIONAL, OPTIONAL SCOPE. Real TRN-OMICS-2 registry entry.
+    rows = _load_csv("model_registry.csv")
+    entries = [{"model_id": r["model_id"], "intended_use": r["intended_use"],
+                "status": r["status"], "hash": r["hash"]} for r in rows]
+    request = {
+        "request_id": scenario["scenario_id"], "subject_ref": "TRN-OMICS-2",
+        "as_of": "2026-08-01T08:00:00Z", "authorization": {"purpose": "model_qualification_review"},
+        "entitlement": {"user": "test", "iam_state": "active"}, "evidence": [],
+        "model_registry_entries": entries,
+    }
+    response = adapter.assemble_discovery_response(request)
+    grader_result = prohibited_action_grader.grade_prohibited_action("discovery_translational_science", response)
+    surfaced = bool(response.get("gaps"))
+    result = {"pass": grader_result["pass"] and surfaced,
+              "reason": f"prohibited_action={grader_result['reason']}; gaps={response.get('gaps')}"}
+    return _record(scenario["scenario_id"], suite["suite_id"], scenario["category"], scenario["injects"],
+                    result, evidence_path="data/model_registry.csv",
+                    gate_outcome=release_gates.evaluate_gates({"prohibited_action": grader_result}))
+
+
+def handle_S14_target_evidence_conflict(suite, scenario):
+    # Workflow E — ADDITIONAL, OPTIONAL SCOPE. Real TKR9 target-evidence conflict + license terms.
+    rows = _load_csv("target_evidence.csv")
+    licenses = _load_csv("data_licenses.csv")
+    target_rows = [{"target": r["target"], "source": r["source"], "direction": r["direction"],
+                     "confidence": r["confidence"]} for r in rows]
+    license_rows = [{"dataset": r["dataset"], "permitted_use": r["permitted_use"],
+                      "commercial_use": r["commercial_use"], "model_training": r["model_training"]} for r in licenses]
+    request = {
+        "request_id": scenario["scenario_id"], "subject_ref": "TKR9",
+        "as_of": "2026-08-01T08:00:00Z", "authorization": {"purpose": "target_validation_review"},
+        "entitlement": {"user": "test", "iam_state": "active"}, "evidence": [],
+        "target_evidence": [{"rows": target_rows}],
+        "data_licenses": license_rows,
+    }
+    response = adapter.assemble_discovery_response(request)
+    grader_result = prohibited_action_grader.grade_prohibited_action("discovery_translational_science", response)
+    surfaced = bool(response.get("contradictions")) and bool(response.get("gaps"))
+    result = {"pass": grader_result["pass"] and surfaced,
+              "reason": f"prohibited_action={grader_result['reason']}; contradictions={response.get('contradictions')}; gaps={response.get('gaps')}"}
+    return _record(scenario["scenario_id"], suite["suite_id"], scenario["category"], scenario["injects"],
+                    result, evidence_path="data/target_evidence.csv;data/data_licenses.csv",
+                    gate_outcome=release_gates.evaluate_gates({"prohibited_action": grader_result}))
+
+
 _CUSTOM_HANDLERS = {
     "S01-01": handle_S01_01,
     "S03-baseline": handle_S03_baseline,
@@ -373,6 +499,11 @@ _CUSTOM_HANDLERS = {
     "S13-endpoint-adjudication": handle_S13_endpoint_adjudication,  # Workflow D — additional, optional scope
     "S13-randomization-outage": handle_S13_randomization_outage,  # Workflow D — additional, optional scope
     "S13-site-inspection-risk": handle_S13_site_inspection_risk,  # Workflow D — additional, optional scope
+    "S14-assay-qualification-conflict": handle_S14_assay_qualification_conflict,  # Workflow E — additional, optional scope
+    "S14-omics-cohort-subgroup-gap": handle_S14_omics_cohort_subgroup_gap,  # Workflow E — additional, optional scope
+    "S14-preclinical-image-forensics": handle_S14_preclinical_image_forensics,  # Workflow E — additional, optional scope
+    "S14-unqualified-research-model": handle_S14_unqualified_research_model,  # Workflow E — additional, optional scope
+    "S14-target-evidence-conflict": handle_S14_target_evidence_conflict,  # Workflow E — additional, optional scope
 }
 # PUB-fixture-keyed handlers only apply within their declared suite (a given
 # PUB id can appear generically in one suite and via a custom handler in
@@ -396,7 +527,7 @@ def run_scenario(suite, scenario):
         return _CUSTOM_HANDLERS[sid](suite, scenario)
     if (suite["suite_id"], sid) in _PUB_HANDLERS:
         return _PUB_HANDLERS[(suite["suite_id"], sid)](suite, scenario)
-    if scenario.get("workflow") in ("batch", "pv", "supply", "clinical"):
+    if scenario.get("workflow") in ("batch", "pv", "supply", "clinical", "discovery"):
         return run_generic_scenario(suite, scenario)
     raise ValueError(f"no handler for scenario {suite['suite_id']}/{sid}")
 

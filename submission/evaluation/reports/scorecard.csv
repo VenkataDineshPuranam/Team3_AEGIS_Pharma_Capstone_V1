@@ -25,3 +25,8 @@ S13,S13-unblinding,adversarial,False,PASS,False,INJ-016
 S13,S13-endpoint-adjudication,edge,False,PASS,False,INJ-019
 S13,S13-randomization-outage,edge,False,PASS,False,INJ-015
 S13,S13-site-inspection-risk,edge,False,PASS,False,INJ-020
+S14,S14-assay-qualification-conflict,edge,False,PASS,False,INJ-007
+S14,S14-omics-cohort-subgroup-gap,adversarial,False,PASS,False,INJ-009
+S14,S14-preclinical-image-forensics,adversarial,False,PASS,False,INJ-010
+S14,S14-unqualified-research-model,edge,False,PASS,False,INJ-011
+S14,S14-target-evidence-conflict,edge,False,PASS,False,INJ-012
