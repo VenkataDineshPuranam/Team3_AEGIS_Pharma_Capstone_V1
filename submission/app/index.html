@@ -35,12 +35,20 @@
   button.run { background: #1d4ed8; color: white; border: none; border-radius: 6px; cursor: pointer; margin-left: 0.5rem; }
   pre.raw { background: #f4f4f5; padding: 0.7rem; border-radius: 6px; overflow-x: auto; font-size: 0.78rem; margin-top: 0.6rem; }
   footer { margin-top: 1.5rem; font-size: 0.78rem; color: #888; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.7rem; margin: 0.6rem 0 1rem; }
+  .stat-tile { border: 1px solid #ddd; border-radius: 6px; padding: 0.6rem 0.8rem; }
+  .stat-tile .stat-value { font-size: 1.3rem; font-weight: 700; }
+  .stat-tile .stat-label { font-size: 0.78rem; color: #666; }
+  table.coverage-table { border-collapse: collapse; width: 100%; font-size: 0.85rem; margin-top: 0.4rem; }
+  table.coverage-table th, table.coverage-table td { border: 1px solid #ddd; padding: 0.35rem 0.55rem; text-align: left; }
+  .snapshot-note { font-size: 0.8rem; color: #666; font-style: italic; margin: 0.3rem 0 0.8rem; }
   @media (prefers-color-scheme: dark) {
     body { background: #0b0b0d; color: #e5e5e5; }
     .tab-btn { background: #1c1c1f; border-color: #333; color: #e5e5e5; }
     section.panel { border-color: #333; }
     pre.raw { background: #1c1c1f; color: #e5e5e5; }
-    .subtitle, footer { color: #999; }
+    .subtitle, footer, .stat-tile .stat-label, .snapshot-note { color: #999; }
+    .stat-tile, table.coverage-table th, table.coverage-table td { border-color: #333; }
   }
 </style>
 </head>
@@ -54,6 +62,9 @@
     <button class="tab-btn" role="tab" data-panel="batch">Workflow A — Batch Evidence</button>
     <button class="tab-btn" role="tab" data-panel="pv">Workflow B — PV Case Intake</button>
     <button class="tab-btn" role="tab" data-panel="supply">Workflow C — Supply Options</button>
+    <button class="tab-btn" role="tab" data-panel="clinical">Workflow D — Clinical Trial Context</button>
+    <button class="tab-btn" role="tab" data-panel="discovery">Workflow E — Discovery/Translational Science</button>
+    <button class="tab-btn" role="tab" data-panel="eval">Evaluation &amp; Coverage</button>
   </div>
 
   <section class="panel" id="panel-batch" aria-labelledby="batch-heading">
@@ -90,12 +101,49 @@
     <div id="supplyOutput"></div>
   </section>
 
+  <section class="panel" id="panel-clinical" aria-labelledby="clinical-heading">
+    <h2 id="clinical-heading">Clinical Trial Context — NCB204-301 (additional, optional scope)</h2>
+    <div class="field-label">Scenario</div>
+    <select id="clinicalScenario">
+      <option value="eligibilityAndUnblinding">S-301-044 ALT threshold disagreement + SUP-41 unblinding-risk ticket</option>
+      <option value="protocolVersion">IN-014 site running protocol v4.1 vs. global-current v5.0</option>
+      <option value="clean">No open evidence (nothing to surface)</option>
+    </select>
+    <button class="run" id="clinicalRun">Assemble response</button>
+    <div id="clinicalOutput"></div>
+  </section>
+
+  <section class="panel" id="panel-discovery" aria-labelledby="discovery-heading">
+    <h2 id="discovery-heading">Discovery/Translational Science — BX-17 / TRN-OMICS-2 (additional, optional scope)</h2>
+    <div class="field-label">Scenario</div>
+    <select id="discoveryScenario">
+      <option value="assayAndSubgroup">AS-101 firmware/CoA conflict + TRN-OMICS-2 Group-A/Group-B AUROC gap</option>
+      <option value="unqualifiedModel">TRN-OMICS-2 research_unqualified registry status referenced by performance evidence</option>
+      <option value="clean">No open evidence (nothing to surface)</option>
+    </select>
+    <button class="run" id="discoveryRun">Assemble response</button>
+    <div id="discoveryOutput"></div>
+  </section>
+
+  <section class="panel" id="panel-eval" aria-labelledby="eval-heading">
+    <h2 id="eval-heading">Evaluation &amp; Coverage — static snapshot</h2>
+    <p class="snapshot-note">Static rendering of already-generated evidence files. Not live — nothing here re-runs tests or the evaluation harness.</p>
+    <div id="evalOutput"></div>
+  </section>
+
   <footer>
     Mirrors <code>submission/src/services/*</code> and <code>submission/src/workflows/*</code> (Python) in vanilla JS for
     offline client-side use — no server, no network calls, no <code>innerHTML</code>. Fixture data drawn from real
-    package rows: <code>data/downtime_events.csv</code>, <code>data/duplicate_candidates.csv</code>, <code>data/inventory.csv</code>.
+    package rows: <code>data/downtime_events.csv</code>, <code>data/duplicate_candidates.csv</code>, <code>data/inventory.csv</code>,
+    <code>data/eligibility_evidence.csv</code>, <code>data/support_tickets.csv</code>, <code>data/protocol_versions.csv</code>,
+    <code>data/site_approvals.csv</code>, <code>data/assay_results.csv</code>, <code>data/instruments.csv</code>,
+    <code>data/reagent_lots.csv</code>, <code>data/omics_cohorts.csv</code>, <code>data/model_performance.csv</code>,
+    <code>data/model_registry.csv</code>. Evaluation &amp; Coverage tab is a static snapshot of
+    <code>submission/evidence/test_results.json</code>, <code>submission/evidence/evaluation_results.json</code> and
+    <code>submission/artefacts/INJECT_WORKFLOW_CATEGORIZATION.md</code>, loaded from <code>eval_data.js</code>.
   </footer>
 
+  <script src="eval_data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

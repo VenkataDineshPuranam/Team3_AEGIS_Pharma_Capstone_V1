@@ -135,6 +135,176 @@ function assembleSupplyResponse(scenarioKey) {
   };
 }
 
+// ---- Workflow D: Clinical Trial Context (INV-11/12/13, POL-07) ------------
+// Mirrors submission/src/workflows/clinical_trial_context.py. ADDITIONAL,
+// OPTIONAL SCOPE — not one of the three mandated workflows. Never renders
+// eligibility, treatment_arm or endpoint_conclusion.
+
+const CLINICAL_SCENARIOS = {
+  eligibilityAndUnblinding: {
+    subject_id: "S-301-044",
+    trial_id: "NCB204-301",
+    evidence: [{ source: "data/eligibility_evidence.csv", record_id: "S-301-044" }, { source: "data/support_tickets.csv", record_id: "SUP-41" }],
+    eligibility_evidence: { test: "ALT", value: 58, central_uln: 40, local_uln: 60, edc_rule_uln: 40 },
+    support_tickets: [{ ticket_id: "SUP-41", system: "IRT", text: "Kit pattern suggests active arm; screenshot attached", visibility: "site_and_vendor" }],
+    protocol_context: null,
+  },
+  protocolVersion: {
+    subject_id: "",
+    trial_id: "NCB204-301",
+    evidence: [{ source: "data/protocol_versions.csv", record_id: "NCB204-301:5.0" }, { source: "data/site_approvals.csv", record_id: "IN-014" }],
+    eligibility_evidence: null,
+    support_tickets: [],
+    protocol_context: { site_approved_version: "4.1", global_current_version: "5.0" },
+  },
+  clean: { subject_id: "", trial_id: "NCB204-301", evidence: [], eligibility_evidence: null, support_tickets: [], protocol_context: null },
+};
+
+function assembleClinicalResponse(scenarioKey) {
+  const s = CLINICAL_SCENARIOS[scenarioKey];
+  const authorization = checkAuthorization(CURRENT_ENTITLEMENT, "clinical_trial_context");
+  const contradictions = [];
+  const gaps = [];
+  const unblinding_risk_flags = [];
+  const protocol_conflicts = [];
+  const required_reviews = [];
+
+  // INV-11: disagreeing eligibility-threshold sources surfaced, never resolved.
+  const elig = s.eligibility_evidence;
+  if (elig) {
+    const thresholds = { central_uln: elig.central_uln, local_uln: elig.local_uln, edc_rule_uln: elig.edc_rule_uln };
+    const exceeds = {};
+    for (const [name, uln] of Object.entries(thresholds)) exceeds[name] = elig.value != null && uln != null && elig.value > uln;
+    if (new Set(Object.values(exceeds)).size > 1) {
+      contradictions.push({ type: "eligibility_threshold_disagreement", test: elig.test, value: elig.value, thresholds, exceeds_by_source: exceeds });
+      required_reviews.push(`eligibility_review:${s.subject_id}`);
+    }
+  }
+
+  // INV-12: unblinding-risk signal terms flagged, never an arm-assignment statement.
+  const UNBLINDING_SIGNAL_TERMS = ["active arm", "placebo arm", "kit pattern", "unblind"];
+  for (const ticket of s.support_tickets) {
+    const text = String(ticket.text || "").toLowerCase();
+    if (UNBLINDING_SIGNAL_TERMS.some((term) => text.includes(term))) {
+      unblinding_risk_flags.push({ ticket_id: ticket.ticket_id, system: ticket.system, visibility: ticket.visibility,
+        reason: "support ticket text matches an unblinding-risk signal term" });
+      required_reviews.push(`unblinding_review:${ticket.ticket_id}`);
+    }
+  }
+
+  // POL-07: site-approved protocol version vs. global-current, both surfaced.
+  if (s.protocol_context) {
+    const { site_approved_version, global_current_version } = s.protocol_context;
+    if (site_approved_version != null && global_current_version != null && site_approved_version !== global_current_version) {
+      protocol_conflicts.push({ trial_id: s.trial_id, site_approved_version, global_current_version });
+      required_reviews.push(`protocol_applicability_review:${s.trial_id}`);
+    }
+  }
+
+  if (!elig && !s.support_tickets.length && !s.protocol_context && !s.evidence.length) {
+    gaps.push({ gap_type: "no_evidence_provided", subject_id: s.subject_id });
+  }
+
+  return {
+    workflow: "clinical_trial_context", authorization, subject_id: s.subject_id, trial_id: s.trial_id,
+    evidence: s.evidence, contradictions, gaps, abstentions: [],
+    protocol_conflicts, unblinding_risk_flags, site_inspection_risk_flags: [], required_reviews,
+    human_review: { required: true, role: "Principal Investigator / Medical Monitor" },
+    execution_status: "not_executed",
+  };
+}
+
+// ---- Workflow E: Discovery/Translational Science (INV-14..18) -------------
+// Mirrors submission/src/workflows/discovery_translational_science.py.
+// ADDITIONAL, OPTIONAL SCOPE. Never renders assay_disposition, model_approval,
+// image_authenticity, model_status_change or target_validation_conclusion.
+
+const DISCOVERY_SCENARIOS = {
+  assayAndSubgroup: {
+    subject_ref: "BX-17",
+    evidence: [{ source: "data/assay_results.csv", record_id: "AS-101" }, { source: "data/model_performance.csv", record_id: "TRN-OMICS-2" }],
+    assay_results: [{ assay_id: "AS-101", compound_code: "BX-17",
+      instrument_info: { instrument_id: "INS-03", firmware: "4.8.1", qualified_firmware: "4.7.9", qualification_status: "conditional" },
+      reagent_lot_info: { reagent_lot: "RG-78", coa_status: "transcribed_only", expiry: "2026-10-31" } }],
+    model_performance_slices: [{ model_id: "TRN-OMICS-2", slices: [{ slice: "Group-A", metric: "AUROC", value: 0.86 }, { slice: "Group-B", metric: "AUROC", value: 0.61 }] }],
+    model_registry_entries: [],
+  },
+  unqualifiedModel: {
+    subject_ref: "TRN-OMICS-2",
+    evidence: [{ source: "data/model_registry.csv", record_id: "TRN-OMICS-2" }],
+    assay_results: [],
+    model_performance_slices: [],
+    model_registry_entries: [{ model_id: "TRN-OMICS-2", intended_use: "portfolio ranking", status: "research_unqualified" }],
+  },
+  clean: { subject_ref: "", evidence: [], assay_results: [], model_performance_slices: [], model_registry_entries: [] },
+};
+
+function assembleDiscoveryResponse(scenarioKey) {
+  const s = DISCOVERY_SCENARIOS[scenarioKey];
+  const authorization = checkAuthorization(CURRENT_ENTITLEMENT, "discovery_translational_science");
+  const contradictions = [];
+  const gaps = [];
+  const assay_quality_flags = [];
+  const required_reviews = [];
+
+  // INV-14: firmware/CoA/expiry qualification conflicts surfaced, never accepted/rejected.
+  for (const result of s.assay_results) {
+    const instrument = result.instrument_info || {};
+    const reagent = result.reagent_lot_info || {};
+    const reasons = [];
+    if (instrument.firmware != null && instrument.qualified_firmware != null && instrument.firmware !== instrument.qualified_firmware) {
+      reasons.push("instrument_firmware_not_qualified_firmware");
+    }
+    if (instrument.qualification_status != null && instrument.qualification_status !== "qualified") {
+      reasons.push(`instrument_qualification_status=${instrument.qualification_status}`);
+    }
+    if (reagent.coa_status != null && reagent.coa_status !== "verified") {
+      reasons.push(`reagent_coa_status=${reagent.coa_status}`);
+    }
+    if (reasons.length) {
+      assay_quality_flags.push({ assay_id: result.assay_id, compound_code: result.compound_code,
+        instrument: instrument.instrument_id, reagent_lot: reagent.reagent_lot, reasons });
+      contradictions.push({ type: "assay_result_qualification_conflict", assay_id: result.assay_id, reasons });
+      required_reviews.push(`assay_qualification_review:${result.assay_id}`);
+    }
+  }
+
+  // INV-15: subgroup performance disparity surfaced, never silently averaged away.
+  for (const perf of s.model_performance_slices) {
+    const values = {};
+    for (const sl of perf.slices) if (sl.value != null) values[sl.slice] = sl.value;
+    const vals = Object.values(values);
+    if (vals.length > 1) {
+      const spread = Math.max(...vals) - Math.min(...vals);
+      if (spread >= 0.10) {
+        contradictions.push({ type: "model_performance_subgroup_disparity", model_id: perf.model_id,
+          metric: perf.slices[0] && perf.slices[0].metric, values_by_slice: values, spread: Math.round(spread * 10000) / 10000 });
+        required_reviews.push(`subgroup_fairness_review:${perf.model_id}`);
+      }
+    }
+  }
+
+  // INV-17: research-unqualified registry entries referenced by portfolio evidence surfaced as a gap, never promoted.
+  for (const entry of s.model_registry_entries) {
+    if (entry.status != null && !["qualified", "approved", "production"].includes(entry.status)) {
+      gaps.push({ gap_type: "model_not_decision_grade", model_id: entry.model_id, status: entry.status, intended_use: entry.intended_use });
+      required_reviews.push(`model_qualification_review:${entry.model_id}`);
+    }
+  }
+
+  if (!s.assay_results.length && !s.model_performance_slices.length && !s.model_registry_entries.length && !s.evidence.length) {
+    gaps.push({ gap_type: "no_evidence_provided", subject_ref: s.subject_ref });
+  }
+
+  return {
+    workflow: "discovery_translational_science", authorization, subject_ref: s.subject_ref,
+    evidence: s.evidence, contradictions, gaps, abstentions: [],
+    assay_quality_flags, required_reviews,
+    human_review: { required: true, role: "Translational Science Lead / Discovery QA" },
+    execution_status: "not_executed",
+  };
+}
+
 // ---- Safe DOM rendering (no innerHTML anywhere) ----------------------------
 
 function el(tag, opts, ...children) {
@@ -244,6 +414,143 @@ function renderSupply(response) {
   renderCommon(out, response);
 }
 
+function renderClinical(response) {
+  const out = document.getElementById("clinicalOutput");
+  out.textContent = "";
+  renderAuthBanner(response.authorization);
+
+  if (response.contradictions.length) {
+    out.appendChild(el("div", { className: "field-label", text: "Contradictions" }));
+    const ul = el("ul", { className: "evidence-list" });
+    for (const c of response.contradictions) {
+      ul.appendChild(el("li", { className: "contradiction", text: `${c.type}: ${JSON.stringify(c)}` }));
+    }
+    out.appendChild(ul);
+  }
+  if (response.unblinding_risk_flags.length) {
+    out.appendChild(el("div", { className: "field-label", text: "Unblinding risk flags (never an arm-assignment statement)" }));
+    const ul = el("ul", { className: "evidence-list" });
+    for (const f of response.unblinding_risk_flags) {
+      ul.appendChild(el("li", { className: "contradiction", text: `${f.ticket_id} (${f.system}, visibility=${f.visibility}): ${f.reason}` }));
+    }
+    out.appendChild(ul);
+  }
+  if (response.protocol_conflicts.length) {
+    out.appendChild(el("div", { className: "field-label", text: "Protocol-version conflicts (both versions surfaced, neither defaulted)" }));
+    const ul = el("ul", { className: "evidence-list" });
+    for (const p of response.protocol_conflicts) {
+      ul.appendChild(el("li", { className: "gap", text: `${p.trial_id}: site_approved=${p.site_approved_version} vs global_current=${p.global_current_version}` }));
+    }
+    out.appendChild(ul);
+  }
+  if (response.gaps.length) {
+    out.appendChild(el("div", { className: "field-label", text: "Gaps" }));
+    const ul = el("ul", { className: "evidence-list" });
+    for (const g of response.gaps) ul.appendChild(el("li", { className: "gap", text: g.gap_type }));
+    out.appendChild(ul);
+  }
+  if (response.required_reviews.length) {
+    out.appendChild(el("div", { className: "field-label", text: "Required reviews" }));
+    const ul = el("ul", { className: "evidence-list" });
+    for (const r of response.required_reviews) ul.appendChild(el("li", { text: r }));
+    out.appendChild(ul);
+  }
+  renderCommon(out, response);
+}
+
+function renderDiscovery(response) {
+  const out = document.getElementById("discoveryOutput");
+  out.textContent = "";
+  renderAuthBanner(response.authorization);
+
+  if (response.contradictions.length) {
+    out.appendChild(el("div", { className: "field-label", text: "Contradictions (never accepted/rejected/certified/resolved)" }));
+    const ul = el("ul", { className: "evidence-list" });
+    for (const c of response.contradictions) {
+      ul.appendChild(el("li", { className: "contradiction", text: `${c.type}: ${JSON.stringify(c)}` }));
+    }
+    out.appendChild(ul);
+  }
+  if (response.assay_quality_flags.length) {
+    out.appendChild(el("div", { className: "field-label", text: "Assay quality flags" }));
+    const ul = el("ul", { className: "evidence-list" });
+    for (const f of response.assay_quality_flags) {
+      ul.appendChild(el("li", { className: "contradiction", text: `${f.assay_id} (instrument=${f.instrument}, lot=${f.reagent_lot}): ${f.reasons.join(", ")}` }));
+    }
+    out.appendChild(ul);
+  }
+  if (response.gaps.length) {
+    out.appendChild(el("div", { className: "field-label", text: "Gaps (never promoted to decision-grade)" }));
+    const ul = el("ul", { className: "evidence-list" });
+    for (const g of response.gaps) ul.appendChild(el("li", { className: "gap", text: `${g.gap_type}${g.model_id ? ": " + g.model_id + " (" + g.status + ")" : ""}` }));
+    out.appendChild(ul);
+  }
+  if (response.required_reviews.length) {
+    out.appendChild(el("div", { className: "field-label", text: "Required reviews" }));
+    const ul = el("ul", { className: "evidence-list" });
+    for (const r of response.required_reviews) ul.appendChild(el("li", { text: r }));
+    out.appendChild(ul);
+  }
+  renderCommon(out, response);
+}
+
+// ---- Evaluation & Coverage tab (static snapshot, no live re-run) ----------
+
+function statTile(value, label) {
+  return el("div", { className: "stat-tile" },
+    el("div", { className: "stat-value", text: String(value) }),
+    el("div", { className: "stat-label", text: label }));
+}
+
+function renderEvalDashboard() {
+  const out = document.getElementById("evalOutput");
+  out.textContent = "";
+  const data = window.AEGIS_EVAL_DATA;
+  if (!data) {
+    out.appendChild(el("p", { text: "eval_data.js not loaded." }));
+    return;
+  }
+
+  out.appendChild(el("div", { className: "field-label", text: `Tests — snapshot run_at ${data.tests.run_at}` }));
+  const testGrid = el("div", { className: "stat-grid" },
+    statTile(data.tests.total_tests, "total tests"),
+    statTile(`${data.tests.passed}/${data.tests.total_tests}`, "pass rate"),
+    statTile(data.tests.failed, "failed"),
+    statTile(data.tests.errors, "errors"));
+  out.appendChild(testGrid);
+  const modUl = el("ul", { className: "evidence-list" });
+  for (const m of data.tests.modules) modUl.appendChild(el("li", { text: `${m.name}: ${m.count} — ${m.note}` }));
+  out.appendChild(modUl);
+
+  out.appendChild(el("div", { className: "field-label", text: `Evaluation — snapshot run_at ${data.evaluation.run_at}` }));
+  const evalGrid = el("div", { className: "stat-grid" },
+    statTile(data.evaluation.total_scenarios, "total eval scenarios"),
+    statTile(`${data.evaluation.regression_passed}/${data.evaluation.regression_scenarios}`, "regression pass rate"),
+    statTile(data.evaluation.release_gates_blocked, "release gates blocked"),
+    statTile(data.evaluation.suites_covered.length, "suites covered"));
+  out.appendChild(evalGrid);
+
+  out.appendChild(el("div", { className: "field-label", text: "Inject coverage" }));
+  const covGrid = el("div", { className: "stat-grid" },
+    statTile(`${data.injectCoverage.addressed}/${data.injectCoverage.total}`, "addressed"),
+    statTile(data.injectCoverage.in_scope_open, "open"),
+    statTile(data.injectCoverage.out_of_scope, "out of scope"));
+  out.appendChild(covGrid);
+
+  const table = el("table", { className: "coverage-table" });
+  const thead = el("tr", null, el("th", { text: "Workflow / grouping" }), el("th", { text: "Inject count" }));
+  table.appendChild(el("thead", null, thead));
+  const tbody = el("tbody");
+  for (const row of data.injectCoverage.byWorkflow) {
+    tbody.appendChild(el("tr", null, el("td", { text: row.label }), el("td", { text: String(row.count) })));
+  }
+  table.appendChild(tbody);
+  out.appendChild(table);
+
+  out.appendChild(el("p", { className: "snapshot-note",
+    text: "Static snapshot only — this tab never re-runs tests or the evaluation harness. Regenerate eval_data.js after any change to the underlying evidence files." }));
+}
+
 // ---- Wiring -----------------------------------------------------------------
 
 function switchTab(panelId) {
@@ -281,9 +588,18 @@ document.getElementById("pvRun").addEventListener("click", () => {
 document.getElementById("supplyRun").addEventListener("click", () => {
   renderSupply(assembleSupplyResponse(document.getElementById("supplyScenario").value));
 });
+document.getElementById("clinicalRun").addEventListener("click", () => {
+  renderClinical(assembleClinicalResponse(document.getElementById("clinicalScenario").value));
+});
+document.getElementById("discoveryRun").addEventListener("click", () => {
+  renderDiscovery(assembleDiscoveryResponse(document.getElementById("discoveryScenario").value));
+});
 
 // Initial state.
 switchTab("batch");
 renderBatch(assembleBatchResponse("conflicted"));
 renderPv(assemblePvResponse("highSimilarity"));
 renderSupply(assembleSupplyResponse("withQuarantine"));
+renderClinical(assembleClinicalResponse("eligibilityAndUnblinding"));
+renderDiscovery(assembleDiscoveryResponse("assayAndSubgroup"));
+renderEvalDashboard();
