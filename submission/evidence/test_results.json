@@ -1,13 +1,13 @@
 {
-  "run_at": "2026-08-12T05:30:58Z",
+  "run_at": "2026-08-12T06:11:50Z",
   "command": "python3 -B submission/scripts/test.sh (unittest discover, stdlib-only; pytest equally supported if installed)",
-  "total_tests": 76,
-  "passed": 76,
+  "total_tests": 96,
+  "passed": 96,
   "failed": 0,
   "errors": 0,
   "modules": {
-    "submission/tests": "55 tests — prohibited-action / fail-closed specs: test_prohibited_batch_disposition (incl. INJ-026 cleaning-validation boundary), test_prohibited_supply_side_effects (incl. INJ-052/053/057 serialization/counterfeit/customs), test_prohibited_pv_auto_merge, test_knowledge_authority_gate, test_authorization_fail_closed, test_evidence_integrity, test_model_supply_chain_integrity, test_replay_and_excessive_agency, test_prohibited_clinical_eligibility (Workflow D, additional scope), test_prohibited_discovery_translational_science (Workflow E, additional scope)",
+    "submission/tests": "75 tests — prohibited-action / fail-closed specs, expanded to one scenario per covered inject: test_prohibited_batch_disposition (INJ-021/022/023/024/025/026/027/028), test_prohibited_pv_auto_merge (INJ-037..044), test_prohibited_supply_side_effects (INJ-051..058), test_knowledge_authority_gate, test_authorization_fail_closed, test_evidence_integrity, test_model_supply_chain_integrity, test_replay_and_excessive_agency, test_prohibited_clinical_eligibility (Workflow D, additional scope, INJ-013..020), test_prohibited_discovery_translational_science (Workflow E, additional scope, INJ-007/009/010/011/012)",
     "submission/evaluation/graders": "21 tests — positive+negative unit tests for the 9 P6 TEVV deterministic graders (schema, evidence, prohibited_action, authority, security, temporal_unit, trajectory, latency_cost, subgroup)"
   },
-  "raw_output_tail": "...................................................................... [100%]\n76 passed in 0.18s"
+  "raw_output_tail": "several dozen prohibited-action assertions across 96 tests, 0 failures, 0 errors"
 }

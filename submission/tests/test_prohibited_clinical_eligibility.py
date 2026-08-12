@@ -182,5 +182,44 @@ class TestPOL07ProtocolVersionConflictSurfaced(unittest.TestCase):
         self.assertTrue(response["protocol_conflicts"], "differing site/global protocol versions must be surfaced")
 
 
+class TestNewD02DetectorsRealDataFidelity(unittest.TestCase):
+    """INJ-017/018: new Workflow D detectors built on real data/*.csv rows
+    (consents.csv, specimens.csv, processing_events.csv,
+    wearable_readings.csv). Each only ever adds to contradictions/gaps —
+    never resolves consent status or normalizes device clocks."""
+
+    def setUp(self):
+        if not IMPLEMENTATION_AVAILABLE:
+            self.fail("RED (expected): Workflow D not implemented yet")
+
+    def test_inj017_econsent_withdrawal_processing_mismatch_surfaced(self):
+        request = _base_request(
+            consents=[{"consent_id": "C-044", "subject_id": "S-301-044",
+                       "purpose": "trial_and_biomarker", "status": "withdrawn_biomarker",
+                       "effective_time": "2026-07-20T10:15:00+05:30"}],
+            specimens=[{"specimen_id": "SP-044-A", "subject_id": "S-301-044", "type": "plasma",
+                        "status": "processed", "processing_time": "2026-07-21T08:00:00Z"}],
+            processing_events=[{"event_id": "PE-9", "specimen_id": "SP-044-A",
+                                 "purpose": "biomarker_model", "status": "completed",
+                                 "consent_check": "cached_active"}],
+        )
+        response = assemble_clinical_response(request)
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("econsent_withdrawal_processing_mismatch", types)
+
+    def test_inj018_device_clock_skew_is_a_gap(self):
+        request = _base_request(
+            wearable_readings=[
+                {"subject_id": "S-301-118", "device_id": "WR-11", "timestamp": "2026-03-29 02:15",
+                 "timezone": "local_unknown", "heart_rate": 118},
+                {"subject_id": "S-301-118", "device_id": "WR-11", "timestamp": "2026-03-29T01:20:00Z",
+                 "timezone": "UTC", "heart_rate": 121},
+            ],
+        )
+        response = assemble_clinical_response(request)
+        gap_types = {g.get("gap_type") for g in response["gaps"]}
+        self.assertIn("device_clock_skew_evidence", gap_types)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -93,6 +93,161 @@ def _detect_customs_documentation_mismatch(shipments, trade_documents):
     return contradictions
 
 
+def _detect_cold_chain_lane_excursion(shipments, temperature_loggers):
+    """INJ-051: a biologic shipment's temperature logger reports disputed
+    pallet association and mixed/unknown timezone readings
+    (data/temperature_loggers.csv LG-31: pallet P-89 @ local_unknown vs
+    pallet P-88 @ UTC, both ~10C) for a shipment already on quarantine/
+    customs_hold (data/shipments.csv SH-901). Surfaced as a contradiction —
+    never resolved to a single pallet/clock reading."""
+    contradictions = []
+    by_logger = {}
+    for row in temperature_loggers or []:
+        by_logger.setdefault(row.get("logger"), []).append(row)
+    for shipment in shipments or []:
+        logger = shipment.get("logger")
+        readings = by_logger.get(logger, [])
+        if not readings:
+            continue
+        pallets = {r.get("pallet") for r in readings}
+        timezones = {r.get("timezone") for r in readings}
+        if len(pallets) > 1 or len(timezones) > 1:
+            contradictions.append({
+                "type": "cold_chain_lane_excursion",
+                "shipment_id": shipment.get("shipment_id"),
+                "product": shipment.get("product"),
+                "lots": shipment.get("lots"),
+                "lane": shipment.get("lane"),
+                "logger": logger,
+                "readings": readings,
+                "pallet_disputed": len(pallets) > 1,
+                "declared_pallet": shipment.get("pallet"),
+                "detail": (
+                    f"Shipment {shipment.get('shipment_id')} on lane "
+                    f"{shipment.get('lane')} has logger {logger} readings "
+                    f"disputing pallet association ({sorted(p for p in pallets if p)}) "
+                    f"and/or timezone ({sorted(t for t in timezones if t)}) — the "
+                    f"excursion cannot be attributed to a single pallet/clock "
+                    f"reading."
+                ),
+            })
+    return contradictions
+
+
+def _detect_critical_excipient_shortage(supplier_risks):
+    """INJ-054: a sole-source excipient supplier reports contamination and
+    a multi-week recovery estimate with no qualified alternate
+    (data/supplier_risks.csv EXCIP-ONE/Polysorbate-X, recovery_weeks=8,
+    alternate_qualified=no). Surfaced as a gap — never silently substituted."""
+    gaps = []
+    for row in supplier_risks or []:
+        if str(row.get("alternate_qualified", "")).lower() == "no":
+            gaps.append({
+                "gap_type": "critical_excipient_shortage_no_alternate",
+                "supplier": row.get("supplier"),
+                "material": row.get("material"),
+                "risk": row.get("risk"),
+                "recovery_weeks": row.get("recovery_weeks"),
+            })
+    return gaps
+
+
+def _detect_cmo_capacity_conflict(cmo_capacity):
+    """INJ-055: a CMO promises more batches across two sponsors than its
+    disclosed capacity for the window (data/cmo_capacity.csv CMO-IE
+    2026-W34: capacity_batches=2, promised_NTG=2, promised_other_sponsor=1,
+    total 3). Surfaced as a contradiction — never resolved to one sponsor's
+    favor."""
+    contradictions = []
+    for row in cmo_capacity or []:
+        capacity = _to_float(row.get("capacity_batches"))
+        promised_a = _to_float(row.get("promised_NTG"))
+        promised_b = _to_float(row.get("promised_other_sponsor"))
+        if capacity is None or promised_a is None or promised_b is None:
+            continue
+        total_promised = promised_a + promised_b
+        if total_promised > capacity:
+            contradictions.append({
+                "type": "cmo_capacity_overcommitted",
+                "cmo": row.get("cmo"),
+                "window": row.get("window"),
+                "capacity_batches": row.get("capacity_batches"),
+                "promised_NTG": row.get("promised_NTG"),
+                "promised_other_sponsor": row.get("promised_other_sponsor"),
+                "total_promised": total_promised,
+                "detail": (
+                    f"{row.get('cmo')} promised {promised_a} batches to NTG "
+                    f"and {promised_b} to another sponsor in window "
+                    f"{row.get('window')}, totalling {total_promised}, "
+                    f"against disclosed capacity of {capacity} — both "
+                    f"commitments cannot be honoured; neither is resolved "
+                    f"here."
+                ),
+            })
+    return contradictions
+
+
+def _detect_allocation_ethics_gap(demand_forecast, inventory, allocation_constraints):
+    """INJ-056: aggregate 8-week demand across commercial, trial and
+    compassionate-use channels exceeds released inventory for a product
+    (data/demand_forecast.csv NCB-204 total 6700 vs data/inventory.csv
+    released 7000... see detail) — surfaced as a gap with the disclosed
+    allocation_constraints, never resolved to a specific allocation."""
+    gaps = []
+    demand_by_product = {}
+    for row in demand_forecast or []:
+        product = row.get("product")
+        units = _to_float(row.get("units_8w")) or 0
+        demand_by_product.setdefault(product, []).append((row.get("channel"), units))
+    released_by_product = {}
+    for row in inventory or []:
+        if row.get("quality_status") == "released":
+            product = row.get("product")
+            released_by_product[product] = released_by_product.get(product, 0) + (_to_float(row.get("units")) or 0)
+    for product, channels in demand_by_product.items():
+        total_demand = sum(u for _, u in channels)
+        available = released_by_product.get(product, 0)
+        if total_demand > available:
+            gaps.append({
+                "gap_type": "demand_exceeds_available_inventory",
+                "product": product,
+                "total_demand_8w": total_demand,
+                "released_inventory": available,
+                "demand_by_channel": dict(channels),
+                "allocation_constraints": list(allocation_constraints or []),
+            })
+    return gaps
+
+
+def _detect_recall_scope_uncertainty(recall_candidates, material_genealogy):
+    """INJ-058: lots sharing a component and equipment (data/recall_candidates.csv
+    NCS310-S26033 / NCS310-S26031, shared VIAL-V19 / FF-02) have differing
+    distribution status and no complete genealogy link confirming/excluding
+    each lot from the shared component — surfaced as a gap, never a
+    recall-scope determination."""
+    gaps = []
+    by_component_equipment = {}
+    for row in recall_candidates or []:
+        key = (row.get("shared_component"), row.get("shared_equipment"))
+        by_component_equipment.setdefault(key, []).append(row)
+    genealogy_lots = {g.get("batch_id") for g in (material_genealogy or [])}
+    for (component, equipment), rows in by_component_equipment.items():
+        if len(rows) < 2:
+            continue
+        distributions = {r.get("distribution") for r in rows}
+        unconfirmed_lots = [r.get("lot") for r in rows if r.get("lot") not in genealogy_lots]
+        if len(distributions) > 1 or unconfirmed_lots:
+            gaps.append({
+                "gap_type": "recall_scope_uncertain",
+                "shared_component": component,
+                "shared_equipment": equipment,
+                "candidate_lots": [r.get("lot") for r in rows],
+                "distribution_by_lot": {r.get("lot"): r.get("distribution") for r in rows},
+                "lots_without_genealogy_confirmation": unconfirmed_lots,
+            })
+    return gaps
+
+
 def _to_float(value):
     try:
         return float(value)
@@ -146,6 +301,14 @@ def assemble_supply_response(request):
             request.get("returns"), request.get("serialisation_events")))
         contradictions.extend(_detect_customs_documentation_mismatch(
             request.get("shipments"), request.get("trade_documents")))
+        contradictions.extend(_detect_cold_chain_lane_excursion(
+            request.get("shipments"), request.get("temperature_loggers")))
+        gaps.extend(_detect_critical_excipient_shortage(request.get("supplier_risks")))
+        contradictions.extend(_detect_cmo_capacity_conflict(request.get("cmo_capacity")))
+        gaps.extend(_detect_allocation_ethics_gap(
+            request.get("demand_forecast"), request.get("inventory"), request.get("allocation_constraints")))
+        gaps.extend(_detect_recall_scope_uncertainty(
+            request.get("recall_candidates"), request.get("material_genealogy")))
 
         options = []
         quality_holds = []

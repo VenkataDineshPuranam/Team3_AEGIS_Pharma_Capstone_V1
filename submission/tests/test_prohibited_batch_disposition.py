@@ -149,5 +149,96 @@ class TestINJ026CleaningValidationBoundaryConflict(unittest.TestCase):
         self.assertNotIn("cleaning_validation_boundary_conflict", types)
 
 
+class TestNewA02DetectorsRealDataFidelity(unittest.TestCase):
+    """INJ-021/022/024/025/027/028: new Workflow A detectors built on real
+    data/*.csv rows (data/material_genealogy.csv, warehouse_movements.csv,
+    environmental_monitoring.csv, microbiology_results.csv, lab_results.csv,
+    interface_mappings.csv, ebr_steps.csv, downtime_events.csv,
+    pat_models.csv, recipes.csv, release_packets.csv, supplier_audits.csv).
+    Each only ever adds to contradictions/gaps — never a disposition field."""
+
+    def setUp(self):
+        if not IMPLEMENTATION_AVAILABLE:
+            self.fail("RED (expected at G4): implementation not yet available")
+
+    def _base(self, **overrides):
+        request = {
+            "request_id": "REQ-TEST-A02",
+            "batch_id": "NCB204-B24071",
+            "as_of": "2026-08-10T00:00:00Z",
+            "authorization": {"user": "qp_eu_1", "purpose": "batch_review"},
+            "evidence": [{"source": "data/lab_results.csv"}],
+        }
+        request.update(overrides)
+        return request
+
+    def test_inj021_genealogy_break_surfaced(self):
+        response = assemble_batch_response(self._base(
+            material_genealogy=[{"batch_id": "NCB204-B24071", "material_lot": "SUA-88",
+                                  "relation": "missing_branch", "source": "MES"}],
+            warehouse_movements=[{"movement_id": "WM-90", "material_lot": "SUA-88",
+                                   "batch_id": "NCB204-B24071", "quantity": 1,
+                                   "unit": "assembly", "status": "issued"}],
+        ))
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("biologics_genealogy_break", types)
+
+    def test_inj022_sterility_excursion_surfaced(self):
+        response = assemble_batch_response(self._base(
+            environmental_monitoring=[{"sample_id": "EM-501", "batch_id": "NCS310-S26033",
+                                        "location": "FF-GradeB-07", "cfu": 4, "alert_limit": 3,
+                                        "time": "2026-07-22T18:10:00+05:30"}],
+            microbiology_results=[{"sample_id": "EM-501", "initial_id": "Micrococcus spp",
+                                    "corrected_id": "Bacillus cereus group",
+                                    "correction_time": "2026-07-25T09:40:00+05:30"}],
+        ))
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("sterility_excursion_organism_identification_conflict", types)
+
+    def test_inj024_unit_conversion_defect_surfaced(self):
+        response = assemble_batch_response(self._base(
+            lab_results=[{"result_id": "LR-88", "batch_id": "NCB204-B24071", "test": "potency",
+                          "value": 0.92, "unit": "mg/L", "spec": "0.85-1.05 ug/mL", "status": "OOS_LIMS"}],
+            interface_mappings=[{"interface": "CRO_LAB_TO_LIMS", "source_unit": "mg/L",
+                                  "target_unit": "ug/mL", "conversion_rule": "1:1_assumed",
+                                  "approved": "no"}],
+        ))
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("unit_conversion_unapproved", types)
+
+    def test_inj025_ebr_back_entry_during_downtime_is_a_gap(self):
+        response = assemble_batch_response(self._base(
+            ebr_steps=[{"batch_id": "NCS310-S26033", "step": "filter_integrity",
+                        "performed_time": "2026-07-22T16:30:00Z", "entered_time": "2026-07-23T09:05:00Z",
+                        "entry_mode": "back_entry"}],
+            downtime_events=[{"event_id": "DT-1", "systems": "MES,QMS,historian",
+                               "cause": "ransomware containment",
+                               "start": "2026-07-22T16:00:00Z", "end": "2026-07-23T08:00:00Z"}],
+        ))
+        gap_types = {g.get("gap_type") for g in response["gaps"]}
+        self.assertIn("ebr_back_entry_during_system_downtime", gap_types)
+
+    def test_inj027_pat_model_drift_surfaced(self):
+        response = assemble_batch_response(self._base(
+            pat_models=[{"model_id": "PAT-NIR-7", "version": "2.4", "approved_version": "2.3",
+                         "deployed_time": "2026-07-09", "change_control": "missing"}],
+            recipes=[{"recipe_id": "NCB-UP-19", "pat_model_version": "2.3", "effective_date": "2026-06-01"}],
+        ))
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("pat_model_version_drift", types)
+
+    def test_inj028_qp_evidence_gap_surfaced(self):
+        response = assemble_batch_response(self._base(
+            release_packets=[{"batch_id": "NCB204-B24071",
+                               "packet_item": "CMO audit commitment 2025-14", "status": "missing"}],
+            supplier_audits=[{"supplier": "CMO-IE", "audit_id": "AUD-2025-14",
+                               "commitment": "audit trail remediation", "due": "2026-06-30",
+                               "status": "vendor_claims_closed_unverified"}],
+        ))
+        gap_types = {g.get("gap_type") for g in response["gaps"]}
+        self.assertIn("qp_release_evidence_gap", gap_types)
+        self.assertEqual(response["execution_status"], "not_executed")
+
+
 if __name__ == "__main__":
     unittest.main()

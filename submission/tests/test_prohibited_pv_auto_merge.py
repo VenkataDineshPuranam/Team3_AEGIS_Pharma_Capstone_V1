@@ -82,5 +82,83 @@ class TestPOL04RequiredReviewOnDuplicateCandidate(unittest.TestCase):
         self.assertIn(("PV-1001", "PV-1009"), surfaced_pairs)
 
 
+class TestNewB02DetectorsRealDataFidelity(unittest.TestCase):
+    """INJ-038/039/040/041/042/043/044: new Workflow B detectors built on
+    real data/*.csv rows (safety_receipts.csv, adverse_events.csv,
+    terminology_versions.csv, listedness_sources.csv, sensitive_segments.csv,
+    social_listening.csv, product_complaints.csv, signal_metrics.csv). Each
+    only ever adds to contradictions/gaps — never a seriousness/causality/
+    expectedness/reportability/signal decision."""
+
+    def test_inj038_reporting_clock_conflict_surfaced(self):
+        request = {"request_id": "REQ-B02-038", "case_ids": ["PV-1001"],
+                   "safety_receipts": [
+                       {"case_id": "PV-1001", "channel": "vendor", "receipt": "2026-07-19T20:01:00Z"},
+                       {"case_id": "PV-1001", "channel": "affiliate_inbox", "receipt": "2026-07-20T08:11:00Z"},
+                       {"case_id": "PV-1001", "channel": "global_db", "receipt": "2026-07-21T12:03:00Z"},
+                   ]}
+        response = assemble_pv_response(request)
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("reporting_clock_conflict", types)
+
+    def test_inj039_meddra_version_mismatch_surfaced(self):
+        request = {"request_id": "REQ-B02-039", "case_ids": ["PV-1001"],
+                   "adverse_events": [{"case_id": "PV-1001", "verbatim": "anaphylactic reaction",
+                                        "meddra_version": "27.1", "pt": "Anaphylactic reaction"}],
+                   "terminology_versions": [{"terminology": "MedDRA", "version": "27.1", "status": "legacy_cases"},
+                                             {"terminology": "MedDRA", "version": "28.0", "status": "current_global"}]}
+        response = assemble_pv_response(request)
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("meddra_version_mismatch", types)
+
+    def test_inj040_expectedness_source_conflict_surfaced(self):
+        request = {"request_id": "REQ-B02-040", "case_ids": [],
+                   "listedness_sources": [
+                       {"product": "NCB-204", "source": "IB v12", "risk": "anaphylaxis", "listed": "yes"},
+                       {"product": "NCB-204", "source": "CCDS v4", "risk": "anaphylaxis", "listed": "yes"},
+                       {"product": "NCB-204", "source": "IN local label", "risk": "anaphylaxis", "listed": "no"},
+                   ]}
+        response = assemble_pv_response(request)
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("expectedness_source_conflict", types)
+
+    def test_inj041_sensitive_segment_in_general_queue_is_a_gap(self):
+        request = {"request_id": "REQ-B02-041", "case_ids": ["PV-1020"],
+                   "sensitive_segments": [{"case_id": "PV-1020", "segment": "pregnancy", "access_group": "PV_PREGNANCY"},
+                                           {"case_id": "PV-1020", "segment": "minor", "access_group": "PV_PAEDIATRIC"}]}
+        response = assemble_pv_response(request)
+        gap_types = {g.get("gap_type") for g in response["gaps"]}
+        self.assertIn("sensitive_segment_in_general_queue", gap_types)
+
+    def test_inj042_social_media_authenticity_unconfirmed_is_a_gap(self):
+        request = {"request_id": "REQ-B02-042", "case_ids": [],
+                   "social_listening": [{"post_id": "SM-77", "text": "Nearly died after Nova infusion",
+                                          "identifiable_reporter": "no", "identifiable_patient": "no",
+                                          "country": "unknown"}]}
+        response = assemble_pv_response(request)
+        gap_types = {g.get("gap_type") for g in response["gaps"]}
+        self.assertIn("social_media_authenticity_unconfirmed", gap_types)
+
+    def test_inj043_product_quality_safety_link_surfaced(self):
+        request = {"request_id": "REQ-B02-043", "case_ids": [],
+                   "product_complaints": [{"complaint_id": "PC-701", "product": "NCS-310",
+                                            "lot": "NCS310-S26033", "issue": "visible particles",
+                                            "adverse_event_link": "possible"}]}
+        response = assemble_pv_response(request)
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("product_quality_safety_link_unresolved", types)
+
+    def test_inj044_signal_disproportionality_instability_surfaced(self):
+        request = {"request_id": "REQ-B02-044", "case_ids": [],
+                   "signal_metrics": [
+                       {"signal": "NCB204_anaphylaxis", "method": "ROR_raw", "value": 3.8},
+                       {"signal": "NCB204_anaphylaxis", "method": "ROR_deduplicated", "value": 2.1},
+                       {"signal": "NCB204_anaphylaxis", "method": "EBGM_alt_exposure", "value": 1.4},
+                   ]}
+        response = assemble_pv_response(request)
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("signal_disproportionality_instability", types)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -71,7 +71,14 @@
     <h2 id="batch-heading">Batch Evidence Review — NCB204-B24071</h2>
     <div class="field-label">Scenario</div>
     <select id="batchScenario">
-      <option value="conflicted">Contradictory lab states (LIMS vs stats vs notebook)</option>
+      <option value="conflicted">INJ-023: OOS-88 LIMS=OOS vs stats=OOT vs notebook=invalid_sample_prep</option>
+      <option value="genealogyBreak">INJ-021: SUA-88 missing_branch genealogy vs WM-90 warehouse issuance</option>
+      <option value="cleaningValidationBoundary">INJ-026: BLEND-04 campaign C-882 vs "NCX only" gap-status cleaning validation</option>
+      <option value="sterilityExcursion">INJ-022: EM-501 excursion (cfu 4&gt;3) + corrected organism ID</option>
+      <option value="unitConversionDefect">INJ-024: LR-88 mg/L over unapproved CRO_LAB_TO_LIMS 1:1 conversion</option>
+      <option value="ebrBackEntry">INJ-025: filter_integrity back-entry during DT-1 ransomware downtime</option>
+      <option value="patModelDrift">INJ-027: PAT-NIR-7 deployed v2.4 vs approved v2.3, recipe NCB-UP-19 stale</option>
+      <option value="qpEvidenceGap">INJ-028: missing CMO audit-commitment 2025-14, vendor-claims-only closure</option>
       <option value="noEvidence">No evidence attached</option>
       <option value="clean">Complete, non-contradictory evidence</option>
     </select>
@@ -83,8 +90,15 @@
     <h2 id="pv-heading">PV Case Intake — Duplicate Candidates</h2>
     <div class="field-label">Scenario</div>
     <select id="pvScenario">
-      <option value="highSimilarity">PV-1001 / PV-1014 (similarity 0.93)</option>
-      <option value="lowSimilarity">PV-1001 / PV-1009 (similarity 0.71)</option>
+      <option value="highSimilarity">INJ-037: PV-1001 / PV-1014 duplicate cluster (similarity 0.93)</option>
+      <option value="lowSimilarity">PV-1001 / PV-1009 lower-similarity candidate (0.71, still surfaced)</option>
+      <option value="reportingClockConflict">INJ-038: PV-1001 awareness clock disagrees vendor/affiliate/global_db</option>
+      <option value="meddraVersionMismatch">INJ-039: PV-1001 coded MedDRA 27.1 vs current_global 28.0</option>
+      <option value="expectednessSourceConflict">INJ-040: NCB-204 anaphylaxis — IB/CCDS list it, IN local label does not</option>
+      <option value="sensitiveSegment">INJ-041: PV-1020 pregnancy + paediatric segments in general queue</option>
+      <option value="socialMediaAuthenticity">INJ-042: SM-77 post — no identifiable reporter or patient</option>
+      <option value="productQualitySafetyLink">INJ-043: PC-701 particles complaint possibly linked to adverse events</option>
+      <option value="signalDisproportionalityInstability">INJ-044: NCB204_anaphylaxis ROR/EBGM spread 3.8 to 1.4</option>
     </select>
     <button class="run" id="pvRun">Assemble response</button>
     <div id="pvOutput"></div>
@@ -96,6 +110,14 @@
     <select id="supplyScenario">
       <option value="withQuarantine">Quarantined + released stock in one event</option>
       <option value="releasedOnly">Released stock only</option>
+      <option value="coldChainExcursion">INJ-051: SH-901 LG-31 disputed pallet (P-88/P-89) + timezone excursion</option>
+      <option value="serializationAggregationBreak">INJ-052: PKG-3 restart, aggregation_rebuild=partial</option>
+      <option value="counterfeitSuspicion">INJ-053: SN-10001 double return, low print score, no distribution match</option>
+      <option value="criticalExcipientShortage">INJ-054: EXCIP-ONE Polysorbate-X contamination, no alternate qualified</option>
+      <option value="cmoCapacityConflict">INJ-055: CMO-IE 2026-W34 promises 3 batches against capacity 2</option>
+      <option value="allocationEthics">INJ-056: NCB-204 8-week demand 6700 vs 4300 released EU units</option>
+      <option value="customsDocumentationMismatch">INJ-057: SH-902 invoice vs import-licence product description mismatch</option>
+      <option value="recallScopeUncertainty">INJ-058: NCS310-S26033/-S26031 share VIAL-V19/FF-02, distribution differs</option>
     </select>
     <button class="run" id="supplyRun">Assemble response</button>
     <div id="supplyOutput"></div>
@@ -105,8 +127,13 @@
     <h2 id="clinical-heading">Clinical Trial Context — NCB204-301 (additional, optional scope)</h2>
     <div class="field-label">Scenario</div>
     <select id="clinicalScenario">
-      <option value="eligibilityAndUnblinding">S-301-044 ALT threshold disagreement + SUP-41 unblinding-risk ticket</option>
-      <option value="protocolVersion">IN-014 site running protocol v4.1 vs. global-current v5.0</option>
+      <option value="eligibilityAndUnblinding">INJ-014/016: S-301-044 ALT threshold disagreement + SUP-41 unblinding-risk ticket</option>
+      <option value="protocolVersion">INJ-013: IN-014 site running protocol v4.1 vs. global-current v5.0</option>
+      <option value="randomizationOutage">INJ-015: IRT-9001 K-7701 assigned via manual_downtime_log, not IRT-automated</option>
+      <option value="econsentWithdrawalMismatch">INJ-017: C-044 withdrawn_biomarker consent vs PE-9 completed on cached consent</option>
+      <option value="deviceClockSkew">INJ-018: WR-11 wearable mixed local/UTC timestamps around DST transition</option>
+      <option value="endpointAdjudicationBacklog">INJ-019: EP-71 incomplete source + R1/R2 responder vs non_responder conflict</option>
+      <option value="siteInspectionRisk">INJ-020: IN-014 late_source_pct=31 + digit-preference + credential-sharing flags</option>
       <option value="clean">No open evidence (nothing to surface)</option>
     </select>
     <button class="run" id="clinicalRun">Assemble response</button>
@@ -117,8 +144,10 @@
     <h2 id="discovery-heading">Discovery/Translational Science — BX-17 / TRN-OMICS-2 (additional, optional scope)</h2>
     <div class="field-label">Scenario</div>
     <select id="discoveryScenario">
-      <option value="assayAndSubgroup">AS-101 firmware/CoA conflict + TRN-OMICS-2 Group-A/Group-B AUROC gap</option>
-      <option value="unqualifiedModel">TRN-OMICS-2 research_unqualified registry status referenced by performance evidence</option>
+      <option value="assayAndSubgroup">INJ-007/009: AS-101 firmware/CoA conflict + TRN-OMICS-2 Group-A/Group-B AUROC gap</option>
+      <option value="unqualifiedModel">INJ-011: TRN-OMICS-2 research_unqualified registry status referenced by performance evidence</option>
+      <option value="preclinicalImageManipulation">INJ-010: PC-88 Figure_6B 0.97-similar to Figure_4A, same acquisition timestamp</option>
+      <option value="targetEvidenceConflict">INJ-012: TKR9 internal_CRISPR supports vs licensed_dataset does_not_support</option>
       <option value="clean">No open evidence (nothing to surface)</option>
     </select>
     <button class="run" id="discoveryRun">Assemble response</button>

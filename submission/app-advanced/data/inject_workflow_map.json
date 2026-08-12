@@ -1,0 +1,674 @@
+[
+  {
+    "id": "INJ-001",
+    "dimension": "D01",
+    "workflow": "Cross-cutting (business framing)",
+    "title": "Board compression target",
+    "status": "addressed",
+    "where": "`01_BUSINESS_CASE.md` \u00a71"
+  },
+  {
+    "id": "INJ-002",
+    "dimension": "D01",
+    "workflow": "Cross-cutting (business framing)",
+    "title": "Conflicting success metrics",
+    "status": "addressed",
+    "where": "`01_BUSINESS_CASE.md` \u00a72; `02_DMAIC_WORKBOOK.md`"
+  },
+  {
+    "id": "INJ-003",
+    "dimension": "D01",
+    "workflow": "Cross-cutting (business framing)",
+    "title": "No-AI challenge",
+    "status": "addressed",
+    "where": "`01_BUSINESS_CASE.md` \u00a73; `02-frame/scqa_minto_decision_narrative.md`"
+  },
+  {
+    "id": "INJ-004",
+    "dimension": "D01",
+    "workflow": "Cross-cutting (business framing)",
+    "title": "Patent-cliff urgency",
+    "status": "addressed",
+    "where": "`01_BUSINESS_CASE.md` E-007"
+  },
+  {
+    "id": "INJ-005",
+    "dimension": "D01",
+    "workflow": "Cross-cutting (business framing)",
+    "title": "Acquisition integration",
+    "status": "addressed",
+    "where": "`01-discovery/evidence_register.md` \u00a79"
+  },
+  {
+    "id": "INJ-006",
+    "dimension": "D01",
+    "workflow": "Cross-cutting (business framing)",
+    "title": "Prohibited optimization",
+    "status": "addressed",
+    "where": "`01_BUSINESS_CASE.md` \u00a75; `04-ddd/domain_model.md` INV-01"
+  },
+  {
+    "id": "INJ-007",
+    "dimension": "D02",
+    "workflow": "Workflow E (discovery/translational science, additional scope)",
+    "title": "Assay drift",
+    "status": "addressed (Workflow E)",
+    "where": "`WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` \u00a72; INV-14; live suite S14 scenario `S14-assay-qualification-conflict`"
+  },
+  {
+    "id": "INJ-008",
+    "dimension": "D02",
+    "workflow": "Workflow E (discovery/translational science, additional scope)",
+    "title": "Compound genealogy collision",
+    "status": "addressed (exception)",
+    "where": "`04-ddd/domain_model.md` \u00a77, Product & Substance Master ACL \u2014 identity-collision pattern recurs at the product-master level the three workflows *do* depend on"
+  },
+  {
+    "id": "INJ-009",
+    "dimension": "D02",
+    "workflow": "Workflow E (discovery/translational science, additional scope)",
+    "title": "Omics cohort bias",
+    "status": "addressed (Workflow E)",
+    "where": "`WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` \u00a72; INV-15; live suite S14 scenario `S14-omics-cohort-subgroup-gap`"
+  },
+  {
+    "id": "INJ-010",
+    "dimension": "D02",
+    "workflow": "Workflow E (discovery/translational science, additional scope)",
+    "title": "Preclinical image manipulation concern",
+    "status": "addressed (Workflow E)",
+    "where": "`WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` \u00a72; INV-16; live suite S14 scenario `S14-preclinical-image-forensics`"
+  },
+  {
+    "id": "INJ-011",
+    "dimension": "D02",
+    "workflow": "Workflow E (discovery/translational science, additional scope)",
+    "title": "Unqualified research model",
+    "status": "addressed (Workflow E)",
+    "where": "`WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` \u00a72; INV-17; live suite S14 scenario `S14-unqualified-research-model`"
+  },
+  {
+    "id": "INJ-012",
+    "dimension": "D02",
+    "workflow": "Workflow E (discovery/translational science, additional scope)",
+    "title": "Target-evidence conflict",
+    "status": "addressed (Workflow E)",
+    "where": "`WORKFLOW_E_DISCOVERY_TRANSLATIONAL_SCIENCE.md` \u00a72; INV-18; live suite S14 scenario `S14-target-evidence-conflict`"
+  },
+  {
+    "id": "INJ-013",
+    "dimension": "D03",
+    "workflow": "Workflow D (clinical trial, additional scope)",
+    "title": "Protocol-version divergence",
+    "status": "addressed (Workflow D)",
+    "where": "`WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` \u00a72; POL-07; live suite S13 scenario `PUB-15`"
+  },
+  {
+    "id": "INJ-014",
+    "dimension": "D03",
+    "workflow": "Workflow D (clinical trial, additional scope)",
+    "title": "Eligibility ambiguity",
+    "status": "addressed (Workflow D)",
+    "where": "`WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` \u00a72; INV-11; live suite S13 scenario `PUB-15`"
+  },
+  {
+    "id": "INJ-015",
+    "dimension": "D03",
+    "workflow": "Workflow D (clinical trial, additional scope)",
+    "title": "Randomization service outage",
+    "status": "addressed (Workflow D)",
+    "where": "`WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` \u00a72; live suite S13 scenario `S13-randomization-outage`"
+  },
+  {
+    "id": "INJ-016",
+    "dimension": "D03",
+    "workflow": "Workflow D (clinical trial, additional scope)",
+    "title": "Potential unblinding",
+    "status": "addressed (Workflow D)",
+    "where": "`WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` \u00a72; INV-12; live suite S13 scenario `S13-unblinding`"
+  },
+  {
+    "id": "INJ-017",
+    "dimension": "D03",
+    "workflow": "Workflow D (clinical trial, additional scope)",
+    "title": "eConsent withdrawal mismatch",
+    "status": "addressed",
+    "where": "`17_PRIVACY_ETHICS.md` \u00a76; `06_DATA_GOVERNANCE_INTEGRITY.md` \u00a76 (first treatment); Workflow D adds a second, complementary demonstration of the same stale-cache pattern"
+  },
+  {
+    "id": "INJ-018",
+    "dimension": "D03",
+    "workflow": "Workflow D (clinical trial, additional scope)",
+    "title": "Decentralized-device clock skew",
+    "status": "addressed (exception)",
+    "where": "`07_ONTOLOGY_SEMANTIC_LAYER.md` \u00a74 \u2014 cited as the concrete instance behind the general timezone/DST temporal-semantics requirement"
+  },
+  {
+    "id": "INJ-019",
+    "dimension": "D03",
+    "workflow": "Workflow D (clinical trial, additional scope)",
+    "title": "Endpoint adjudication backlog",
+    "status": "addressed (Workflow D)",
+    "where": "`WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` \u00a72; INV-13; live suite S13 scenario `S13-endpoint-adjudication`"
+  },
+  {
+    "id": "INJ-020",
+    "dimension": "D03",
+    "workflow": "Workflow D (clinical trial, additional scope)",
+    "title": "Site inspection risk",
+    "status": "addressed (Workflow D)",
+    "where": "`WORKFLOW_D_CLINICAL_TRIAL_CONTEXT.md` \u00a72; live suite S13 scenario `S13-site-inspection-risk`"
+  },
+  {
+    "id": "INJ-021",
+    "dimension": "D04",
+    "workflow": "Workflow A (GxP batch review)",
+    "title": "Biologics batch genealogy break",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` INV-03; context canvas"
+  },
+  {
+    "id": "INJ-022",
+    "dimension": "D04",
+    "workflow": "Workflow A (GxP batch review)",
+    "title": "Sterility excursion",
+    "status": "addressed",
+    "where": "`04-ddd/context_map.md` canvas (known gaps)"
+  },
+  {
+    "id": "INJ-023",
+    "dimension": "D04",
+    "workflow": "Workflow A (GxP batch review)",
+    "title": "OOS/OOT disagreement",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` INV-03"
+  },
+  {
+    "id": "INJ-024",
+    "dimension": "D04",
+    "workflow": "Workflow A (GxP batch review)",
+    "title": "Unit conversion defect",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` INV-02 (central example throughout)"
+  },
+  {
+    "id": "INJ-025",
+    "dimension": "D04",
+    "workflow": "Workflow A (GxP batch review)",
+    "title": "Electronic batch record exception",
+    "status": "addressed",
+    "where": "`06_DATA_GOVERNANCE_INTEGRITY.md` \u00a74 (timeliness)"
+  },
+  {
+    "id": "INJ-026",
+    "dimension": "D04",
+    "workflow": "Workflow A (GxP batch review)",
+    "title": "Cleaning validation boundary",
+    "status": "addressed",
+    "where": "`submission/src/workflows/batch_evidence.py`; `submission/tests/test_prohibited_batch_disposition.py::TestINJ026CleaningValidationBoundaryConflict`"
+  },
+  {
+    "id": "INJ-027",
+    "dimension": "D04",
+    "workflow": "Workflow A (GxP batch review)",
+    "title": "Process analytical technology drift",
+    "status": "addressed",
+    "where": "`01-discovery/waste_register_downtime.md`"
+  },
+  {
+    "id": "INJ-028",
+    "dimension": "D04",
+    "workflow": "Workflow A (GxP batch review)",
+    "title": "Qualified Person evidence gap",
+    "status": "addressed",
+    "where": "`04-ddd/context_map.md` canvas (known gaps)"
+  },
+  {
+    "id": "INJ-029",
+    "dimension": "D05",
+    "workflow": "Cross-cutting (Evidence & Provenance spine)",
+    "title": "Audit-trail disabled",
+    "status": "addressed",
+    "where": "`01-discovery/waste_register_downtime.md`; `04-ddd/domain_model.md`"
+  },
+  {
+    "id": "INJ-030",
+    "dimension": "D05",
+    "workflow": "Cross-cutting (Evidence & Provenance spine)",
+    "title": "Shared laboratory account",
+    "status": "addressed",
+    "where": "`submission/scripts/data_integrity_findings_demo.py`; `06_DATA_GOVERNANCE_INTEGRITY.md` \u00a78"
+  },
+  {
+    "id": "INJ-031",
+    "dimension": "D05",
+    "workflow": "Cross-cutting (Evidence & Provenance spine)",
+    "title": "Validation-state ambiguity",
+    "status": "addressed",
+    "where": "`06_DATA_GOVERNANCE_INTEGRITY.md` \u00a71"
+  },
+  {
+    "id": "INJ-032",
+    "dimension": "D05",
+    "workflow": "Cross-cutting (Evidence & Provenance spine)",
+    "title": "Unapproved spreadsheet",
+    "status": "addressed",
+    "where": "`06_DATA_GOVERNANCE_INTEGRITY.md` \u00a71; `01-discovery/waste_register_downtime.md`"
+  },
+  {
+    "id": "INJ-033",
+    "dimension": "D05",
+    "workflow": "Cross-cutting (Evidence & Provenance spine)",
+    "title": "CAPA effectiveness failure",
+    "status": "addressed",
+    "where": "`02_DMAIC_WORKBOOK.md` \u00a73 (fishbone)"
+  },
+  {
+    "id": "INJ-034",
+    "dimension": "D05",
+    "workflow": "Cross-cutting (Evidence & Provenance spine)",
+    "title": "Change-control bypass",
+    "status": "addressed",
+    "where": "`submission/scripts/data_integrity_findings_demo.py`; `06_DATA_GOVERNANCE_INTEGRITY.md` \u00a78"
+  },
+  {
+    "id": "INJ-035",
+    "dimension": "D05",
+    "workflow": "Cross-cutting (Evidence & Provenance spine)",
+    "title": "Record-retention conflict",
+    "status": "addressed",
+    "where": "`06_DATA_GOVERNANCE_INTEGRITY.md` \u00a76 (central example); `17_PRIVACY_ETHICS.md` \u00a76 (deepened \u2014 3-way legal-hold/GxP-retention/deletion conflict)"
+  },
+  {
+    "id": "INJ-036",
+    "dimension": "D05",
+    "workflow": "Cross-cutting (Evidence & Provenance spine)",
+    "title": "ALCOA+ provenance break",
+    "status": "addressed",
+    "where": "`06_DATA_GOVERNANCE_INTEGRITY.md` \u00a74 (central example)"
+  },
+  {
+    "id": "INJ-037",
+    "dimension": "D06",
+    "workflow": "Workflow B (Pharmacovigilance)",
+    "title": "ICSR duplicate cluster",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` INV-05, POL-04 (central example)"
+  },
+  {
+    "id": "INJ-038",
+    "dimension": "D06",
+    "workflow": "Workflow B (Pharmacovigilance)",
+    "title": "Reporting-clock conflict",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` \u00a73 `awareness_date`"
+  },
+  {
+    "id": "INJ-039",
+    "dimension": "D06",
+    "workflow": "Workflow B (Pharmacovigilance)",
+    "title": "MedDRA version mismatch",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` \u00a77 ACL"
+  },
+  {
+    "id": "INJ-040",
+    "dimension": "D06",
+    "workflow": "Workflow B (Pharmacovigilance)",
+    "title": "Expectedness source conflict",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` \u00a73 `listedness`"
+  },
+  {
+    "id": "INJ-041",
+    "dimension": "D06",
+    "workflow": "Workflow B (Pharmacovigilance)",
+    "title": "Pregnancy and paediatric sensitivity",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` aggregate composition"
+  },
+  {
+    "id": "INJ-042",
+    "dimension": "D06",
+    "workflow": "Workflow B (Pharmacovigilance)",
+    "title": "Social-media authenticity",
+    "status": "addressed",
+    "where": "`01-discovery/evidence_register.md` \u00a74"
+  },
+  {
+    "id": "INJ-043",
+    "dimension": "D06",
+    "workflow": "Workflow B (Pharmacovigilance)",
+    "title": "Product-quality and safety link",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` \u00a78 (open cross-context question \u2014 deliberately unresolved, not silently dropped)"
+  },
+  {
+    "id": "INJ-044",
+    "dimension": "D06",
+    "workflow": "Workflow B (Pharmacovigilance)",
+    "title": "Signal disproportionality instability",
+    "status": "addressed",
+    "where": "`01-discovery/evidence_register.md` \u00a74"
+  },
+  {
+    "id": "INJ-045",
+    "dimension": "D07",
+    "workflow": "Cross-cutting (Regulatory info, supports A)",
+    "title": "IDMP identity conflict",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` INV-10 (central example)"
+  },
+  {
+    "id": "INJ-046",
+    "dimension": "D07",
+    "workflow": "Cross-cutting (Regulatory info, supports A)",
+    "title": "Labeling divergence",
+    "status": "addressed",
+    "where": "`submission/scripts/data_integrity_findings_demo.py`; `09_REQUIREMENTS_TRACEABILITY.md` \u00a76a"
+  },
+  {
+    "id": "INJ-047",
+    "dimension": "D07",
+    "workflow": "Cross-cutting (Regulatory info, supports A)",
+    "title": "Commitment deadline ambiguity",
+    "status": "addressed",
+    "where": "`submission/scripts/data_integrity_findings_demo.py`; `09_REQUIREMENTS_TRACEABILITY.md` \u00a76a"
+  },
+  {
+    "id": "INJ-048",
+    "dimension": "D07",
+    "workflow": "Cross-cutting (Regulatory info, supports A)",
+    "title": "eCTD sequence gap",
+    "status": "addressed",
+    "where": "`06_DATA_GOVERNANCE_INTEGRITY.md` \u00a71"
+  },
+  {
+    "id": "INJ-049",
+    "dimension": "D07",
+    "workflow": "Cross-cutting (Regulatory info, supports A)",
+    "title": "Variation classification dispute",
+    "status": "addressed",
+    "where": "`submission/scripts/data_integrity_findings_demo.py`; `09_REQUIREMENTS_TRACEABILITY.md` \u00a76a"
+  },
+  {
+    "id": "INJ-050",
+    "dimension": "D07",
+    "workflow": "Cross-cutting (Regulatory info, supports A)",
+    "title": "Inspection request surge",
+    "status": "addressed",
+    "where": "`submission/scripts/inspection_response_demo.py` (verifies every cited evidence path exists on disk, exit 0) + `FINAL_DEFENCE_DOSSIER.md` element 11 \u2014 closed at P8 as promised here at P2"
+  },
+  {
+    "id": "INJ-051",
+    "dimension": "D08",
+    "workflow": "Workflow C (Supply/cold-chain)",
+    "title": "Cold-chain lane excursion",
+    "status": "addressed",
+    "where": "`04-ddd/context_map.md` canvas"
+  },
+  {
+    "id": "INJ-052",
+    "dimension": "D08",
+    "workflow": "Workflow C (Supply/cold-chain)",
+    "title": "Serialization aggregation break",
+    "status": "addressed",
+    "where": "`submission/src/workflows/supply_options.py::_detect_serialization_aggregation_break`; `submission/tests/test_prohibited_supply_side_effects.py::TestINJ052SerializationAggregationBreak`"
+  },
+  {
+    "id": "INJ-053",
+    "dimension": "D08",
+    "workflow": "Workflow C (Supply/cold-chain)",
+    "title": "Counterfeit suspicion",
+    "status": "addressed",
+    "where": "`submission/src/workflows/supply_options.py::_detect_counterfeit_suspicion`; `submission/tests/test_prohibited_supply_side_effects.py::TestINJ053CounterfeitSuspicion`"
+  },
+  {
+    "id": "INJ-054",
+    "dimension": "D08",
+    "workflow": "Workflow C (Supply/cold-chain)",
+    "title": "Critical excipient shortage",
+    "status": "addressed",
+    "where": "`04-ddd/context_map.md` canvas"
+  },
+  {
+    "id": "INJ-055",
+    "dimension": "D08",
+    "workflow": "Workflow C (Supply/cold-chain)",
+    "title": "CMO capacity conflict",
+    "status": "addressed",
+    "where": "`01-discovery/evidence_register.md` \u00a74"
+  },
+  {
+    "id": "INJ-056",
+    "dimension": "D08",
+    "workflow": "Workflow C (Supply/cold-chain)",
+    "title": "Allocation ethics",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` INV-06/07, POL-05 (central example)"
+  },
+  {
+    "id": "INJ-057",
+    "dimension": "D08",
+    "workflow": "Workflow C (Supply/cold-chain)",
+    "title": "Customs documentation mismatch",
+    "status": "addressed",
+    "where": "`submission/src/workflows/supply_options.py::_detect_customs_documentation_mismatch`; `submission/tests/test_prohibited_supply_side_effects.py::TestINJ057CustomsDocumentationMismatch`"
+  },
+  {
+    "id": "INJ-058",
+    "dimension": "D08",
+    "workflow": "Workflow C (Supply/cold-chain)",
+    "title": "Recall-scope uncertainty",
+    "status": "addressed",
+    "where": "`04-ddd/context_map.md` canvas"
+  },
+  {
+    "id": "INJ-059",
+    "dimension": "D09",
+    "workflow": "Cross-cutting (Privacy/Ethics)",
+    "title": "Genomic re-identification risk",
+    "status": "addressed",
+    "where": "`17_PRIVACY_ETHICS.md` \u00a73 (genomic quasi-identifier finding, `privacy_risk.csv` singling-out=high)"
+  },
+  {
+    "id": "INJ-060",
+    "dimension": "D09",
+    "workflow": "Cross-cutting (Privacy/Ethics)",
+    "title": "Cross-border secondary use",
+    "status": "addressed",
+    "where": "`06_DATA_GOVERNANCE_INTEGRITY.md` \u00a76; `17_PRIVACY_ETHICS.md` \u00a74"
+  },
+  {
+    "id": "INJ-061",
+    "dimension": "D09",
+    "workflow": "Cross-cutting (Privacy/Ethics)",
+    "title": "Data-subject request versus GxP record",
+    "status": "addressed",
+    "where": "`17_PRIVACY_ETHICS.md` \u00a76 (central example \u2014 real DSR-17/LH-44 conflict)"
+  },
+  {
+    "id": "INJ-062",
+    "dimension": "D09",
+    "workflow": "Cross-cutting (Privacy/Ethics)",
+    "title": "Patient-support programme leakage",
+    "status": "addressed",
+    "where": "`17_PRIVACY_ETHICS.md` \u00a71 (finding + explicit scope-boundary decision; residual gap tracked as R-001)"
+  },
+  {
+    "id": "INJ-063",
+    "dimension": "D09",
+    "workflow": "Cross-cutting (Privacy/Ethics)",
+    "title": "Research-commercial boundary",
+    "status": "addressed",
+    "where": "`17_PRIVACY_ETHICS.md` \u00a74"
+  },
+  {
+    "id": "INJ-064",
+    "dimension": "D09",
+    "workflow": "Cross-cutting (Privacy/Ethics)",
+    "title": "Regional residency failure",
+    "status": "addressed",
+    "where": "`06_DATA_GOVERNANCE_INTEGRITY.md` \u00a76 (central example); `17_PRIVACY_ETHICS.md` \u00a75"
+  },
+  {
+    "id": "INJ-065",
+    "dimension": "D10",
+    "workflow": "Cross-cutting (Security)",
+    "title": "Prompt injection in SOP",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` INV-09, POL-02 (central example); `16_THREAT_ABUSE_MODEL.md` \u00a73; failing spec `submission/tests/test_knowledge_authority_gate.py`"
+  },
+  {
+    "id": "INJ-066",
+    "dimension": "D10",
+    "workflow": "Cross-cutting (Security)",
+    "title": "Tool-manifest poisoning",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` POL-06; `16_THREAT_ABUSE_MODEL.md` \u00a74; failing spec `submission/tests/test_knowledge_authority_gate.py`"
+  },
+  {
+    "id": "INJ-067",
+    "dimension": "D10",
+    "workflow": "Cross-cutting (Security)",
+    "title": "Entitlement revocation lag",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` POL-01; `07_ONTOLOGY_SEMANTIC_LAYER.md` \u00a76; `16_THREAT_ABUSE_MODEL.md` \u00a74; failing spec `submission/tests/test_authorization_fail_closed.py`"
+  },
+  {
+    "id": "INJ-068",
+    "dimension": "D10",
+    "workflow": "Cross-cutting (Security)",
+    "title": "Safety-data exfiltration",
+    "status": "addressed",
+    "where": "`16_THREAT_ABUSE_MODEL.md` \u00a75 (finding + cross-affiliate scoping gap named; no ADR yet, tracked as R-002)"
+  },
+  {
+    "id": "INJ-069",
+    "dimension": "D10",
+    "workflow": "Cross-cutting (Security)",
+    "title": "Ransomware and OT segmentation",
+    "status": "addressed",
+    "where": "`06-c4/boundary_and_degraded_mode.md` \u2014 source-system unavailability produces explicit `gaps`, not a blocked response; `16_THREAT_ABUSE_MODEL.md` \u00a76 (threat-actor framing added)"
+  },
+  {
+    "id": "INJ-070",
+    "dimension": "D10",
+    "workflow": "Cross-cutting (Security)",
+    "title": "Model supply-chain compromise",
+    "status": "addressed",
+    "where": "`01-discovery/waste_register_ai_specific.md`; `16_THREAT_ABUSE_MODEL.md` \u00a76; `20_ISO42001_GOVERNANCE.md` \u00a74; failing spec `submission/tests/test_model_supply_chain_integrity.py`"
+  },
+  {
+    "id": "INJ-071",
+    "dimension": "D11",
+    "workflow": "Cross-cutting (Human factors/Responsible AI)",
+    "title": "Automation bias in batch review",
+    "status": "addressed",
+    "where": "`04_PRODUCT_SERVICE_BLUEPRINT.md` \u00a74; `04-ddd/gen_ai_boundaries.md` \u00a73; `15_QUALITY_RISK_MANAGEMENT.md` HAZ-02; `18_RESPONSIBLE_AI_HUMAN_FACTORS.md` \u00a72 (concrete mitigation design added)"
+  },
+  {
+    "id": "INJ-072",
+    "dimension": "D11",
+    "workflow": "Cross-cutting (Human factors/Responsible AI)",
+    "title": "Language inequity",
+    "status": "addressed",
+    "where": "`04_PRODUCT_SERVICE_BLUEPRINT.md` \u00a76; `18_RESPONSIBLE_AI_HUMAN_FACTORS.md` \u00a74 (hard-gate control added)"
+  },
+  {
+    "id": "INJ-073",
+    "dimension": "D11",
+    "workflow": "Cross-cutting (Human factors/Responsible AI)",
+    "title": "Accessibility failure",
+    "status": "addressed",
+    "where": "`04_PRODUCT_SERVICE_BLUEPRINT.md` \u00a76; `18_RESPONSIBLE_AI_HUMAN_FACTORS.md` \u00a75 (binding build requirement added)"
+  },
+  {
+    "id": "INJ-074",
+    "dimension": "D11",
+    "workflow": "Cross-cutting (Human factors/Responsible AI)",
+    "title": "Role conflict",
+    "status": "addressed",
+    "where": "`03_STAKEHOLDER_DECISION_RIGHTS.md` context; `18_RESPONSIBLE_AI_HUMAN_FACTORS.md` \u00a71 (own design response \u2014 inline accountable-owner labeling)"
+  },
+  {
+    "id": "INJ-075",
+    "dimension": "D12",
+    "workflow": "Cross-cutting (Economics/Token FinOps)",
+    "title": "Model price shock",
+    "status": "addressed",
+    "where": "`01-discovery/waste_register_ai_specific.md`"
+  },
+  {
+    "id": "INJ-076",
+    "dimension": "D12",
+    "workflow": "Cross-cutting (Economics/Token FinOps)",
+    "title": "Denial-of-wallet pattern",
+    "status": "addressed",
+    "where": "`01-discovery/waste_register_ai_specific.md`; `09_REQUIREMENTS_TRACEABILITY.md` NFR-04"
+  },
+  {
+    "id": "INJ-077",
+    "dimension": "D12",
+    "workflow": "Cross-cutting (Economics/Token FinOps)",
+    "title": "Hidden human-review cost",
+    "status": "addressed",
+    "where": "`01_BUSINESS_CASE.md` \u00a74 (central example)"
+  },
+  {
+    "id": "INJ-078",
+    "dimension": "D12",
+    "workflow": "Cross-cutting (Economics/Token FinOps)",
+    "title": "Vendor concentration",
+    "status": "addressed",
+    "where": "`08_KNOWLEDGE_GRAPH_DECISION.md` \u00a75"
+  },
+  {
+    "id": "INJ-079",
+    "dimension": "D13",
+    "workflow": "Cross-cutting (Reliability/Continuity)",
+    "title": "Regional platform outage",
+    "status": "addressed",
+    "where": "`submission/scripts/ai_disabled_offline_demo.py` (P5) \u2014 mechanically proves all 3 workflows succeed with `socket.connect` blocked, i.e. zero dependency on the AI region that INJ-079 describes as failing. **Correction**: previously marked \"carried to Prompt 06\" but never actually treated by name in `06-c4/boundary_and_degraded_mode.md` or `16_THREAT_ABUSE_MODEL.md` \u2014 found and fixed during Phase 5 cross-verification"
+  },
+  {
+    "id": "INJ-080",
+    "dimension": "D13",
+    "workflow": "Cross-cutting (Reliability/Continuity)",
+    "title": "Checkpoint corruption",
+    "status": "addressed",
+    "where": "`04-ddd/domain_model.md` \u00a74 (Improve, error-path idempotency)"
+  },
+  {
+    "id": "INJ-081",
+    "dimension": "D13",
+    "workflow": "Cross-cutting (Reliability/Continuity)",
+    "title": "Model substitution regression",
+    "status": "addressed",
+    "where": "`01-discovery/waste_register_ai_specific.md`"
+  },
+  {
+    "id": "INJ-082",
+    "dimension": "D13",
+    "workflow": "Cross-cutting (Reliability/Continuity)",
+    "title": "AI-disabled continuity",
+    "status": "addressed",
+    "where": "`01_BUSINESS_CASE.md`; `04_PRODUCT_SERVICE_BLUEPRINT.md` \u00a75 (central example)"
+  },
+  {
+    "id": "INJ-083",
+    "dimension": "D13",
+    "workflow": "Cross-cutting (Reliability/Continuity)",
+    "title": "Vendor exit deadline",
+    "status": "addressed",
+    "where": "`submission/scripts/data_integrity_findings_demo.py`; `27_VENDOR_EXIT_RETIREMENT.md` \u00a78"
+  },
+  {
+    "id": "INJ-084",
+    "dimension": "D13",
+    "workflow": "Cross-cutting (Reliability/Continuity)",
+    "title": "Retirement and evidence preservation",
+    "status": "addressed",
+    "where": "`submission/scripts/data_integrity_findings_demo.py`; `29_NINETY_DAY_ROADMAP_HANDOVER.md` \u00a76"
+  }
+]

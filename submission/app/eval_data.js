@@ -10,13 +10,13 @@
 //   submission/artefacts/INJECT_WORKFLOW_CATEGORIZATION.md ("Summary by workflow")
 window.AEGIS_EVAL_DATA = {
   tests: {
-    run_at: "2026-08-12T05:30:58Z",
-    total_tests: 76,
-    passed: 76,
+    run_at: "2026-08-12T06:11:50Z",
+    total_tests: 96,
+    passed: 96,
     failed: 0,
     errors: 0,
     modules: [
-      { name: "submission/tests", count: 55, note: "prohibited-action / fail-closed specs" },
+      { name: "submission/tests", count: 75, note: "prohibited-action / fail-closed specs, one scenario per covered inject" },
       { name: "submission/evaluation/graders", count: 21, note: "positive+negative unit tests for the 9 P6 TEVV deterministic graders" },
     ],
   },

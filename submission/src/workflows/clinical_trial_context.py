@@ -15,6 +15,62 @@ Design basis: `submission/artefacts/04-ddd/domain_model.md` INV-11/12/13, POL-07
 from submission.src.services.authorization import check_authorization
 
 
+def _detect_econsent_withdrawal_mismatch(consents, specimens, processing_events):
+    """INJ-017: a subject's consent was withdrawn for biomarker processing
+    (data/consents.csv C-044 S-301-044 status=withdrawn_biomarker) but a
+    downstream processing event for that subject's specimen continued
+    against a cached (not re-verified) consent check
+    (data/processing_events.csv PE-9 consent_check=cached_active).
+    Surfaced as a contradiction — never silently halted or continued."""
+    contradictions = []
+    withdrawn = [c for c in (consents or []) if "withdrawn" in str(c.get("status", ""))]
+    specimens_by_subject = {}
+    for sp in specimens or []:
+        specimens_by_subject.setdefault(sp.get("subject_id"), []).append(sp)
+    for consent in withdrawn:
+        subject_id = consent.get("subject_id")
+        for specimen in specimens_by_subject.get(subject_id, []):
+            for event in processing_events or []:
+                if event.get("specimen_id") != specimen.get("specimen_id"):
+                    continue
+                if event.get("status") == "completed" and event.get("consent_check") != "verified_current":
+                    contradictions.append({
+                        "type": "econsent_withdrawal_processing_mismatch",
+                        "subject_id": subject_id,
+                        "consent_id": consent.get("consent_id"),
+                        "consent_status": consent.get("status"),
+                        "consent_effective_time": consent.get("effective_time"),
+                        "specimen_id": specimen.get("specimen_id"),
+                        "processing_event_id": event.get("event_id"),
+                        "processing_status": event.get("status"),
+                        "consent_check": event.get("consent_check"),
+                    })
+    return contradictions
+
+
+def _detect_device_clock_skew(wearable_readings):
+    """INJ-018: wearable-device readings for the same subject/device carry
+    mixed local/UTC timezone labels around a daylight-saving transition
+    (data/wearable_readings.csv S-301-118/WR-11: local_unknown vs UTC).
+    Surfaced as a gap — readings are never silently normalized to one
+    clock."""
+    gaps = []
+    by_device = {}
+    for row in wearable_readings or []:
+        by_device.setdefault((row.get("subject_id"), row.get("device_id")), []).append(row)
+    for (subject_id, device_id), rows in by_device.items():
+        timezones = {r.get("timezone") for r in rows}
+        if len(timezones) > 1:
+            gaps.append({
+                "gap_type": "device_clock_skew_evidence",
+                "subject_id": subject_id,
+                "device_id": device_id,
+                "readings": rows,
+                "timezones_observed": sorted(t for t in timezones if t),
+            })
+    return gaps
+
+
 def assemble_clinical_response(request):
     request_id = request.get("request_id", "")
     subject_id = request.get("subject_id", "")
@@ -129,8 +185,13 @@ def assemble_clinical_response(request):
             })
             required_reviews.append(f"site_inspection_review:{site_metrics.get('site_id')}")
 
+    contradictions.extend(_detect_econsent_withdrawal_mismatch(
+        request.get("consents"), request.get("specimens"), request.get("processing_events")))
+    gaps.extend(_detect_device_clock_skew(request.get("wearable_readings")))
+
     if (not elig and not request.get("support_tickets") and not endpoint_reviews and not proto
-            and not request.get("evidence") and not request.get("randomization_events") and not site_metrics):
+            and not request.get("evidence") and not request.get("randomization_events") and not site_metrics
+            and not request.get("consents") and not request.get("wearable_readings")):
         gaps.append({"gap_type": "no_evidence_provided", "subject_id": subject_id})
 
     return {

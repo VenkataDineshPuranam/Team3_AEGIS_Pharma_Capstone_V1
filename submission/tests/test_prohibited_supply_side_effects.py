@@ -169,5 +169,75 @@ class TestINJ057CustomsDocumentationMismatch(unittest.TestCase):
         self.assertNotIn("shipment_cleared", response)
 
 
+class TestNewC02DetectorsRealDataFidelity(unittest.TestCase):
+    """INJ-051/054/055/056/058: new Workflow C detectors built on real
+    data/*.csv rows. Each only ever adds to contradictions/gaps and
+    no_side_effects stays true — never a reservation/allocation/quality-
+    status change/shipment/recall."""
+
+    def test_inj051_cold_chain_lane_excursion_surfaced(self):
+        request = {
+            "request_id": "REQ-C02-051", "event_id": "EVT-051", "inventory": [RELEASED_ROW],
+            "shipments": [{"shipment_id": "SH-901", "product": "NCB-204", "lots": "NCB204-B24062",
+                            "lane": "IE>DE", "status": "quarantine", "logger": "LG-31", "pallet": "P-88"}],
+            "temperature_loggers": [
+                {"logger": "LG-31", "timestamp": "2026-07-29 02:10", "timezone": "local_unknown",
+                 "temp_c": 10.8, "pallet": "P-89"},
+                {"logger": "LG-31", "timestamp": "2026-07-29T01:15:00Z", "timezone": "UTC",
+                 "temp_c": 9.7, "pallet": "P-88"},
+            ],
+        }
+        response = assemble_supply_response(request)
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("cold_chain_lane_excursion", types)
+        self.assertIs(response["no_side_effects"], True)
+
+    def test_inj054_critical_excipient_shortage_is_a_gap(self):
+        request = {"request_id": "REQ-C02-054", "event_id": "EVT-054", "inventory": [RELEASED_ROW],
+                   "supplier_risks": [{"supplier": "EXCIP-ONE", "material": "Polysorbate-X",
+                                        "risk": "contamination", "recovery_weeks": 8,
+                                        "alternate_qualified": "no"}]}
+        response = assemble_supply_response(request)
+        gap_types = {g.get("gap_type") for g in response["gaps"]}
+        self.assertIn("critical_excipient_shortage_no_alternate", gap_types)
+
+    def test_inj055_cmo_capacity_overcommitted_surfaced(self):
+        request = {"request_id": "REQ-C02-055", "event_id": "EVT-055", "inventory": [RELEASED_ROW],
+                   "cmo_capacity": [{"cmo": "CMO-IE", "window": "2026-W34", "capacity_batches": 2,
+                                      "promised_NTG": 2, "promised_other_sponsor": 1}]}
+        response = assemble_supply_response(request)
+        types = {c.get("type") for c in response["contradictions"]}
+        self.assertIn("cmo_capacity_overcommitted", types)
+
+    def test_inj056_demand_exceeds_available_inventory_is_a_gap(self):
+        request = {"request_id": "REQ-C02-056", "event_id": "EVT-056",
+                   "inventory": [{"product": "NCB-204", "market": "EU", "quality_status": "released", "units": 4300}],
+                   "demand_forecast": [
+                       {"channel": "commercial_EU", "product": "NCB-204", "units_8w": 5200},
+                       {"channel": "clinical_trial", "product": "NCB-204", "units_8w": 900},
+                       {"channel": "compassionate_use", "product": "NCB-204", "units_8w": 600},
+                   ],
+                   "allocation_constraints": [{"constraint": "quality_released_only", "priority": "hard"}]}
+        response = assemble_supply_response(request)
+        gap_types = {g.get("gap_type") for g in response["gaps"]}
+        self.assertIn("demand_exceeds_available_inventory", gap_types)
+        self.assertNotIn("allocation_decision", response)
+
+    def test_inj058_recall_scope_uncertain_is_a_gap(self):
+        request = {"request_id": "REQ-C02-058", "event_id": "EVT-058", "inventory": [RELEASED_ROW],
+                   "recall_candidates": [
+                       {"lot": "NCS310-S26033", "shared_component": "VIAL-V19", "shared_equipment": "FF-02",
+                        "distribution": "not shipped"},
+                       {"lot": "NCS310-S26031", "shared_component": "VIAL-V19", "shared_equipment": "FF-02",
+                        "distribution": "AE hospitals"},
+                   ],
+                   "material_genealogy": []}
+        response = assemble_supply_response(request)
+        gap_types = {g.get("gap_type") for g in response["gaps"]}
+        self.assertIn("recall_scope_uncertain", gap_types)
+        self.assertNotIn("recall_initiated", response)
+        self.assertIs(response["no_side_effects"], True)
+
+
 if __name__ == "__main__":
     unittest.main()
