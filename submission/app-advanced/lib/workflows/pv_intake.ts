@@ -39,7 +39,10 @@ export interface PvResponse {
 }
 
 export function assemblePvResponse(scenarioKey: string): PvResponse {
-  const s = PV_SCENARIOS[scenarioKey];
+  return assemblePvResponseFromScenario(PV_SCENARIOS[scenarioKey]);
+}
+
+export function assemblePvResponseFromScenario(s: PvScenario): PvResponse {
   const authorization = checkAuthorization("pv_intake");
   const duplicate_candidates: DuplicatePair[] = [];
   const required_reviews: string[] = [];

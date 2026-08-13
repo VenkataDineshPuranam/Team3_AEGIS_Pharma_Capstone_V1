@@ -88,7 +88,10 @@ export interface ClinicalResponse {
 const UNBLINDING_SIGNAL_TERMS = ["active arm", "placebo arm", "kit pattern", "unblind"];
 
 export function assembleClinicalResponse(scenarioKey: string): ClinicalResponse {
-  const s = CLINICAL_SCENARIOS[scenarioKey];
+  return assembleClinicalResponseFromScenario(CLINICAL_SCENARIOS[scenarioKey]);
+}
+
+export function assembleClinicalResponseFromScenario(s: ClinicalScenario): ClinicalResponse {
   const authorization = checkAuthorization("clinical_trial_context");
   const contradictions: Record<string, unknown>[] = [];
   const gaps: { gap_type: string; subject_id?: string }[] = [];

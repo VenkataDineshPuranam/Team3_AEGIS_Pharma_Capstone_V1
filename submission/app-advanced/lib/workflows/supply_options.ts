@@ -47,7 +47,10 @@ export interface SupplyResponse {
 }
 
 export function assembleSupplyResponse(scenarioKey: string): SupplyResponse {
-  const s = SUPPLY_SCENARIOS[scenarioKey];
+  return assembleSupplyResponseFromScenario(SUPPLY_SCENARIOS[scenarioKey]);
+}
+
+export function assembleSupplyResponseFromScenario(s: SupplyScenario): SupplyResponse {
   const authorization = checkAuthorization("supply_options");
   const options: DraftOption[] = [];
   const quality_holds: InventoryRow[] = [];

@@ -88,7 +88,10 @@ export interface DiscoveryResponse {
 }
 
 export function assembleDiscoveryResponse(scenarioKey: string): DiscoveryResponse {
-  const s = DISCOVERY_SCENARIOS[scenarioKey];
+  return assembleDiscoveryResponseFromScenario(DISCOVERY_SCENARIOS[scenarioKey]);
+}
+
+export function assembleDiscoveryResponseFromScenario(s: DiscoveryScenario): DiscoveryResponse {
   const authorization = checkAuthorization("discovery_translational_science");
   const contradictions: Record<string, unknown>[] = [];
   const gaps: DiscoveryResponse["gaps"] = [];

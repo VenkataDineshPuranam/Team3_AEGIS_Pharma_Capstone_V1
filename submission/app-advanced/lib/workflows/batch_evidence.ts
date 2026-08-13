@@ -62,7 +62,12 @@ export interface BatchResponse {
 }
 
 export function assembleBatchResponse(scenarioKey: string): BatchResponse {
-  const s = BATCH_SCENARIOS[scenarioKey];
+  return assembleBatchResponseFromScenario(BATCH_SCENARIOS[scenarioKey]);
+}
+
+// Pure compute path shared by the canned scenario picker AND the live
+// "Advanced / Edit evidence" form — same invariants, no new decision logic.
+export function assembleBatchResponseFromScenario(s: BatchScenario): BatchResponse {
   const authorization = checkAuthorization("batch_review");
   const contradictions: Contradiction[] = [];
   const gaps: { gap_type: string }[] = [];
