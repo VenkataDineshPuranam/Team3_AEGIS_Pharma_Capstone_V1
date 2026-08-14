@@ -3,14 +3,23 @@
 ## What this is
 
 A richer, exploratory Next.js/TypeScript/Tailwind companion to the AEGIS-PHARMA
-static demonstrator. It ports the same five workflow response-assembly
-functions (Workflow A batch evidence, B pharmacovigilance, C supply/cold-chain,
-D clinical trial context, E discovery/translational science) into TypeScript,
-reusing the exact invariant discipline, field names, and guardrail behavior
-already established in:
+static demonstrator. **Current scope**: this app's user-facing navigation and
+routing expose only the three business-mandated workflows — A (batch
+evidence), B (pharmacovigilance), C (supply/cold-chain). It ports their
+response-assembly functions into TypeScript, reusing the exact invariant
+discipline, field names, and guardrail behavior already established in:
 
 - `submission/src/workflows/*.py` (the Python reference implementation)
 - `submission/app/app.js` (the static demonstrator's JS mirror)
+
+Workflow D (clinical trial context) and Workflow E (discovery/translational
+science) TypeScript ports also exist in `lib/workflows/` — real, tested code,
+built ahead of schedule as additional scope — but their pages
+(`app/_roadmap-workflow-d/`, `app/_roadmap-workflow-e/`) are excluded from
+Next.js routing via the underscore-prefix convention, so they 404 today. See
+`app/roadmap/page.tsx` (linked from the nav bar) for the phased-scope
+explainer. A future release will re-enable Workflow D's route, then
+Workflow E's and the remaining cross-cutting injects.
 
 No new decision logic is introduced. This app renders the same
 `execution_status: "not_executed"`, `human_review.required` badges, and
@@ -82,8 +91,9 @@ app-advanced/
     workflow-a/page.tsx        Workflow A — GxP batch review (canned + advanced-edit tabs)
     workflow-b/page.tsx        Workflow B — pharmacovigilance (canned + advanced-edit tabs)
     workflow-c/page.tsx        Workflow C — supply/cold-chain (canned + advanced-edit tabs)
-    workflow-d/page.tsx        Workflow D — clinical trial context (additional scope, canned + advanced-edit tabs)
-    workflow-e/page.tsx        Workflow E — discovery/translational science (additional scope, canned + advanced-edit tabs)
+    roadmap/page.tsx           phased-scope explainer, grounded in INJECT_WORKFLOW_CATEGORIZATION.md
+    _roadmap-workflow-d/page.tsx  Workflow D — clinical trial context (not yet shipped, excluded from routing, underscore-prefixed)
+    _roadmap-workflow-e/page.tsx  Workflow E — discovery/translational science (not yet shipped, excluded from routing, underscore-prefixed)
     injects/page.tsx           inject explorer (search/filter over all 84 injects)
     injects/[id]/page.tsx       inject detail route, links into its mapped live workflow
     evaluation/page.tsx        evaluation dashboard (Recharts: bar / radial / dimension bar)
@@ -127,38 +137,6 @@ a separate Next.js app rather than modifying the compliant static app.
 **`submission/app/index.html` remains the graded, offline, compliant
 artifact.** Nothing under `submission/app/` was modified to build this.
 
-## Structure
-
-```
-app-advanced/
-  app/
-    page.tsx                 home page — explains the app, links to workflows
-    layout.tsx                root layout: guardrail banner + nav
-    workflow-a/page.tsx        Workflow A — GxP batch review
-    workflow-b/page.tsx        Workflow B — pharmacovigilance
-    workflow-c/page.tsx        Workflow C — supply/cold-chain
-    workflow-d/page.tsx        Workflow D — clinical trial context (additional scope)
-    workflow-e/page.tsx        Workflow E — discovery/translational science (additional scope)
-    injects/page.tsx           inject explorer (search/filter over all 84 injects)
-    evaluation/page.tsx        evaluation dashboard (static snapshot)
-  lib/workflows/
-    common.ts                  shared authorization + evidence-ref types
-    batch_evidence.ts           ported from app/app.js assembleBatchResponse
-    pv_intake.ts                 ported from app/app.js assemblePvResponse
-    supply_options.ts            ported from app/app.js assembleSupplyResponse
-    clinical_trial_context.ts     ported from app/app.js assembleClinicalResponse
-    discovery_translational_science.ts  ported from app/app.js assembleDiscoveryResponse
-  components/
-    GuardrailBanner.tsx          "decision-support, not execution" banner
-    NavBar.tsx                    workflow/injects/evaluation nav
-    ResponseCard.tsx              auth banner, guardrail badges, raw-JSON viewer
-  data/
-    injects.json                  read-only copy of data/injects.json (84 injects)
-    inject_workflow_map.json      mechanically parsed from
-                                   submission/artefacts/INJECT_WORKFLOW_CATEGORIZATION.md
-    eval_data.json                 ported from submission/app/eval_data.js
-```
-
 ## How to run
 
 ```sh
@@ -190,8 +168,13 @@ npm run lint
 - The root layout renders a persistent banner: "Decision-support
   demonstrator, not an execution system... not the graded/compliant
   artifact."
-- Workflow D and E pages are additionally labeled "additional scope" since
-  they are not among the three mandated workflows (A/B/C).
+- Workflow D and E pages live under the Next.js underscore-prefix convention
+  (`app/_roadmap-workflow-d/`, `app/_roadmap-workflow-e/`), which excludes
+  them from routing — they 404 at runtime, are not linked from nav/command
+  palette/home page, and are not part of the current user-facing surface.
+  Their library code (`lib/workflows/clinical_trial_context.ts`,
+  `discovery_translational_science.ts`) is untouched and ready for a future
+  release.
 - The "Advanced / Edit evidence" live-editing tabs on every workflow page
   reuse the exact same `assemble*ResponseFromScenario` functions as the
   canned tabs — editing values can change *which* contradictions/gaps

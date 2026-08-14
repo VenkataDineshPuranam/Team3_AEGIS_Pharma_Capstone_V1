@@ -1,0 +1,177 @@
+{
+  "meta": {
+    "project": "AEGIS-PHARMA capstone submission",
+    "scope": "This release ships Workflow A/B/C (mandatory); Workflow D and E are real, tested, additional-scope code not yet included in this release",
+    "generated_for": "AI agents and humans navigating this repository",
+    "node_count_note": "not exhaustive of all 143 CSVs / 32 knowledge docs / 84 injects individually — those are represented as single aggregate nodes; see each node's file field for the real path"
+  },
+  "nodes": [
+    { "id": "data_injects", "label": "injects.json (84 injects)", "type": "data-source", "file": "data/injects.json", "description": "Traceability spine: 84 disclosed injects INJ-001..INJ-084, each {id, dimension D01-D13, title, scenario, evidence[]}, cross-linked to 143 CSVs." },
+    { "id": "data_csv", "label": "Evidence CSVs (143 files)", "type": "data-source", "file": "data/*.csv", "description": "Source-system evidence tables (LIMS, EBR, warehouse, PV cases, supply/cold-chain) referenced by injects; includes data/inject_evidence_map.csv and data/INJECT_TEST_COVERAGE.csv linking injects to expected tests." },
+    { "id": "knowledge_docs", "label": "Knowledge base (32 policy docs)", "type": "data-source", "file": "knowledge/", "description": "Policy/authority test bed: most approved, BATCH_RELEASE_POLICY_OLD superseded, FAKE_PV_EXPEDITED_RULE and MALICIOUS_SUPPLIER_DEVIATION untrusted (poisoned traps), RESEARCH_NOTE_UNAPPROVED draft, LOCAL_WORK_INSTRUCTION_DE jurisdiction-local." },
+    { "id": "case_pack", "label": "Case scenario pack", "type": "data-source", "file": "case/INTEGRATED_CASE.md", "description": "Master scenario: NovaCura Therapeutics crisis convergence, 15 stakeholders, brownfield system landscape, non-binding regulatory anchors (case/STAKEHOLDER_PACK.md, SOURCE_SYSTEM_FACT_PACK.md, REGULATORY_BOUNDARY_PACK.md)." },
+
+    { "id": "svc_authorization", "label": "authorization.py", "type": "shared-kernel", "file": "submission/src/services/authorization.py", "description": "check_authorization(request) — verifies user, purpose, object, role and tool authorization at execution time; denies by default on stale/ambiguous entitlement (fail-closed)." },
+    { "id": "svc_evidence_resolver", "label": "evidence_resolver.py", "type": "shared-kernel", "file": "submission/src/services/evidence_resolver.py", "description": "verify_integrity, check_unit_conversion, surface_contradiction(states), resolve_identity — reconciles conflicting source states without silently normalizing them." },
+    { "id": "svc_knowledge_gateway", "label": "knowledge_gateway.py", "type": "shared-kernel", "file": "submission/src/services/knowledge_gateway.py", "description": "resolve_citation(doc) — resolves a knowledge citation only after checking document status/authority, refusing untrusted/superseded/draft sources as authoritative." },
+    { "id": "svc_model_registry", "label": "model_registry.py", "type": "shared-kernel", "file": "submission/src/services/model_registry.py", "description": "verify_model_integrity(model) — model supply-chain integrity check (hash/version) before a model result can be trusted." },
+    { "id": "svc_tool_gateway", "label": "tool_gateway.py", "type": "shared-kernel", "file": "submission/src/services/tool_gateway.py", "description": "invoke_tool(call) — bounded, validated tool invocation gateway; replaces the legacy_portal.js executeTool() pattern that called any tool with any payload." },
+
+    { "id": "wf_a_batch", "label": "Workflow A: batch_evidence.py", "type": "workflow", "file": "submission/src/workflows/batch_evidence.py", "description": "assemble_batch_response(request) — GxP batch evidence completeness/conflict/gap review. Detectors: _detect_genealogy_break, _detect_sterility_excursion, _detect_unit_conversion_defect, _detect_ebr_back_entry_during_downtime, _detect_pat_model_drift, _detect_qp_evidence_gap. Never releases/rejects/reprocesses/relabels/recalls a batch." },
+    { "id": "wf_b_pv", "label": "Workflow B: pv_intake.py", "type": "workflow", "file": "submission/src/workflows/pv_intake.py", "description": "assemble_pv_response(request) — pharmacovigilance case intake and signal support. Detectors: _detect_reporting_clock_conflict, _detect_meddra_version_mismatch, _detect_expectedness_source_conflict, _detect_sensitive_segment_gap, _detect_social_media_authenticity_gap, _detect_product_quality_safety_link, _detect_signal_disproportionality_instability. Never decides seriousness/causality/expectedness/reportability/signal." },
+    { "id": "wf_c_supply", "label": "Workflow C: supply_options.py", "type": "workflow", "file": "submission/src/workflows/supply_options.py", "description": "assemble_supply_response(request) — non-executing supply/cold-chain recovery options. Detectors: _detect_serialization_aggregation_break, _detect_counterfeit_suspicion, _detect_customs_documentation_mismatch, _detect_cold_chain_lane_excursion, _detect_critical_excipient_shortage, _detect_cmo_capacity_conflict, _detect_allocation_ethics_gap, _detect_recall_scope_uncertainty. Never reserves/allocates/changes quality status/ships/initiates a recall." },
+    { "id": "wf_d_clinical", "label": "Workflow D (planned): clinical_trial_context.py", "type": "workflow-roadmap", "file": "submission/src/workflows/clinical_trial_context.py", "description": "Additional scope, built and tested, not yet included in this release. Never renders eligibility, treatment_arm or endpoint_conclusion. TypeScript port exists at submission/app-advanced/lib/workflows/clinical_trial_context.ts, page excluded from routing at app/_roadmap-workflow-d/." },
+    { "id": "wf_e_discovery", "label": "Workflow E (planned): discovery_translational_science.py", "type": "workflow-roadmap", "file": "submission/src/workflows/discovery_translational_science.py", "description": "Additional scope, built and tested, not yet included in this release. Never renders assay_disposition, model_approval, image_authenticity, or target_validation_conclusion. TypeScript port at lib/workflows/discovery_translational_science.ts, page excluded from routing at app/_roadmap-workflow-e/." },
+
+    { "id": "contract_batch", "label": "batch_response.schema.json", "type": "contract", "file": "evaluation/contracts/batch_response.schema.json", "description": "JSON Schema contract for Workflow A responses; additionalProperties:false enforces no prohibited disposition field can appear." },
+    { "id": "contract_pv", "label": "pv_response.schema.json", "type": "contract", "file": "evaluation/contracts/pv_response.schema.json", "description": "JSON Schema contract for Workflow B responses; forbids final seriousness/causality/expectedness/reportability fields." },
+    { "id": "contract_supply", "label": "supply_response.schema.json", "type": "contract", "file": "evaluation/contracts/supply_response.schema.json", "description": "JSON Schema contract for Workflow C responses; enforces no_side_effects:true, forbids reservation/allocation/shipment/recall fields." },
+    { "id": "contract_clinical", "label": "clinical_response.schema.json (roadmap)", "type": "contract-roadmap", "file": "evaluation/contracts/clinical_response.schema.json", "description": "Contract for Workflow D responses (planned, not yet in this release)." },
+    { "id": "contract_discovery", "label": "discovery_response.schema.json (roadmap)", "type": "contract-roadmap", "file": "evaluation/contracts/discovery_response.schema.json", "description": "Contract for Workflow E responses (planned, not yet in this release)." },
+
+    { "id": "test_prohibited_batch", "label": "test_prohibited_batch_disposition.py", "type": "test", "file": "submission/tests/test_prohibited_batch_disposition.py", "description": "Adversarial test asserting Workflow A never emits a batch disposition/release/reject/recall action." },
+    { "id": "test_prohibited_pv", "label": "test_prohibited_pv_auto_merge.py", "type": "test", "file": "submission/tests/test_prohibited_pv_auto_merge.py", "description": "Adversarial test asserting Workflow B never auto-merges duplicate cases or issues a final PV decision." },
+    { "id": "test_prohibited_supply", "label": "test_prohibited_supply_side_effects.py", "type": "test", "file": "submission/tests/test_prohibited_supply_side_effects.py", "description": "Adversarial test asserting Workflow C never reserves, allocates, changes quality status, ships, or recalls." },
+    { "id": "test_authz_fail_closed", "label": "test_authorization_fail_closed.py", "type": "test", "file": "submission/tests/test_authorization_fail_closed.py", "description": "Tests check_authorization denies by default on stale/ambiguous entitlement across all workflows." },
+    { "id": "test_knowledge_gate", "label": "test_knowledge_authority_gate.py", "type": "test", "file": "submission/tests/test_knowledge_authority_gate.py", "description": "Tests knowledge_gateway rejects untrusted/superseded/draft documents as authoritative citations (poisoned-trap defense)." },
+    { "id": "test_evidence_integrity", "label": "test_evidence_integrity.py", "type": "test", "file": "submission/tests/test_evidence_integrity.py", "description": "Tests evidence_resolver preserves source/authority/effective-date/verbatim value/uncertainty without silent normalization." },
+    { "id": "test_model_supply_chain", "label": "test_model_supply_chain_integrity.py", "type": "test", "file": "submission/tests/test_model_supply_chain_integrity.py", "description": "Tests model_registry.verify_model_integrity detects tampered/unversioned models." },
+    { "id": "test_replay_excessive_agency", "label": "test_replay_and_excessive_agency.py", "type": "test", "file": "submission/tests/test_replay_and_excessive_agency.py", "description": "Tests idempotency-key replay protection and bounded-step/no-excessive-agency behavior via tool_gateway." },
+    { "id": "test_prohibited_clinical", "label": "test_prohibited_clinical_eligibility.py (roadmap)", "type": "test-roadmap", "file": "submission/tests/test_prohibited_clinical_eligibility.py", "description": "Adversarial test for Workflow D (planned, not yet in this release) — never renders eligibility/treatment_arm/endpoint_conclusion." },
+    { "id": "test_prohibited_discovery", "label": "test_prohibited_discovery_translational_science.py (roadmap)", "type": "test-roadmap", "file": "submission/tests/test_prohibited_discovery_translational_science.py", "description": "Adversarial test for Workflow E (planned, not yet in this release) — never renders assay_disposition/model_approval/image_authenticity/target_validation_conclusion." },
+
+    { "id": "eval_runner", "label": "evaluation/runner.py", "type": "evaluation", "file": "submission/evaluation/runner.py", "description": "run_generic_scenario, run_scenario, main() — executes evaluation datasets/scenarios end to end and produces reports." },
+    { "id": "eval_adapter", "label": "adapters/workflow_adapter.py", "type": "evaluation", "file": "submission/evaluation/adapters/workflow_adapter.py", "description": "run_batch_scenario, run_pv_scenario, run_supply_scenario, run_clinical_scenario, run_discovery_scenario, run_regression_scenario, run_baseline_batch_ready — bridges evaluation fixtures to the real workflow-assembly functions." },
+    { "id": "eval_graders", "label": "evaluation/graders/*.py", "type": "evaluation", "file": "submission/evaluation/graders/", "description": "grade_schema, grade_evidence_fidelity, grade_prohibited_action, grade_authority, grade_security, grade_temporal_unit, grade_subgroup_evidence, grade_trajectory, grade_latency_cost — one grader per rubric dimension." },
+    { "id": "eval_reports", "label": "evaluation/reports/summary.json", "type": "evaluation", "file": "submission/evaluation/reports/summary.json", "description": "Aggregated evaluation run output: scorecard.csv, detailed_results.jsonl, failed_cases.json, final_evaluation_report.md live alongside it." },
+    { "id": "evidence_test_results", "label": "evidence/test_results.json", "type": "evaluation", "file": "submission/evidence/test_results.json", "description": "Machine-readable snapshot of submission/tests/* pytest run, mirrored into app-advanced/data/eval_data.json for the dashboard." },
+    { "id": "evidence_eval_results", "label": "evidence/evaluation_results.json", "type": "evaluation", "file": "submission/evidence/evaluation_results.json", "description": "Machine-readable snapshot of the evaluation harness run (regression scenarios, release gates, baseline defects)." },
+
+    { "id": "app_static", "label": "app/ (offline static demonstrator)", "type": "app", "file": "submission/app/index.html", "description": "Graded, offline-guardrail-compliant artifact: index.html + app.js + generated data.js. No build step, no network. The actual submission artifact for the capstone." },
+    { "id": "app_advanced", "label": "app-advanced/ (Next.js companion, 3 workflows)", "type": "app", "file": "submission/app-advanced/", "description": "Non-offline exploratory companion. Current UI/routing expose only Workflow A/B/C; Workflow D/E ports exist in lib/workflows/ but their pages are excluded from routing (app/_roadmap-workflow-d/, app/_roadmap-workflow-e/)." },
+    { "id": "artefacts_dir", "label": "submission/artefacts/", "type": "artefact", "file": "submission/artefacts/", "description": "Completed template deliverables (business case through defence), INJECT_WORKFLOW_CATEGORIZATION.md, and this architecture graph pair." },
+    { "id": "evidence_dir", "label": "submission/evidence/", "type": "artefact", "file": "submission/evidence/", "description": "submission_manifest.csv, file_hashes.csv, test_results.json, evaluation_results.json and operational evidence (security_retest_report.json, soak_test_report.json, rollback_rehearsal_report.json, etc.)." }
+  ],
+
+  "edges": [
+    { "from": "data_injects", "to": "data_csv", "label": "cross-linked to", "type": "reads" },
+    { "from": "wf_a_batch", "to": "data_csv", "label": "reads LIMS/EBR/warehouse evidence", "type": "reads" },
+    { "from": "wf_b_pv", "to": "data_csv", "label": "reads PV case evidence", "type": "reads" },
+    { "from": "wf_c_supply", "to": "data_csv", "label": "reads supply/cold-chain evidence", "type": "reads" },
+    { "from": "wf_d_clinical", "to": "data_csv", "label": "reads clinical trial evidence", "type": "reads" },
+    { "from": "wf_e_discovery", "to": "data_csv", "label": "reads discovery/assay evidence", "type": "reads" },
+    { "from": "wf_a_batch", "to": "svc_knowledge_gateway", "label": "resolves cited policy", "type": "calls" },
+    { "from": "wf_b_pv", "to": "svc_knowledge_gateway", "label": "resolves cited policy", "type": "calls" },
+    { "from": "wf_c_supply", "to": "svc_knowledge_gateway", "label": "resolves cited policy", "type": "calls" },
+    { "from": "svc_knowledge_gateway", "to": "knowledge_docs", "label": "reads with status/authority check", "type": "reads" },
+    { "from": "svc_evidence_resolver", "to": "data_csv", "label": "verifies integrity/units/identity", "type": "reads" },
+    { "from": "wf_a_batch", "to": "svc_evidence_resolver", "label": "surface_contradiction(lab_states)", "type": "calls" },
+    { "from": "wf_b_pv", "to": "svc_evidence_resolver", "label": "resolve_identity/duplicate evidence", "type": "calls" },
+    { "from": "wf_c_supply", "to": "svc_evidence_resolver", "label": "verify_integrity(shipment evidence)", "type": "calls" },
+    { "from": "wf_a_batch", "to": "svc_authorization", "label": "check_authorization(request)", "type": "calls" },
+    { "from": "wf_b_pv", "to": "svc_authorization", "label": "check_authorization(request)", "type": "calls" },
+    { "from": "wf_c_supply", "to": "svc_authorization", "label": "check_authorization(request)", "type": "calls" },
+    { "from": "wf_d_clinical", "to": "svc_authorization", "label": "check_authorization(request)", "type": "calls" },
+    { "from": "wf_e_discovery", "to": "svc_authorization", "label": "check_authorization(request)", "type": "calls" },
+    { "from": "wf_e_discovery", "to": "svc_model_registry", "label": "verify_model_integrity(assay model)", "type": "calls" },
+    { "from": "wf_a_batch", "to": "svc_tool_gateway", "label": "bounded tool invocation", "type": "calls" },
+    { "from": "wf_c_supply", "to": "svc_tool_gateway", "label": "bounded tool invocation", "type": "calls" },
+    { "from": "case_pack", "to": "wf_a_batch", "label": "scenario grounding", "type": "informs" },
+    { "from": "case_pack", "to": "wf_b_pv", "label": "scenario grounding", "type": "informs" },
+    { "from": "case_pack", "to": "wf_c_supply", "label": "scenario grounding", "type": "informs" },
+
+    { "from": "wf_a_batch", "to": "contract_batch", "label": "response validated against", "type": "validates" },
+    { "from": "wf_b_pv", "to": "contract_pv", "label": "response validated against", "type": "validates" },
+    { "from": "wf_c_supply", "to": "contract_supply", "label": "response validated against", "type": "validates" },
+    { "from": "wf_d_clinical", "to": "contract_clinical", "label": "response validated against", "type": "validates" },
+    { "from": "wf_e_discovery", "to": "contract_discovery", "label": "response validated against", "type": "validates" },
+
+    { "from": "test_prohibited_batch", "to": "wf_a_batch", "label": "asserts no disposition action", "type": "tests" },
+    { "from": "test_prohibited_pv", "to": "wf_b_pv", "label": "asserts no auto-merge/final decision", "type": "tests" },
+    { "from": "test_prohibited_supply", "to": "wf_c_supply", "label": "asserts no reserve/allocate/ship/recall", "type": "tests" },
+    { "from": "test_prohibited_clinical", "to": "wf_d_clinical", "label": "asserts no eligibility/arm/endpoint", "type": "tests" },
+    { "from": "test_prohibited_discovery", "to": "wf_e_discovery", "label": "asserts no assay/model/image disposition", "type": "tests" },
+    { "from": "test_authz_fail_closed", "to": "svc_authorization", "label": "asserts deny-by-default", "type": "tests" },
+    { "from": "test_knowledge_gate", "to": "svc_knowledge_gateway", "label": "asserts untrusted/superseded rejected", "type": "tests" },
+    { "from": "test_evidence_integrity", "to": "svc_evidence_resolver", "label": "asserts no silent normalization", "type": "tests" },
+    { "from": "test_model_supply_chain", "to": "svc_model_registry", "label": "asserts tamper detection", "type": "tests" },
+    { "from": "test_replay_excessive_agency", "to": "svc_tool_gateway", "label": "asserts idempotency/bounded steps", "type": "tests" },
+
+    { "from": "eval_adapter", "to": "wf_a_batch", "label": "run_batch_scenario invokes", "type": "calls" },
+    { "from": "eval_adapter", "to": "wf_b_pv", "label": "run_pv_scenario invokes", "type": "calls" },
+    { "from": "eval_adapter", "to": "wf_c_supply", "label": "run_supply_scenario invokes", "type": "calls" },
+    { "from": "eval_adapter", "to": "wf_d_clinical", "label": "run_clinical_scenario invokes", "type": "calls" },
+    { "from": "eval_adapter", "to": "wf_e_discovery", "label": "run_discovery_scenario invokes", "type": "calls" },
+    { "from": "eval_runner", "to": "eval_adapter", "label": "drives scenarios via", "type": "calls" },
+    { "from": "eval_runner", "to": "eval_graders", "label": "grades responses via", "type": "calls" },
+    { "from": "eval_graders", "to": "contract_batch", "label": "grade_schema validates against", "type": "reads" },
+    { "from": "eval_graders", "to": "contract_pv", "label": "grade_schema validates against", "type": "reads" },
+    { "from": "eval_graders", "to": "contract_supply", "label": "grade_schema validates against", "type": "reads" },
+    { "from": "eval_runner", "to": "eval_reports", "label": "writes", "type": "writes" },
+    { "from": "eval_reports", "to": "evidence_eval_results", "label": "mirrored into", "type": "writes" },
+    { "from": "test_prohibited_batch", "to": "evidence_test_results", "label": "pytest run recorded in", "type": "writes" },
+    { "from": "test_prohibited_pv", "to": "evidence_test_results", "label": "pytest run recorded in", "type": "writes" },
+    { "from": "test_prohibited_supply", "to": "evidence_test_results", "label": "pytest run recorded in", "type": "writes" },
+    { "from": "test_authz_fail_closed", "to": "evidence_test_results", "label": "pytest run recorded in", "type": "writes" },
+    { "from": "test_knowledge_gate", "to": "evidence_test_results", "label": "pytest run recorded in", "type": "writes" },
+
+    { "from": "app_static", "to": "wf_a_batch", "label": "app.js JS mirror of", "type": "mirrors" },
+    { "from": "app_static", "to": "wf_b_pv", "label": "app.js JS mirror of", "type": "mirrors" },
+    { "from": "app_static", "to": "wf_c_supply", "label": "app.js JS mirror of", "type": "mirrors" },
+    { "from": "app_static", "to": "data_injects", "label": "renders via generated data.js", "type": "reads" },
+    { "from": "app_advanced", "to": "wf_a_batch", "label": "lib/workflows/batch_evidence.ts port of", "type": "mirrors" },
+    { "from": "app_advanced", "to": "wf_b_pv", "label": "lib/workflows/pv_intake.ts port of", "type": "mirrors" },
+    { "from": "app_advanced", "to": "wf_c_supply", "label": "lib/workflows/supply_options.ts port of", "type": "mirrors" },
+    { "from": "app_advanced", "to": "wf_d_clinical", "label": "lib/workflows/clinical_trial_context.ts port (page routing excluded)", "type": "mirrors" },
+    { "from": "app_advanced", "to": "wf_e_discovery", "label": "lib/workflows/discovery_translational_science.ts port (page routing excluded)", "type": "mirrors" },
+    { "from": "app_advanced", "to": "evidence_test_results", "label": "mirrors into data/eval_data.json for dashboard", "type": "reads" },
+    { "from": "app_advanced", "to": "evidence_eval_results", "label": "mirrors into data/eval_data.json for dashboard", "type": "reads" },
+    { "from": "artefacts_dir", "to": "app_advanced", "label": "roadmap page reads INJECT_WORKFLOW_CATEGORIZATION.md counts", "type": "reads" },
+    { "from": "evidence_dir", "to": "artefacts_dir", "label": "submission_manifest.csv catalogs", "type": "reads" }
+  ],
+
+  "flows": [
+    {
+      "id": "flow_workflow_a",
+      "name": "Workflow A request lifecycle (GxP batch review)",
+      "description": "A request for object evidence, checked, assembled and validated — ending in mandatory human review, never a batch disposition.",
+      "steps": ["data_injects", "svc_authorization", "wf_a_batch", "svc_evidence_resolver", "contract_batch", "test_prohibited_batch"]
+    },
+    {
+      "id": "flow_workflow_b",
+      "name": "Workflow B request lifecycle (pharmacovigilance)",
+      "description": "Case intake, duplicate-candidate surfacing, contract validation, ending in mandatory human review, never a final PV decision.",
+      "steps": ["data_injects", "svc_authorization", "wf_b_pv", "svc_evidence_resolver", "contract_pv", "test_prohibited_pv"]
+    },
+    {
+      "id": "flow_workflow_c",
+      "name": "Workflow C request lifecycle (supply/cold-chain)",
+      "description": "Non-executing recovery-option assembly with quarantine exclusion and counterfeit/customs/aggregation detectors, ending in mandatory human review with no_side_effects:true.",
+      "steps": ["data_injects", "svc_authorization", "wf_c_supply", "svc_evidence_resolver", "contract_supply", "test_prohibited_supply"]
+    },
+    {
+      "id": "flow_authz_deny",
+      "name": "Authorization deny path",
+      "description": "A request with a stale or inactive entitlement is denied by check_authorization; execution_status is not_executed and no further workflow processing occurs.",
+      "steps": ["svc_authorization", "test_authz_fail_closed"]
+    },
+    {
+      "id": "flow_evaluation_proof",
+      "name": "Evaluation / proof-of-testing flow",
+      "description": "Deterministic and adversarial tests assert prohibited-action boundaries; the evaluation harness runs scenarios through graders and writes reports and machine-readable evidence.",
+      "steps": ["test_prohibited_batch", "test_prohibited_pv", "test_prohibited_supply", "eval_runner", "eval_adapter", "eval_graders", "eval_reports", "evidence_test_results", "evidence_eval_results"]
+    },
+    {
+      "id": "flow_knowledge_poisoning_defense",
+      "name": "Knowledge authority gate (poisoned-trap defense)",
+      "description": "A workflow's citation request is resolved only after knowledge_gateway checks document status/authority, rejecting untrusted (poisoned), superseded, or draft sources even if lexically relevant.",
+      "steps": ["wf_a_batch", "svc_knowledge_gateway", "knowledge_docs", "test_knowledge_gate"]
+    },
+    {
+      "id": "flow_app_scoping_roadmap",
+      "name": "App scoping roadmap (Workflow D/E not yet shipped)",
+      "description": "Workflow D and E implementations exist and are tested identically to A/B/C, but app-advanced excludes their pages from routing in this release; only the roadmap page and library files reference them.",
+      "steps": ["wf_d_clinical", "wf_e_discovery", "contract_clinical", "contract_discovery", "test_prohibited_clinical", "test_prohibited_discovery", "app_advanced"]
+    }
+  ]
+}

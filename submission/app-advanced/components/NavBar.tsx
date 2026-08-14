@@ -10,11 +10,10 @@ const LINKS = [
   { href: "/workflow-a", label: "A · Batch" },
   { href: "/workflow-b", label: "B · PV" },
   { href: "/workflow-c", label: "C · Supply" },
-  { href: "/workflow-d", label: "D · Clinical" },
-  { href: "/workflow-e", label: "E · Discovery" },
   { href: "/injects", label: "Injects" },
   { href: "/evaluation", label: "Evaluation" },
   { href: "/tour", label: "Tour" },
+  { href: "/roadmap", label: "Roadmap" },
 ];
 
 export function NavBar() {

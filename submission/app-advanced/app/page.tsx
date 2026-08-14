@@ -6,8 +6,6 @@ const WORKFLOWS = [
   { href: "/workflow-a", tag: "A", label: "GxP Batch Review", desc: "Evidence completeness/conflicts/gaps. Never releases, rejects, reprocesses, relabels or recalls a batch.", mandatory: true },
   { href: "/workflow-b", tag: "B", label: "Pharmacovigilance", desc: "Case intake and signal support. Never makes final seriousness/causality/expectedness/reportability/signal decisions.", mandatory: true },
   { href: "/workflow-c", tag: "C", label: "Supply / Cold-Chain", desc: "Non-executing recovery options. Never reserves, allocates, changes quality status, ships or initiates a recall.", mandatory: true },
-  { href: "/workflow-d", tag: "D", label: "Clinical Trial Context", desc: "Additional scope. Never renders eligibility, treatment_arm or endpoint_conclusion.", mandatory: false },
-  { href: "/workflow-e", tag: "E", label: "Discovery / Translational Science", desc: "Additional scope. Never renders assay_disposition, model_approval, image_authenticity, or target_validation_conclusion.", mandatory: false },
 ];
 
 export default function Home() {
