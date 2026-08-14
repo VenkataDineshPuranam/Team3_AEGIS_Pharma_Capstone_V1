@@ -26,7 +26,7 @@
   --series-4: #eda100;
   --series-5: #4a3aa7;
   --series-6: #e34948;
-  --background: #fafafa;
+  --background: #ffffff;
   --foreground: #18181b;
   --card: #ffffff;
   --card-foreground: #18181b;
@@ -122,4 +122,11 @@ h1, h2, h3 {
 }
 .animate-flag-in {
   animation: flag-in 0.5s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-flag-in {
+    animation: none;
+  }
 }

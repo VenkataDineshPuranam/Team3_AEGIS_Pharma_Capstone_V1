@@ -41,6 +41,8 @@ interface EvalData {
     addressed: number;
     in_scope_open: number;
     out_of_scope: number;
+    not_in_this_release?: number;
+    note?: string;
     byWorkflow: { label: string; count: number }[];
   };
 }
@@ -193,11 +195,18 @@ export default function EvaluationPage() {
         <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Inject coverage by workflow
         </h2>
-        <div className="grid grid-cols-3 gap-3">
-          <StatTile value={`${evalData.injectCoverage.addressed}/${evalData.injectCoverage.total}`} label="addressed" />
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <StatTile
+            value={`${Math.round((evalData.injectCoverage.addressed / evalData.injectCoverage.total) * 1000) / 10}%`}
+            label={`addressed (${evalData.injectCoverage.addressed}/${evalData.injectCoverage.total})`}
+          />
           <StatTile value={evalData.injectCoverage.in_scope_open} label="open" />
           <StatTile value={evalData.injectCoverage.out_of_scope} label="out of scope" />
+          <StatTile value={evalData.injectCoverage.not_in_this_release ?? 0} label="not in this release" />
         </div>
+        {evalData.injectCoverage.note && (
+          <p className="text-xs text-muted-foreground">{evalData.injectCoverage.note}</p>
+        )}
         <Card>
           <CardContent className="pt-5">
             <ResponsiveContainer width="100%" height={280}>

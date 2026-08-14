@@ -32,11 +32,9 @@ const STATIC_PAGES = [
   { href: "/", label: "Home" },
   { href: "/injects", label: "Inject Explorer (all 84 injects)" },
   { href: "/evaluation", label: "Evaluation Dashboard" },
-  { href: "/tour", label: "Guided Narrative Tour" },
   { href: "/workflow-a", label: "Workflow A — GxP Batch Review" },
   { href: "/workflow-b", label: "Workflow B — Pharmacovigilance" },
   { href: "/workflow-c", label: "Workflow C — Supply / Cold-Chain" },
-  { href: "/roadmap", label: "Roadmap — Workflow D/E (planned)" },
 ];
 
 // Simple substring/startsWith scoring — no fuzzy-match dependency needed.

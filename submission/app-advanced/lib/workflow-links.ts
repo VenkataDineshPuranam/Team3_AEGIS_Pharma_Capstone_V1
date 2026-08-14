@@ -5,6 +5,6 @@ export function workflowHref(label: string): string | null {
   if (label.startsWith("Workflow A")) return "/workflow-a";
   if (label.startsWith("Workflow B")) return "/workflow-b";
   if (label.startsWith("Workflow C")) return "/workflow-c";
-  // Workflow D/E are not included in this release and have no live route — see /roadmap.
+  // Cross-cutting rows have no single live workflow page.
   return null;
 }

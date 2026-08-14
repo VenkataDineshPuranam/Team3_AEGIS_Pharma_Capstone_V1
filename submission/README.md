@@ -15,7 +15,7 @@ Use `python tools/check_submission_structure.py --scaffold` during work and `--f
 
 ## Phased scope
 
-This release ships the three business-mandated workflows: A (GxP batch review), B (pharmacovigilance), C (supply/cold-chain). Workflow D (clinical trial context) and Workflow E (discovery/translational science) are additional scope, not yet included in this release, and cover the remaining cross-cutting injects when they ship. All five workflows' Python implementations (`src/workflows/`) and TypeScript ports (`app-advanced/lib/workflows/`) already exist and are tested; the app UIs (`app/`, `app-advanced/`) expose only A/B/C for now. See `app-advanced/app/roadmap/page.tsx` for the in-app explainer.
+This release ships the three business-mandated workflows: A (GxP batch review), B (pharmacovigilance), C (supply/cold-chain). Workflow D (clinical trial context) and Workflow E (discovery/translational science) are additional scope, not yet included in this release. All five workflows' Python implementations (`src/workflows/`) and TypeScript ports (`app-advanced/lib/workflows/`) already exist and are tested; the app UIs (`app/`, `app-advanced/`) expose only A/B/C — D/E have no live route, no nav entry and no mention anywhere in either app's UI. 70 of the 84 disclosed injects are addressed by the three shipped workflows and the cross-cutting design work; the remaining 14 are addressed in the wider repository but not demonstrated by either app in this release (see `app-advanced/app/evaluation/page.tsx` and `app-advanced/lib/release-scope.ts`).
 
 ## Architecture reference
 

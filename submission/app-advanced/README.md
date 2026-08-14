@@ -1,194 +1,88 @@
-# AEGIS-PHARMA — Advanced Companion (`submission/app-advanced/`)
+# AEGIS-PHARMA — Advanced Companion
 
-## What this is
+A Next.js/TypeScript/Tailwind companion to the AEGIS-PHARMA static demonstrator, exposing the three business-mandated workflows through a richer, exploratory UI.
 
-A richer, exploratory Next.js/TypeScript/Tailwind companion to the AEGIS-PHARMA
-static demonstrator. **Current scope**: this app's user-facing navigation and
-routing expose only the three business-mandated workflows — A (batch
-evidence), B (pharmacovigilance), C (supply/cold-chain). It ports their
-response-assembly functions into TypeScript, reusing the exact invariant
-discipline, field names, and guardrail behavior already established in:
+> **This is not the graded submission artifact.** `submission/app/index.html` (static HTML/JS, no build step, fully offline) is the compliant, graded deliverable. This app requires `npm install` and a build step, and exists purely as an additional, clearly-labeled companion for exploration.
 
-- `submission/src/workflows/*.py` (the Python reference implementation)
-- `submission/app/app.js` (the static demonstrator's JS mirror)
+## What ships in this release
 
-Workflow D (clinical trial context) and Workflow E (discovery/translational
-science) TypeScript ports also exist in `lib/workflows/` — real, tested code,
-built ahead of schedule as additional scope — but their pages
-(`app/_roadmap-workflow-d/`, `app/_roadmap-workflow-e/`) are excluded from
-Next.js routing via the underscore-prefix convention, so they 404 today. See
-`app/roadmap/page.tsx` (linked from the nav bar) for the phased-scope
-explainer. A future release will re-enable Workflow D's route, then
-Workflow E's and the remaining cross-cutting injects.
+| Workflow | Covers | Never |
+|---|---|---|
+| **A — GxP Batch Review** | Evidence completeness, conflicts, gaps for a batch | Releases, rejects, reprocesses, relabels or recalls a batch |
+| **B — Pharmacovigilance** | Case intake and signal support | Makes a final seriousness, causality, expectedness, reportability or signal decision |
+| **C — Supply / Cold-Chain** | Non-executing recovery options | Reserves, allocates, changes quality status, ships or initiates a recall |
 
-No new decision logic is introduced. This app renders the same
-`execution_status: "not_executed"`, `human_review.required` badges, and
-never surfaces a prohibited-field value (batch disposition, PV final
-decision, allocation/shipment decision, eligibility/treatment-arm,
-assay/model disposition, etc.) — see each workflow's
-`submission/evaluation/contracts/*.schema.json` for the definitive
-forbidden-field list via `additionalProperties: false`.
+Every response carries `execution_status: "not_executed"` and names the human reviewer role required to act on it — that guardrail is structural, not cosmetic: each workflow's response type (`BatchResponse`, `PvResponse`, `SupplyResponse`) has a fixed shape that cannot express a prohibited field, matching the `additionalProperties: false` discipline in `submission/evaluation/contracts/*.schema.json`.
 
-## Design system
+Response logic is a direct TypeScript port of the Python reference implementation (`submission/src/workflows/*.py`) and the static demonstrator's JS mirror (`submission/app/app.js`) — no new decision logic is introduced.
 
-Restyled to a Linear/Vercel/Stripe-dashboard "modern clinical/enterprise"
-aesthetic: hand-built shadcn-style primitives (`components/ui/`) on Radix
-(`@radix-ui/react-dialog`, `-tabs`, `-slot`) + `class-variance-authority` +
-`tailwind-merge`, a neutral/zinc token system in `app/globals.css` (light and
-dark palettes as CSS variables, toggled via `next-themes` + `.dark` class —
-`components/theme-toggle.tsx`), a real type scale, and subtle motion
-(`motion` package, `components/Reveal.tsx`) rather than default Tailwind
-sizes/spacing.
+### Not in this release
 
-## Feature set (added on top of the original port)
+Workflow D (clinical trial context) and Workflow E (discovery/translational science) are real, tested, working code — TypeScript ports live in `lib/workflows/`, their pages exist at `app/_roadmap-workflow-d/` and `app/_roadmap-workflow-e/` — but are excluded from routing (Next.js's underscore-prefix convention; both 404 at runtime) and are not named anywhere in the live UI: not the sidebar, not the home page, not the command palette, not the injects page, not the evaluation dashboard.
 
-1. **Command palette (`⌘K`)** — `components/command-palette.tsx`, built on
-   `cmdk` (via a local `components/ui/command.tsx` wrapper). Searches all 84
-   injects (by id/title/dimension/scenario) and all static pages
-   (workflows, injects, evaluation, tour) with simple substring/startsWith
-   scoring — no fuzzy-match dependency. Selecting an inject navigates to its
-   detail route, `app/injects/[id]/page.tsx`, which offers a direct link
-   into the mapped live workflow (`lib/workflow-links.ts`) when one exists.
-2. **Live interactive workflow builder** — every workflow page now has two
-   tabs: "Real disclosed scenario" (the original canned picker, unchanged
-   in substance) and "Advanced / Edit evidence". The advanced tab holds a
-   plain-React form bound to the same scenario shape the canned picker uses
-   (e.g. Workflow A's `lab_states.{lims_state,stats_state,notebook_state}`,
-   Workflow D's `eligibility_evidence.{value,central_uln,local_uln,edc_rule_uln}`,
-   Workflow E's `assay_results[0].instrument_info.firmware`); every keystroke
-   recomputes the response via `useMemo` calling the same
-   `assemble*ResponseFromScenario` pure function the canned tab uses (added
-   to each `lib/workflows/*.ts` file as a small refactor: `assemble*Response`
-   now just looks up the canned scenario and delegates to
-   `assemble*ResponseFromScenario`). New contradiction/gap rows fade/scale in
-   (`animate-flag-in` in `app/globals.css`). No new decision logic — the
-   invariants (never a prohibited field, always `execution_status` +
-   `human_review`) hold identically in both tabs.
-3. **Rich data visualization (Recharts)** — `app/evaluation/page.tsx`: a
-   horizontal bar chart of inject coverage by workflow (from
-   `data/eval_data.json` → `data/inject_workflow_map.json`), a radial
-   pass-rate ring (from `submission/evidence/test_results.json`, mirrored
-   into `eval_data.json`), and a bar chart of injects per D01–D13 dimension
-   computed live from `data/injects.json` (not hardcoded). Colors use the
-   validated categorical palette from the `dataviz` skill
-   (`--series-1..6` in `app/globals.css`, distinct light/dark steps).
-4. **Guided narrative tour** — `app/tour/page.tsx`, scroll-reveal
-   (`components/Reveal.tsx`, `motion`/`whileInView`) walkthrough using only
-   real disclosed text: INJ-001 (board pressure) → INJ-023 (OOS/OOT/invalid
-   lab-state disagreement) and INJ-037 (ICSR duplicate cluster) → live
-   Workflow A and Workflow B responses for those exact scenarios → a closing
-   "human review required, always" section. No invented dialogue or events.
+Of the 84 disclosed injects, **70 are addressed by what this app demonstrates**; the remaining 14 are addressed elsewhere in the repository but not shown here. The injects page marks those 14 `not in this release` rather than `addressed` (`lib/release-scope.ts`), and the evaluation dashboard states the same split plainly — see `data/eval_data.json`'s `injectCoverage.note`.
+
+## Running it
+
+```sh
+cd submission/app-advanced
+npm install
+npm run dev      # http://localhost:9000
+```
+
+```sh
+npm run build && npm start    # production build, same port
+npm run lint                  # eslint
+```
+
+## Design
+
+Modern clinical/enterprise dashboard aesthetic — shadcn-style primitives (`components/ui/`) on Radix + `class-variance-authority` + `tailwind-merge`, a light-first token system in `app/globals.css` (`--background: #ffffff`), a persistent left sidebar for navigation (`components/Sidebar.tsx`, collapses to a drawer under `md`), and a real type scale. Opens in light mode regardless of OS theme (`defaultTheme="light"`, `enableSystem={false}` in `components/theme-provider.tsx`); a manual toggle is available.
+
+## Features
+
+**Command palette (`⌘K`)** — `components/command-palette.tsx`, built on `cmdk`. Searches all 84 injects (id, title, dimension, scenario) and every live page. Selecting an inject opens its detail route (`app/injects/[id]/page.tsx`), which links into its mapped live workflow when one exists (`lib/workflow-links.ts`).
+
+**Live evidence editor** — every workflow page has two tabs: *Real disclosed scenario* (the original canned picker, drawn from real CSV rows) and *Advanced / Edit evidence*, where the underlying fields are editable and every keystroke recomputes the response via the same pure `assemble*ResponseFromScenario` function the canned tab uses. New contradictions/gaps fade in (`animate-flag-in`). The invariants hold identically in both tabs — editing values can change *which* conflicts surface, never add a prohibited field to the response shape.
+
+**Evaluation dashboard** — `app/evaluation/page.tsx`: Recharts bar chart of inject coverage by workflow, a radial test-pass-rate ring, and a bar chart of injects per dimension (D01–D13) computed live from `data/injects.json`. Colors use the validated categorical palette from the `dataviz` skill.
+
+**Inject explorer** — `app/injects/page.tsx` and `app/injects/[id]/page.tsx`: search and filter across all 84 injects by dimension, workflow and status.
 
 ## Structure
 
 ```
 app-advanced/
   app/
-    page.tsx                 home page — explains the app, links to workflows
-    layout.tsx                root layout: theme provider, guardrail banner, nav, command palette
-    globals.css                design tokens (light/dark), type scale, motion keyframes
-    tour/page.tsx               guided narrative scrollytelling walkthrough
-    workflow-a/page.tsx        Workflow A — GxP batch review (canned + advanced-edit tabs)
-    workflow-b/page.tsx        Workflow B — pharmacovigilance (canned + advanced-edit tabs)
-    workflow-c/page.tsx        Workflow C — supply/cold-chain (canned + advanced-edit tabs)
-    roadmap/page.tsx           phased-scope explainer, grounded in INJECT_WORKFLOW_CATEGORIZATION.md
-    _roadmap-workflow-d/page.tsx  Workflow D — clinical trial context (not yet shipped, excluded from routing, underscore-prefixed)
-    _roadmap-workflow-e/page.tsx  Workflow E — discovery/translational science (not yet shipped, excluded from routing, underscore-prefixed)
-    injects/page.tsx           inject explorer (search/filter over all 84 injects)
-    injects/[id]/page.tsx       inject detail route, links into its mapped live workflow
-    evaluation/page.tsx        evaluation dashboard (Recharts: bar / radial / dimension bar)
-  lib/workflows/
-    common.ts                  shared authorization + evidence-ref types
-    batch_evidence.ts           assembleBatchResponse(key) + assembleBatchResponseFromScenario(scenario)
-    pv_intake.ts                 assemblePvResponse(key) + assemblePvResponseFromScenario(scenario)
-    supply_options.ts            assembleSupplyResponse(key) + assembleSupplyResponseFromScenario(scenario)
-    clinical_trial_context.ts     assembleClinicalResponse(key) + assembleClinicalResponseFromScenario(scenario)
-    discovery_translational_science.ts  assembleDiscoveryResponse(key) + assembleDiscoveryResponseFromScenario(scenario)
-  lib/workflow-links.ts        maps an inject's workflow label to a live workflow route
-  lib/utils.ts                  cn() class-merge helper
+    page.tsx                    home page
+    layout.tsx                  root layout — theme provider, sidebar, command palette
+    globals.css                 design tokens, type scale, motion keyframes
+    workflow-a/page.tsx         Workflow A
+    workflow-b/page.tsx         Workflow B
+    workflow-c/page.tsx         Workflow C
+    _roadmap-workflow-d/        Workflow D — built, tested, not routed
+    _roadmap-workflow-e/        Workflow E — built, tested, not routed
+    injects/page.tsx            inject explorer
+    injects/[id]/page.tsx       inject detail
+    evaluation/page.tsx         evaluation dashboard
+    loading.tsx / error.tsx / not-found.tsx
+  lib/
+    workflows/                  TypeScript ports (5 workflows, incl. D/E)
+    workflow-links.ts           inject workflow label → live route
+    release-scope.ts            which injects are "not in this release"
+    utils.ts                    cn() class-merge helper
   components/
-    GuardrailBanner.tsx          "decision-support, not execution" banner
-    NavBar.tsx                    workflow/injects/evaluation/tour nav + theme toggle + ⌘K hint
-    ResponseCard.tsx              auth banner, guardrail badges (now visually prominent), raw-JSON viewer
-    command-palette.tsx            ⌘K global search over injects + pages
-    theme-provider.tsx / theme-toggle.tsx   next-themes wiring
-    Reveal.tsx                     scroll-triggered fade/slide-in wrapper (motion)
-    ui/                            button, badge, card, tabs, dialog, command, input
+    Sidebar.tsx                 persistent left nav, theme toggle, ⌘K trigger
+    ResponseCard.tsx            auth banner, guardrail badges, raw-JSON viewer
+    command-palette.tsx         ⌘K global search
+    theme-provider.tsx / theme-toggle.tsx
+    ui/                         button, badge, card, tabs, dialog, command, input
   data/
-    injects.json                  read-only copy of data/injects.json (84 injects)
-    inject_workflow_map.json      mechanically parsed from
-                                   submission/artefacts/INJECT_WORKFLOW_CATEGORIZATION.md
-    eval_data.json                 ported from submission/app/eval_data.js
+    injects.json                 read-only copy of data/injects.json
+    inject_workflow_map.json     parsed from INJECT_WORKFLOW_CATEGORIZATION.md
+    eval_data.json                test/eval snapshot
 ```
-
-## Why this exists as a *separate* app
-
-`submission/app/` (the static HTML/JS explorer) is the graded submission
-artifact and must stay build-free and fully offline-capable per the
-capstone's guardrails — `CLAUDE.md` states the offline-capability
-requirement explicitly, and the static app is what satisfies it.
-
-This Next.js app is **not** offline-capable (it requires `npm install` and a
-build step) and is **not** the graded artifact. It was built as an
-additional, clearly-labeled companion for a richer exploratory UI, after the
-offline/no-build tradeoff was explained and the user confirmed they wanted
-a separate Next.js app rather than modifying the compliant static app.
-
-**`submission/app/index.html` remains the graded, offline, compliant
-artifact.** Nothing under `submission/app/` was modified to build this.
-
-## How to run
-
-```sh
-cd submission/app-advanced
-npm install
-npm run dev       # http://localhost:3000
-```
-
-Production build:
-
-```sh
-npm run build
-npm start
-```
-
-Lint:
-
-```sh
-npm run lint
-```
-
-## Guardrails discipline
-
-- Every workflow page shows `execution_status: "not_executed"` and the
-  required human-reviewer role badge, exactly like the static app.
-- No page computes or displays a prohibited-field value. Conflicts are
-  always surfaced as flags/contradictions/gaps requiring human review, never
-  resolved by the UI.
-- The root layout renders a persistent banner: "Decision-support
-  demonstrator, not an execution system... not the graded/compliant
-  artifact."
-- Workflow D and E pages live under the Next.js underscore-prefix convention
-  (`app/_roadmap-workflow-d/`, `app/_roadmap-workflow-e/`), which excludes
-  them from routing — they 404 at runtime, are not linked from nav/command
-  palette/home page, and are not part of the current user-facing surface.
-  Their library code (`lib/workflows/clinical_trial_context.ts`,
-  `discovery_translational_science.ts`) is untouched and ready for a future
-  release.
-- The "Advanced / Edit evidence" live-editing tabs on every workflow page
-  reuse the exact same `assemble*ResponseFromScenario` functions as the
-  canned tabs — editing values can change *which* contradictions/gaps
-  surface, but can never add a prohibited-field key to the response shape,
-  since the TypeScript response interfaces (`BatchResponse`, `PvResponse`,
-  `SupplyResponse`, `ClinicalResponse`, `DiscoveryResponse`) are fixed and
-  the form only edits scenario *inputs*, never the response-assembly logic.
 
 ## Data provenance
 
-`data/injects.json` and `data/inject_workflow_map.json` are read-only
-snapshots copied from the immutable challenge evidence (`data/injects.json`)
-and mechanically parsed from `submission/artefacts/INJECT_WORKFLOW_CATEGORIZATION.md`
-respectively — nothing under `data/` or `submission/artefacts/` was modified
-to produce them. `data/eval_data.json` mirrors the same static snapshot as
-`submission/app/eval_data.js`; regenerate both by hand whenever the
-underlying evidence changes.
+`data/injects.json` and `data/inject_workflow_map.json` are read-only snapshots — nothing under the immutable `data/` or `submission/artefacts/` was modified to produce them. `data/eval_data.json` mirrors the same snapshot as `submission/app/eval_data.js`; regenerate both by hand when the underlying evidence changes.

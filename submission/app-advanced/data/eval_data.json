@@ -46,9 +46,11 @@
   },
   "injectCoverage": {
     "total": 84,
-    "addressed": 84,
+    "addressed": 70,
     "in_scope_open": 0,
     "out_of_scope": 0,
+    "not_in_this_release": 14,
+    "note": "70 of the 84 disclosed injects are addressed by the three workflows in this app. The remaining 14 are covered by workflows not included in this release.",
     "byWorkflow": [
       {
         "label": "Workflow A (GxP batch review)",
@@ -61,14 +63,6 @@
       {
         "label": "Workflow C (Supply/cold-chain)",
         "count": 8
-      },
-      {
-        "label": "Workflow D (clinical trial) — not yet in this release",
-        "count": 8
-      },
-      {
-        "label": "Workflow E (discovery/translational science) — not yet in this release",
-        "count": 6
       },
       {
         "label": "Cross-cutting (business framing)",

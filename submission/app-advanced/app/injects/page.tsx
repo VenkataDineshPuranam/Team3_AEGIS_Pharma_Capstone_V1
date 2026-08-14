@@ -7,6 +7,7 @@ import workflowMap from "@/data/inject_workflow_map.json";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { displayStatus, NOT_IN_THIS_RELEASE_STATUS } from "@/lib/release-scope";
 
 interface Inject {
   id: string;
@@ -44,7 +45,7 @@ export default function InjectsPage() {
     [],
   );
   const statuses = useMemo(
-    () => ["all", ...Array.from(new Set(workflowRows.map((r) => r.status))).sort()],
+    () => ["all", ...Array.from(new Set(workflowRows.map((r) => displayStatus(r.id, r.status)))).sort()],
     [],
   );
 
@@ -54,7 +55,7 @@ export default function InjectsPage() {
       const wf = workflowById.get(inj.id);
       if (dimension !== "all" && inj.dimension !== dimension) return false;
       if (workflow !== "all" && wf?.workflow !== workflow) return false;
-      if (status !== "all" && wf?.status !== status) return false;
+      if (status !== "all" && (wf ? displayStatus(wf.id, wf.status) : undefined) !== status) return false;
       if (q) {
         const hay = `${inj.id} ${inj.title} ${inj.scenario} ${inj.evidence}`.toLowerCase();
         if (!hay.includes(q)) return false;
@@ -135,7 +136,12 @@ export default function InjectsPage() {
                   {wf && (
                     <>
                       <Badge variant="outline">{wf.workflow}</Badge>
-                      <Badge variant="ok">{wf.status}</Badge>
+                      {(() => {
+                        const s = displayStatus(wf.id, wf.status);
+                        return (
+                          <Badge variant={s === NOT_IN_THIS_RELEASE_STATUS ? "outline" : "ok"}>{s}</Badge>
+                        );
+                      })()}
                     </>
                   )}
                   <span className="font-medium">{inj.title}</span>

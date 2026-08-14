@@ -12,38 +12,30 @@ export default function Home() {
   return (
     <div className="mx-auto max-w-4xl space-y-14 px-6 py-16">
       <header className="space-y-5">
-        <Badge variant="outline">Non-offline companion · build required</Badge>
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
           AEGIS-PHARMA
           <span className="block text-2xl font-normal text-muted-foreground sm:text-3xl">Advanced Companion</span>
         </h1>
-        <p className="max-w-2xl leading-relaxed text-foreground/80">
-          This is a richer, exploratory companion to the compliant offline static
-          demonstrator at{" "}
-          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">
-            submission/app/index.html
-          </code>
-          . It requires Node.js/npm to build and run and is <strong>not</strong> the
-          graded, offline-guardrail-compliant submission artifact — it exists purely to
-          give a nicer exploratory surface over the same real workflow logic, real
-          disclosed injects, and real evaluation evidence. The static app remains the
-          artifact that is actually graded and that satisfies the capstone&apos;s
-          offline-capability requirement.
+        <p className="max-w-2xl text-lg leading-relaxed text-foreground/90">
+          A decision-support surface over three safety-bounded pharma workflows — GxP
+          batch review, pharmacovigilance case intake, and supply/cold-chain recovery
+          options — built on the same real evidence and evaluation results as the
+          graded submission.
         </p>
-        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Every response shown here is produced by TypeScript ports of the same
-          workflow-assembly functions used by the static app&apos;s JS mirror
-          (<code className="font-mono">submission/app/app.js</code>) and by the Python
-          reference implementation under{" "}
-          <code className="font-mono">submission/src/workflows/</code>. No new decision
-          logic is introduced — field names, invariants, and guardrail behavior are
-          identical. Press <kbd className="rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-xs">⌘K</kbd> to search.
-        </p>
+        <div className="max-w-2xl rounded-lg border border-[var(--warn)]/40 bg-[color-mix(in_srgb,var(--warn)_10%,var(--background))] px-4 py-3 text-sm leading-relaxed text-foreground/90">
+          <strong>Decision-support only.</strong> Every workflow response below is
+          advisory: it never releases, rejects, reprocesses, relabels or recalls a
+          batch; never makes a final seriousness, causality, expectedness,
+          reportability or signal decision; and never reserves, allocates, changes
+          quality status, ships or initiates a recall. Every response carries an{" "}
+          <code className="font-mono">execution_status: &quot;not_executed&quot;</code> flag and
+          names the human reviewer role required to act on it.
+        </div>
       </header>
 
       <section className="space-y-4">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Mandated + additional-scope workflows
+          The three mandated workflows
         </h2>
         <div className="grid gap-3 sm:grid-cols-2">
           {WORKFLOWS.map((w) => (
@@ -65,7 +57,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="grid gap-3 sm:grid-cols-3">
+      <section className="grid gap-3 sm:grid-cols-2">
         <Link href="/injects" className="group">
           <Card className="h-full transition-colors group-hover:border-foreground/30">
             <CardHeader><CardTitle>Inject Explorer</CardTitle></CardHeader>
@@ -79,15 +71,6 @@ export default function Home() {
             <CardHeader><CardTitle>Evaluation Dashboard</CardTitle></CardHeader>
             <CardContent className="text-sm text-muted-foreground">
               Test results, evaluation scenarios and inject-coverage, charted from real data.
-            </CardContent>
-          </Card>
-        </Link>
-        <Link href="/tour" className="group">
-          <Card className="h-full transition-colors group-hover:border-foreground/30">
-            <CardHeader><CardTitle>Guided Tour</CardTitle></CardHeader>
-            <CardContent className="text-sm text-muted-foreground">
-              A scrollytelling walkthrough of a real crisis inject, real conflicts, and the
-              decision-support boundary.
             </CardContent>
           </Card>
         </Link>

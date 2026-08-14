@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { workflowHref } from "@/lib/workflow-links";
+import { displayStatus, NOT_IN_THIS_RELEASE_STATUS } from "@/lib/release-scope";
 
 interface Inject {
   id: string;
@@ -47,7 +48,10 @@ export default async function InjectDetailPage({ params }: { params: Promise<{ i
         <div className="flex flex-wrap items-center gap-2">
           <Badge>{inject.id}</Badge>
           <Badge variant="outline">{inject.dimension}</Badge>
-          {wf && <Badge variant="ok">{wf.status}</Badge>}
+          {wf && (() => {
+            const s = displayStatus(wf.id, wf.status);
+            return <Badge variant={s === NOT_IN_THIS_RELEASE_STATUS ? "outline" : "ok"}>{s}</Badge>;
+          })()}
         </div>
         <h1 className="text-2xl font-semibold tracking-tight">{inject.title}</h1>
       </header>
@@ -73,7 +77,11 @@ export default async function InjectDetailPage({ params }: { params: Promise<{ i
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <div className="text-muted-foreground">
-              <span className="font-medium text-foreground">{wf.workflow}</span> — addressed at{" "}
+              <span className="font-medium text-foreground">{wf.workflow}</span>
+              {" — "}
+              {displayStatus(wf.id, wf.status) === NOT_IN_THIS_RELEASE_STATUS
+                ? "addressed in the wider repository, not demonstrated by this app"
+                : "addressed at"}{" "}
               <code className="font-mono text-xs">{wf.where}</code>
             </div>
             {href && (

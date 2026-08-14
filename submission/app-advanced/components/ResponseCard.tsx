@@ -27,7 +27,7 @@ export function AuthBanner({ authorization }: { authorization: Authorization }) 
 
 // This is the non-negotiable guardrail surface: execution_status and the
 // required human-reviewer role. Must render prominently on every workflow
-// response view (canned, live-edited, or embedded in the tour) — never a
+// response view (canned or live-edited) — never a
 // small forgettable badge.
 export function GuardrailBadges({
   executionStatus,

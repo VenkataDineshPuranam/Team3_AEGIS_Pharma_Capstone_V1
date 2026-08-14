@@ -921,8 +921,8 @@
     },
     {
         "id": "flow_app_scoping_roadmap",
-        "name": "App scoping roadmap (Workflow D/E not yet shipped)",
-        "description": "Workflow D and E implementations exist and are tested identically to A/B/C, but app-advanced excludes their pages from routing in this release; only the roadmap page and library files reference them.",
+        "name": "App scoping (Workflow D/E not included in this release)",
+        "description": "Workflow D and E implementations exist and are tested identically to A/B/C, but app-advanced excludes their pages from routing in this release (app/_roadmap-workflow-d/, app/_roadmap-workflow-e/, both underscore-prefixed to opt out of Next.js routing); only their TypeScript ports under lib/workflows/ reference them, and nothing in the live UI (nav, home page, evaluation dashboard, injects page) names them.",
         "steps": [
             "wf_d_clinical",
             "wf_e_discovery",
