@@ -9,3 +9,6 @@ submission/evidence/exports/
 .cursor/
 .vscode/
 eval-ai-cache/
+
+# graphify regeneratable cache (rebuild with: graphify update .)
+submission/artefacts/graphify-out/cache/
